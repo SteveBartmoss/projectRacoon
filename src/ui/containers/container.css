@@ -1,0 +1,10 @@
+
+.div-row{
+    display: flex;
+    flex-direction: row;
+}
+
+.div-col{
+    display: flex;
+    flex-direction: column;
+}
