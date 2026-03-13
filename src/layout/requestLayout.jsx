@@ -1,3 +1,4 @@
+import { invoke } from "@tauri-apps/api/core";
 import { Btn } from "../ui/btn/btn";
 import { Box, Row } from "../ui/containers/containers";
 import { Select } from "../ui/select/select";
@@ -29,6 +30,14 @@ export function RequesLayout(){
         }
     ]
 
+    const handleRequest = async () => {
+        let data = await invoke("fetch_data",{
+            url: 'https://yesno.wtf/api'
+        })
+        
+        console.log(data)
+    }
+
     return(
         <Row>
             <Box
@@ -52,7 +61,7 @@ export function RequesLayout(){
                     padding: "1rem",
                 }}
             >
-                <Btn title='Send'/>
+                <Btn handle={handleRequest} title='Send'/>
             </Box>
         </Row>
     )
