@@ -1,0 +1,15 @@
+.text-field {
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    border-bottom: 2px solid #e0e0e0;
+    font-size: 16px;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.text-field:focus {
+    border-bottom-color: #646cff;
+    outline: none;
+}
