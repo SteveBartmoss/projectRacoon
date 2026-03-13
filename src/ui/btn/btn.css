@@ -1,21 +1,20 @@
 .btn {
+  background: #3182ce;
   color: white;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background .2s ease, transform .1s ease;
+  font-size: 1em;
+  font-family: inherit;
 }
 
 .btn:hover {
-  border-color: #646cff;
+  background: #2b6cb0;
 }
 
-.btn:focus,
-.btn:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.btn:active {
+  transform: scale(0.98);
 }
