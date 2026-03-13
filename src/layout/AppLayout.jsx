@@ -14,6 +14,14 @@ export function AppLayout(){
                         <h1>Racoon</h1>
                     </div>
                 </Row>
+                <Row>
+                    <p>
+                        Cliente http ligero
+                    </p>
+                    <p className="read-the-docs">
+                        Descubre mas sobre el proyecto aqui
+                    </p>
+                </Row>
             </Column>
         </>
     )
