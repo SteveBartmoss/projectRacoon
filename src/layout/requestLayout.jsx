@@ -1,5 +1,5 @@
 import { Btn } from "../ui/btn/btn";
-import { Row } from "../ui/containers/containers";
+import { Box, Row } from "../ui/containers/containers";
 import { Select } from "../ui/select/select";
 import { TextField } from "../ui/textField/textField";
 
@@ -31,15 +31,29 @@ export function RequesLayout(){
 
     return(
         <Row>
-            <div>
+            <Box
+                styles={{
+                    padding: "1rem",
+                    width: "4.5rem"
+                }}
+            >
                 <Select elements={methodElements} />
-            </div>
-            <div>
+            </Box>
+            <Box
+                styles={{
+                    padding: "1rem",
+                    width: "30rem"
+                }}
+            >
                 <TextField />
-            </div>
-            <div>
+            </Box>
+            <Box
+                styles={{
+                    padding: "1rem",
+                }}
+            >
                 <Btn title='Send'/>
-            </div>
+            </Box>
         </Row>
     )
 
