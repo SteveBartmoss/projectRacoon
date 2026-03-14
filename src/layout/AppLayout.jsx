@@ -1,5 +1,6 @@
-import reactLogo from "../assets/react.svg"
+import logo from "../assets/racoon.png"
 import { Column, Row } from "../ui/containers/containers"
+import { Header } from "../ui/header/header"
 import { Tab } from "../ui/tab/tab"
 import { RequesLayout } from "./requestLayout"
 
@@ -7,7 +8,7 @@ export function AppLayout(){
 
     const frameItems = [
         {
-            title: "Prueba",
+            title: "New Request",
             content: <RequesLayout />
         },
     ]
@@ -16,12 +17,7 @@ export function AppLayout(){
         <>
             <Column>
                 <Row>
-                    <div>
-                        <img src={reactLogo} />
-                    </div>
-                    <div>
-                        <h1>Racoon</h1>
-                    </div>
+                    <Header />
                 </Row>
                 <Row>
                     <div>
