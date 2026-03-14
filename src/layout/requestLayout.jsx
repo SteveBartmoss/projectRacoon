@@ -10,9 +10,9 @@ import { ResponseFrame } from "../ui/responseFrame/responseFrame";
 
 export function RequesLayout(){
 
-    const [method,setMethod] = useState('')
+    const [method,setMethod] = useState('GET')
     const [url,setUrl] = useState('')
-    const [body, setBody] = useState('')
+    const [requestBody, setRequestBody] = useState('')
     const [objResponse, setObjResponse] = useState({})
 
     const methodElements = [
@@ -96,7 +96,7 @@ export function RequesLayout(){
                 width: "50%",
                 height: "36rem",
             }}>
-                <BodyForm  />
+                <BodyForm body={requestBody} setBody={setRequestBody} />
             </Box>
             <ResponseFrame objProps={objResponse}/>
         </Row>
