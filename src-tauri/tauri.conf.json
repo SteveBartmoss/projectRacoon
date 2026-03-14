@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "racoon",
+        "title": "Racoon",
         "width": 800,
         "height": 600
       }
