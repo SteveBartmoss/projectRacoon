@@ -1,18 +1,20 @@
 .select-method {
   width: 100%;
-  padding: 12px 0;
-  border: none;
-  border-bottom: 2px solid #e0e0e0;
+  background-color: #1f2937;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  color: #fff;
   font-size: 16px;
-  background-color: transparent;
-  transition: all 0.3s ease;
-  color: #63b3ed;
-  appearance: none; /* elimina estilo nativo en algunos navegadores */
+  cursor: pointer;
+  transition: border .2s ease, box-shadow .2s ease;
+  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
 
 .select-method:focus {
-  border-color: #63b3ed;
   outline: none;
+  border-color: #63b3ed;
+  box-shadow: 0 0 0 2px rgba(99, 179, 237, 0.3);
 }
