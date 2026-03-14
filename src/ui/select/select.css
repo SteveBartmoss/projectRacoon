@@ -6,13 +6,13 @@
   font-size: 16px;
   background-color: transparent;
   transition: all 0.3s ease;
-  color: #646cff;
+  color: #63b3ed;
   appearance: none; /* elimina estilo nativo en algunos navegadores */
   -webkit-appearance: none;
   -moz-appearance: none;
 }
 
 .select-method:focus {
-  border-bottom-color: #646cff;
+  border-color: #63b3ed;
   outline: none;
 }
