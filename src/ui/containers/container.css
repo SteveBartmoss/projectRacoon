@@ -2,9 +2,11 @@
 .div-row{
     display: flex;
     flex-direction: row;
+    width: 100vw;
 }
 
 .div-col{
     display: flex;
     flex-direction: column;
+    height: 100vh;
 }
