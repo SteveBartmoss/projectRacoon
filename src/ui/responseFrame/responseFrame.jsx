@@ -1,12 +1,13 @@
+import './responseFrame.css'
 
 export function ResponseFrame({objProps}){
 
 
     return(
         <>
-        <div>
-            <div>
-                <pre>{JSON.stringify(objProps.objResponse, null, 2)}</pre>
+        <div className='div-container'>
+            <div className='div-response'>
+                <pre>{JSON.stringify(objProps.body, null, 2)}</pre>
             </div>
         </div>
         </>
