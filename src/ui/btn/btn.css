@@ -1,14 +1,17 @@
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: #3182ce;
   color: white;
   border: none;
   border-radius: 0.5rem;
-  padding: 0.6rem;
+  padding: 0.6rem 1rem;
   font-weight: 500;
+  font-size: 1rem;
+  font-family: inherit;
   cursor: pointer;
   transition: background .2s ease, transform .1s ease;
-  font-size: 1em;
-  font-family: inherit;
 }
 
 .btn:hover {
