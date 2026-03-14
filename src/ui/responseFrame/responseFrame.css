@@ -28,3 +28,16 @@
     scrollbar-color: #61dafb rgba(49, 49, 49, 0.2);
     scrollbar-width: thin;
 }
+
+.div-response::-webkit-scrollbar {
+    width: 5px;
+}
+
+.div-response::-webkit-scrollbar-track {
+    background-color: rgba(49, 49, 49, 0.2);
+}
+
+.div-response::-webkit-scrollbar-thumb {
+    background-color: #61dafb;
+    border-radius: 20px;
+}
