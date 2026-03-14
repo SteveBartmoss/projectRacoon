@@ -1,15 +1,14 @@
+import './tab.css'
 
 export function Tab({elements}){
-
-
 
     return(
         <div>
             {
                 elements.map(item => 
                     <>
-                    <div>
-                        <div>
+                    <div className="container-head">
+                        <div className='div-tabs'>
                             <p>{item.title}</p>
                         </div>
                     </div>
