@@ -55,7 +55,13 @@ export function RequesLayout(){
         
         console.log(data)
 
-        setObjResponse({objResponse: data})
+        setObjResponse({
+            status: data.status,
+            time: data.time,
+            size: data.size,
+            body: data.body,
+        })
+        
     }
 
     return(
@@ -86,7 +92,12 @@ export function RequesLayout(){
             </Box>
         </Row>
         <Row>
-            <BodyForm  />
+            <Box styles={{
+                width: "50%",
+                height: "36rem",
+            }}>
+                <BodyForm  />
+            </Box>
             <ResponseFrame objProps={objResponse}/>
         </Row>
         </>
