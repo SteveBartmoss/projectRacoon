@@ -3,9 +3,17 @@ import { Btn } from "../ui/btn/btn";
 import { Box, Row } from "../ui/containers/containers";
 import { Select } from "../ui/select/select";
 import { TextField } from "../ui/textField/textField";
+import { useState } from "react";
+import { BodyForm } from "../ui/bodyForm/bodyForm";
+import { ResponseFrame } from "../ui/responseFrame/responseFrame";
 
 
 export function RequesLayout(){
+
+    const [method,setMethod] = useState('')
+    const [url,setUrl] = useState('')
+    const [body, setBody] = useState('')
+    const [objResponse, setObjResponse] = useState({})
 
     const methodElements = [
         {
@@ -31,14 +39,27 @@ export function RequesLayout(){
     ]
 
     const handleRequest = async () => {
+
+        let objPeticion = {
+            url: url,
+            method: method,
+            params: null,
+            body: null,
+        }
+
+        console.log(objPeticion)
+
         let data = await invoke("fetch_data",{
-            url: 'https://yesno.wtf/api'
+            req: objPeticion
         })
         
         console.log(data)
+
+        setObjResponse({objResponse: data})
     }
 
     return(
+        <>
         <Row>
             <Box
                 styles={{
@@ -46,7 +67,7 @@ export function RequesLayout(){
                     width: "4.5rem"
                 }}
             >
-                <Select elements={methodElements} />
+                <Select target={method} handleChange={(event)=> setMethod(event.target.value) } elements={methodElements} />
             </Box>
             <Box
                 styles={{
@@ -54,7 +75,7 @@ export function RequesLayout(){
                     width: "30rem"
                 }}
             >
-                <TextField />
+                <TextField  target={url} handleTarget={(event)=>setUrl(event.target.value)}/>
             </Box>
             <Box
                 styles={{
@@ -64,6 +85,11 @@ export function RequesLayout(){
                 <Btn handle={handleRequest} title='Send'/>
             </Box>
         </Row>
+        <Row>
+            <BodyForm  />
+            <ResponseFrame objProps={objResponse}/>
+        </Row>
+        </>
     )
 
 }
