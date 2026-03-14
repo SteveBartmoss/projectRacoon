@@ -1,5 +1,6 @@
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use std::time::Instant;
 
 #[derive(Serialize, Deserialize)]
 pub struct HttpRequest {
@@ -9,8 +10,16 @@ pub struct HttpRequest {
     pub body: Option<serde_json::Value>
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct HttpResponse {
+    pub status: u16,
+    pub time: u128,
+    pub size: usize,
+    pub body: serde_json::Value
+}
+
 #[tauri::command]
-pub async fn fetch_data(req: HttpRequest) -> Result<serde_json::Value, String>{
+pub async fn fetch_data(req: HttpRequest) -> Result<HttpResponse, String>{
 
     let client = Client::new();
 
@@ -31,16 +40,32 @@ pub async fn fetch_data(req: HttpRequest) -> Result<serde_json::Value, String>{
         request = request.json(&body);
     }
 
+    let start = Instant::now();
+
     let response = request
         .send()
         .await
         .map_err(|e| e.to_string())?;
-        
-    let data: serde_json::Value = response
-        .json()
+
+    let status = response.status().as_u16();
+
+    let text = response
+        .text()
         .await
         .map_err(|e| e.to_string())?;
 
-    Ok(data)
+    let duration = start.elapsed().as_millis();
+
+    let size = text.len();
+    
+    let body: serde_json::Value =
+        serde_json::from_str(&text).unwrap_or(serde_json::Value::String(text));
+        
+    Ok(HttpResponse {
+        status,
+        time: duration,
+        size,
+        body
+    })
 
 }
