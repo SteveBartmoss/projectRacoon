@@ -1,4 +1,4 @@
-.div-container{
+.div-container {
     width: 65%;
     height: 40rem;
     display: flex;
@@ -7,7 +7,7 @@
     flex-grow: 0;
 }
 
-.div-status-bar{
+.div-status-bar {
     display: flex;
     flex-direction: row;
 }
@@ -16,7 +16,7 @@
     margin: 0 0.5rem;
 }
 
-.div-response{
+.div-response {
     margin: .5rem;
     border: 2px solid #63b3ed;
     border-radius: 0.5rem;
@@ -24,7 +24,7 @@
     height: 37rem;
     overflow-y: auto;
     padding: 1rem;
-    box-sizing: border-box; 
+    box-sizing: border-box;
     scrollbar-color: #61dafb rgba(49, 49, 49, 0.2);
     scrollbar-width: thin;
 }
@@ -42,6 +42,10 @@
     border-radius: 20px;
 }
 
-.btn-clipboard{
+.btn-clipboard {
     cursor: pointer;
+}
+
+.btn-clipboard:hover {
+    background: #2b6cb0;
 }
