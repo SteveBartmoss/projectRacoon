@@ -1,8 +1,18 @@
 import { Chip } from '../chip/chip'
 import './responseFrame.css'
+import copy from "../../assets/copy.svg"
 
 export function ResponseFrame({ objProps }) {
 
+    const handleClipBoard = async () => {
+        try{
+
+            await navigator.clipboard.writeText(JSON.stringify(objProps.body))
+
+        }catch(error){
+            console.log(error)
+        }
+    }
 
     return (
         <>
@@ -16,6 +26,9 @@ export function ResponseFrame({ objProps }) {
                     </div>
                     <div>
                         <Chip text={`size: ${objProps?.size}`} type={'main'} />
+                    </div>
+                    <div>
+                        <img className="copy" onClick={handleClipBoard} src={copy} />
                     </div>
                 </div>
                 <div className='div-response'>
