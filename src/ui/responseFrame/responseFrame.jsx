@@ -24,21 +24,21 @@ export function ResponseFrame({ objProps }) {
                             margin: ".3rem",
                         }}
                     >
-                        <Chip text={`status: ${objProps?.status}`} type={'main'}/>
+                        <Chip text={`status: ${objProps?.status ?? ""}`} type={'main'}/>
                     </Box>
                     <Box
                         styles={{
                             margin: ".3rem",
                         }}
                     >
-                        <Chip text={`time: ${objProps?.time}`} type={'main'}/>
+                        <Chip text={`time: ${objProps?.time ?? ""}`} type={'main'}/>
                     </Box>
                     <Box
                         styles={{
                             margin: ".3rem",
                         }}
                     >
-                        <Chip text={`size: ${objProps?.size}`} type={'main'} />
+                        <Chip text={`size: ${objProps?.size ?? ""}`} type={'main'} />
                     </Box>
                     <Box
                         styles={{
