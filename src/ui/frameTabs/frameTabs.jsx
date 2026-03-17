@@ -41,7 +41,7 @@ export function FrameTabs({ elements }) {
                     elements.map(item =>
                         <div className="div-tabs">
                             <p className="tab" onClick={() => handleChangeTab(item.id)}>{item.title}</p>
-                            <img  className="img-close" onClick={() => handleRemoveTab(item.id)} src={closeImg} />
+                            <img className="img-close" onClick={() => handleRemoveTab(item.id)} src={closeImg} />
                         </div>
                     )
                 }
@@ -49,15 +49,13 @@ export function FrameTabs({ elements }) {
                     <img className="img-add" onClick={handleAddTab} src={addImg} />
                 </div>
             </div>
-            <div>
-                {
-                    elements.map(item =>
-                        <div className={tabSelected !== item.id && 'tab-close'}>
-                            <RequesLayout />
-                        </div>
-                    )
-                }
-            </div>
+            {
+                elements.map(item =>
+                    <div className={tabSelected !== item.id ? 'tab-close' : 'div-content-tab'}>
+                        <RequesLayout />
+                    </div>
+                )
+            }
 
         </div>
     )
