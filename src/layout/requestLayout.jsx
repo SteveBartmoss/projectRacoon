@@ -10,7 +10,7 @@ import { Tab } from "../ui/tab/tab";
 import { Params } from "../ui/params/params";
 import { Auth } from "../ui/auth/aurth";
 import { useDispatch, useSelector } from "react-redux";
-import { setBody, setMethod, setUrl } from "../store/frameSlice";
+import { setBody, setMethod, setResponse, setUrl } from "../store/frameSlice";
 
 
 export function RequesLayout({id}) {
@@ -19,9 +19,6 @@ export function RequesLayout({id}) {
     const dispatch = useDispatch()
 
     const {url, method, body, response} = frame
-
-    const [requestBody, setRequestBody] = useState('')
-    const [objResponse, setObjResponse] = useState({})
 
     const methodElements = [
         {
@@ -71,7 +68,7 @@ export function RequesLayout({id}) {
                         width: "100%",
                         height: "50%",
                     }}>
-                        <BodyForm body={requestBody} setBody={setRequestBody} />
+                        <BodyForm body={body} setBody={handleBody} />
                     </Box> 
         },
         {
@@ -98,12 +95,12 @@ export function RequesLayout({id}) {
 
         console.log(data)
 
-        setObjResponse({
+        dispatch(setResponse({id: id, response: {
             status: data.status,
             time: data.time,
             size: data.size,
             body: data.body,
-        })
+        }}))
 
     }
 
@@ -152,7 +149,7 @@ export function RequesLayout({id}) {
                     </Box>
                     <Tab elements={tabsElements} />
                 </Box>
-                <ResponseFrame objProps={objResponse} />
+                <ResponseFrame objProps={response} />
             </Row>
         </>
     )
