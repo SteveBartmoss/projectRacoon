@@ -18,7 +18,7 @@ export function RequesLayout({id}) {
     const frame = useSelector((state) => state.frames.listFrames.find(element => element.id === id))
     const dispatch = useDispatch()
 
-    const {url, method, body, response} = frame
+    const {url, method, body, params, response} = frame
 
     const methodElements = [
         {
@@ -59,7 +59,7 @@ export function RequesLayout({id}) {
         {
             id: 1,
             title: "Params",
-            content: <Params />
+            content: <Params elements={params} />
         },
         {
             id: 2,
