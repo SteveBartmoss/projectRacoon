@@ -1,25 +1,34 @@
+import { useState } from 'react'
 import './tab.css'
 
-export function Tab({elements}){
+export function Tab({ elements }) {
 
-    return(
+    const [currentTab, setCurrentTab] = useState(1)
+
+
+
+    return (
         <div>
-            {
-                elements.map(item => 
-                    <>
-                    <div className="container-head">
+            <div className="container-head">
+                {
+                    elements.map(item =>
                         <div className='div-tabs'>
-                            <p>{item.title}</p>
+                            <p onClick={() => setCurrentTab(item.id)}>{item.title}</p>
                         </div>
-                    </div>
-                    <div>
-                        {
-                            item.content
-                        }
-                    </div>
-                    </>
-                )
-            }
+                    )
+                }
+            </div>
+            <div>
+                {
+                    elements.map(item =>
+                        <div className={currentTab !== item.id ? 'tab-close' : ''}>
+                            {
+                                item.content
+                            }
+                        </div>
+                    )
+                }
+            </div>
         </div>
     )
 
