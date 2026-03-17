@@ -66,10 +66,17 @@ export function RequesLayout(){
 
     return(
         <>
-        <Row>
+        <Box
+            styles={{
+                display: "flex",
+                flexDirection: "row",
+                width: "100vw",
+                border: "1px solid rgba(255, 255, 255, 0.05)"
+            }} 
+        >
             <Box
                 styles={{
-                    padding: "1rem",
+                    padding: "0.1rem .5rem",
                     width: "4.5rem"
                 }}
             >
@@ -77,7 +84,7 @@ export function RequesLayout(){
             </Box>
             <Box
                 styles={{
-                    padding: "1rem",
+                    padding: "0.1rem .5rem",
                     width: "30rem"
                 }}
             >
@@ -85,12 +92,12 @@ export function RequesLayout(){
             </Box>
             <Box
                 styles={{
-                    padding: "1rem",
+                    padding: "0.1rem 2rem",
                 }}
             >
                 <Btn handle={handleRequest} title='Send'/>
             </Box>
-        </Row>
+        </Box>
         <Row>
             <Box styles={{
                 width: "50%",
