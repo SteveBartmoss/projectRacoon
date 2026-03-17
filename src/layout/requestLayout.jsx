@@ -8,9 +8,9 @@ import { BodyForm } from "../ui/bodyForm/bodyForm";
 import { ResponseFrame } from "../ui/responseFrame/responseFrame";
 import { Tab } from "../ui/tab/tab";
 import { Params } from "../ui/params/params";
-import { Auth } from "../ui/auth/aurth";
+import { Auth } from "../ui/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { setBody, setMethod, setResponse, setUrl } from "../store/frameSlice";
+import { setAuth, setAuthType, setBody, setMethod, setResponse, setUrl } from "../store/frameSlice";
 
 
 export function RequesLayout({id}) {
@@ -55,6 +55,14 @@ export function RequesLayout({id}) {
         dispatch(setBody({id: id, body:value}))
     }
 
+    const handleAuth = (value) => {
+        dispatch(setAuth({id: id, auth: value}))
+    }
+
+    const handleAuthType = (value) => {
+        dispatch(setAuthType({id: id, authType: value}))
+    }
+
     const tabsElements = [
         {
             id: 1,
@@ -74,7 +82,7 @@ export function RequesLayout({id}) {
         {
             id: 3,
             title: "Auth",
-            content: <Auth auth={auth} authType={authType} />
+            content: <Auth auth={auth} authType={authType} setAuth={handleAuth} setAuthType={handleAuthType} />
         }
     ]
 
