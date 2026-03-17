@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux"
 import logo from "../assets/racoon.png"
 import { Column, Row } from "../ui/containers/containers"
 import { Header } from "../ui/header/header"
@@ -6,12 +7,7 @@ import { RequesLayout } from "./requestLayout"
 
 export function AppLayout(){
 
-    const frameItems = [
-        {
-            title: "New Request",
-            content: <RequesLayout />
-        },
-    ]
+    const frameItems = useSelector((state) => state.frames.listFrames)
     
     return (
         <>
