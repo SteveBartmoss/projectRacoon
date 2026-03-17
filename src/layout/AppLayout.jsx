@@ -4,6 +4,7 @@ import { Column, Row } from "../ui/containers/containers"
 import { Header } from "../ui/header/header"
 import { Tab } from "../ui/tab/tab"
 import { RequesLayout } from "./requestLayout"
+import { FrameTabs } from "../ui/frameTabs/frameTabs"
 
 export function AppLayout(){
 
@@ -17,7 +18,7 @@ export function AppLayout(){
                 </Row>
                 <Row>
                     <div>
-                        <Tab elements={frameItems} />
+                        <FrameTabs elements={frameItems} />
                     </div>
                 </Row>
                 <Row>
