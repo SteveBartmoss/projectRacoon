@@ -16,7 +16,7 @@
 }
 
 .tab:hover {
-    color: #646cff;
+    color: #63b3ed;
 }
 
 .tab-actibe {
@@ -27,12 +27,26 @@
 .div-tabs{
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: .3rem;
 }
 
-.img-close{
-    padding: 0!;
-    width: 1.3rem;
-    height: 1.3rem;
+.img-close:hover {
+    background-color: #1a1a1a;
+}
+
+.img-add:hover {
+    background-color: #1a1a1a;
+}
+
+.btn-add{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: .3rem;
 }
 
 .div-btn-icon{
