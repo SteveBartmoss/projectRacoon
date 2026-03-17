@@ -62,6 +62,20 @@ const frameSlice = createSlice({
             if (index !== -1) {
                 state.listFrames[index].response = action.payload.response
             }
+        },
+        setAuth(state, action){
+            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+
+            if (index !== -1) {
+                state.listFrames[index].auth = action.payload.auth
+            }
+        },
+        setAuthType(state, action){
+            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+
+            if (index !== -1) {
+                state.listFrames[index].authType = action.payload.authType
+            }
         }
     }
 })
@@ -73,7 +87,9 @@ export const {
     setUrl,
     setMethod,
     setBody,
-    setResponse
+    setResponse,
+    setAuth,
+    setAuthType
 } = frameSlice.actions
 
 export default frameSlice.reducer
