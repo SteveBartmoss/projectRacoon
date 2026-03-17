@@ -33,6 +33,10 @@
     padding: .3rem;
 }
 
+.div-content-tab{
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .img-close:hover {
     background-color: #1a1a1a;
 }
