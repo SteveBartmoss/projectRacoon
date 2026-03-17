@@ -6,12 +6,20 @@ import { TextField } from "../ui/textField/textField";
 import { useState } from "react";
 import { BodyForm } from "../ui/bodyForm/bodyForm";
 import { ResponseFrame } from "../ui/responseFrame/responseFrame";
+import { Tab } from "../ui/tab/tab";
+import { Params } from "../ui/params/params";
+import { Auth } from "../ui/auth/aurth";
+import { useDispatch, useSelector } from "react-redux";
+import { setBody, setMethod, setUrl } from "../store/frameSlice";
 
 
-export function RequesLayout(){
+export function RequesLayout({id}) {
 
-    const [method,setMethod] = useState('GET')
-    const [url,setUrl] = useState('')
+    const frame = useSelector((state) => state.frames.listFrames.find(element => element.id === id))
+    const dispatch = useDispatch()
+
+    const {url, method, body, response} = frame
+
     const [requestBody, setRequestBody] = useState('')
     const [objResponse, setObjResponse] = useState({})
 
@@ -25,7 +33,7 @@ export function RequesLayout(){
             title: "POST"
         },
         {
-            value: "PUT", 
+            value: "PUT",
             title: "PUT"
         },
         {
@@ -35,6 +43,41 @@ export function RequesLayout(){
         {
             value: "DELETE",
             title: "DELETE"
+        }
+    ]
+
+    const handleUrl = (value) => {
+        dispatch(setUrl({id: id, url:value}))
+    }
+
+    const handleMethod = (value) => {
+        dispatch(setMethod({id: id, method: value}))
+    }
+
+    const handleBody = (value) => {
+        dispatch(setBody({id: id, body:value}))
+    }
+
+    const tabsElements = [
+        {
+            id: 1,
+            title: "Params",
+            content: <Params />
+        },
+        {
+            id: 2,
+            title: "Body",
+            content: <Box styles={{
+                        width: "100%",
+                        height: "50%",
+                    }}>
+                        <BodyForm body={requestBody} setBody={setRequestBody} />
+                    </Box> 
+        },
+        {
+            id: 3,
+            title: "Auth",
+            content: <Auth />
         }
     ]
 
@@ -49,10 +92,10 @@ export function RequesLayout(){
 
         console.log(objPeticion)
 
-        let data = await invoke("fetch_data",{
+        let data = await invoke("fetch_data", {
             req: objPeticion
         })
-        
+
         console.log(data)
 
         setObjResponse({
@@ -61,52 +104,56 @@ export function RequesLayout(){
             size: data.size,
             body: data.body,
         })
-        
+
     }
 
-    return(
+    return (
         <>
-        <Box
-            styles={{
-                display: "flex",
-                flexDirection: "row",
-                width: "100vw",
-                border: "1px solid rgba(255, 255, 255, 0.05)"
-            }} 
-        >
-            <Box
-                styles={{
-                    padding: "0.1rem .5rem",
-                    width: "4.5rem"
-                }}
-            >
-                <Select target={method} handleChange={(event)=> setMethod(event.target.value) } elements={methodElements} />
-            </Box>
-            <Box
-                styles={{
-                    padding: "0.1rem .5rem",
-                    width: "30rem"
-                }}
-            >
-                <TextField  target={url} handleTarget={(event)=>setUrl(event.target.value)}/>
-            </Box>
-            <Box
-                styles={{
-                    padding: "0.1rem 2rem",
-                }}
-            >
-                <Btn handle={handleRequest} title='Send'/>
-            </Box>
-        </Box>
-        <Row>
-            <Box styles={{
-                width: "50%",
-                height: "36rem",
-            }}>
-                <BodyForm body={requestBody} setBody={setRequestBody} />
-            </Box>
-            <ResponseFrame objProps={objResponse}/>
-        </Row>
+
+            <Row>
+                <Box
+                    styles={{
+                        display: "flex",
+                        flexDirection: "column",
+                        height: "100vh",
+                        width: "40%"
+                    }}
+                >
+                    <Box
+                        styles={{
+                            display: "flex",
+                            flexDirection: "row",
+                            border: "1px solid rgba(255, 255, 255, 0.05)"
+                        }}
+                    >
+                        <Box
+                            styles={{
+                                padding: "0.1rem .5rem",
+                                width: "4.5rem"
+                            }}
+                        >
+                            <Select target={method} handleChange={(event) => handleMethod(event.target.value)} elements={methodElements} />
+                        </Box>
+                        <Box
+                            styles={{
+                                padding: "0.1rem .5rem",
+                                width: "30rem"
+                            }}
+                        >
+                            <TextField target={url} handleTarget={(event) => handleUrl(event.target.value)} />
+                        </Box>
+                        <Box
+                            styles={{
+                                padding: "0.1rem 2rem",
+                            }}
+                        >
+                            <Btn handle={handleRequest} title='Send' />
+                        </Box>
+                    </Box>
+                    <Tab elements={tabsElements} />
+                </Box>
+                <ResponseFrame objProps={objResponse} />
+            </Row>
         </>
     )
 
