@@ -10,6 +10,7 @@ const initialState = {
             body: "",
             params: [
                 {
+                    id: 1,
                     name: "",
                     value: "",
                 }
@@ -76,6 +77,44 @@ const frameSlice = createSlice({
             if (index !== -1) {
                 state.listFrames[index].authType = action.payload.authType
             }
+        },
+        setParamName(state,action){
+            const index = state.listFrames.findIndex(element => element.id === action.payload.frameId)
+            let paramIndex = null
+
+            if(index !== -1){
+                paramIndex = state.listFrames[index].params.findIndex(element => element.id === action.payload.paramId)
+            }
+
+            if([paramIndex !== -1]){
+                state.listFrames[index].params[paramIndex].name = action.payload.paramName
+            }
+        },
+        setParamValue(state,action){
+            const index = state.listFrames.findIndex(element => element.id === action.payload.frameId)
+            let paramIndex = null
+
+            if(index !== -1){
+                paramIndex = state.listFrames[index].params.findIndex(element => element.id === action.payload.paramId)
+            }
+
+            if([paramIndex !== -1]){
+                state.listFrames[index].params[paramIndex].value = action.payload.paramValue
+            }
+        },
+        addParam(state,action){
+            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+
+            if(index !== -1){
+                state.listFrames[index].params.push(action.payload.param)
+            }
+        },
+        removeParam(state,action){
+            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+
+            if(index !== -1){
+                state.listFrames[index].params.filter(element => element.id !== action.payload.paramId)
+            }
         }
     }
 })
@@ -89,7 +128,11 @@ export const {
     setBody,
     setResponse,
     setAuth,
-    setAuthType
+    setAuthType,
+    setParamName,
+    setParamValue,
+    addParam,
+    removeParam
 } = frameSlice.actions
 
 export default frameSlice.reducer
