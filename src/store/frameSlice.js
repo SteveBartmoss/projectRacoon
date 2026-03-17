@@ -8,9 +8,14 @@ const initialState = {
             url: "",
             method: "GET",
             body: "",
-            params: [],
-            auth: null,
-            response: null,
+            params: [
+                {
+                    name: "",
+                    value: "",
+                }
+            ],
+            auth: "",
+            response: {},
         }
     ],
     currentTab: 1,
