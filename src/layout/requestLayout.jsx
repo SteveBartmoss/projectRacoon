@@ -18,7 +18,7 @@ export function RequesLayout({id}) {
     const frame = useSelector((state) => state.frames.listFrames.find(element => element.id === id))
     const dispatch = useDispatch()
 
-    const {url, method, body, params, response} = frame
+    const {url, method, body, params, auth, authType, response} = frame
 
     const methodElements = [
         {
@@ -74,7 +74,7 @@ export function RequesLayout({id}) {
         {
             id: 3,
             title: "Auth",
-            content: <Auth />
+            content: <Auth auth={auth} authType={authType} />
         }
     ]
 
