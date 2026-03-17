@@ -3,6 +3,7 @@ import addImg from '../../assets/add.svg'
 import closeImg from '../../assets/close.svg'
 import { useDispatch, useSelector } from "react-redux";
 import { addFrame, removeFrame, setCurrentTab } from "../../store/frameSlice";
+import './frameTabs.css'
 
 export function FrameTabs({ elements }) {
 
@@ -16,18 +17,18 @@ export function FrameTabs({ elements }) {
     }
 
     const handleAddTab = () => {
-        if(listFrames.length<=0){
-            dispatch(addFrame({id:1, title: "New Request"}))
+        if (listFrames.length <= 0) {
+            dispatch(addFrame({ id: 1, title: "New Request" }))
             return
         }
 
-        let counter = listFrames[listFrames.length-1].id
+        let counter = listFrames[listFrames.length - 1].id
 
-        dispatch(addFrame({ id: counter+1, title: "New Request" }))
+        dispatch(addFrame({ id: counter + 1, title: "New Request" }))
 
     }
 
-    const handleRemoveTab=(id)=> {
+    const handleRemoveTab = (id) => {
         dispatch(removeFrame(id))
     }
 
@@ -38,16 +39,14 @@ export function FrameTabs({ elements }) {
             <div className="container-head">
                 {
                     elements.map(item =>
-                        <div>
-                            <div className="div-tabs">
-                                <p onClick={()=>handleChangeTab(item.id)}>{item.title}</p>
-                                <img onClick={()=>handleRemoveTab(item.id)} src={closeImg} />
-                            </div>
+                        <div className="div-tabs">
+                            <p className="tab" onClick={() => handleChangeTab(item.id)}>{item.title}</p>
+                            <img  className="img-close" onClick={() => handleRemoveTab(item.id)} src={closeImg} />
                         </div>
                     )
                 }
-                <div>
-                    <img onClick={handleAddTab} src={addImg} />
+                <div className="btn-add">
+                    <img className="img-add" onClick={handleAddTab} src={addImg} />
                 </div>
             </div>
             <div>
