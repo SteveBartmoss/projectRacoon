@@ -4,17 +4,17 @@ import { setParamName, setParamValue } from "../../store/frameSlice";
 import { Box } from "../containers/containers";
 
 
-export function Params({elements,setElements}){
+export function Params({elements}){
 
     const frameId = useSelector((state) => state.frames.currentTab)
     const dispatch = useDispatch()
 
-    const handleName=(value,paramIndex) => {
-        dispatch(setParamName({frameId: frameId, paramIndex: paramIndex, paramName: value  }))
+    const handleName=(value,paramId) => {
+        dispatch(setParamName({frameId: frameId, paramId: paramId, paramName: value  }))
     }
 
-    const handleValue=(value, paramIndex) => {
-        dispatch(setParamValue({frameId: frameId, paramIndex: paramIndex, paramValue: value}))
+    const handleValue=(value, paramId) => {
+        dispatch(setParamValue({frameId: frameId, paramId: paramId, paramValue: value}))
     }
 
     return(
@@ -47,7 +47,7 @@ export function Params({elements,setElements}){
                                 width: "40%",
                                 margin: "1rem"
                             }}>
-                                <TextField target={item.value} handleTarget={(event) => handleValue(event.target.vaslue, item.id)} />
+                                <TextField target={item.value} handleTarget={(event) => handleValue(event.target.value, item.id)} />
                             </Box>
                         </Box>
                     )
