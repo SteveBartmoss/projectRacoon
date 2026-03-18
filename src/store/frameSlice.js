@@ -86,7 +86,7 @@ const frameSlice = createSlice({
                 paramIndex = state.listFrames[index].params.findIndex(element => element.id === action.payload.paramId)
             }
 
-            if([paramIndex !== -1]){
+            if(paramIndex !== -1){
                 state.listFrames[index].params[paramIndex].name = action.payload.paramName
             }
         },
@@ -98,7 +98,7 @@ const frameSlice = createSlice({
                 paramIndex = state.listFrames[index].params.findIndex(element => element.id === action.payload.paramId)
             }
 
-            if([paramIndex !== -1]){
+            if(paramIndex !== -1){
                 state.listFrames[index].params[paramIndex].value = action.payload.paramValue
             }
         },
