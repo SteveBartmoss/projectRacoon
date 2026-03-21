@@ -86,13 +86,26 @@ export function RequesLayout({id}) {
         }
     ]
 
+    const buildParams = (paramsArray) => {
+        return paramsArray.filter(p => p.name && p.value)
+            .reduce((acc, curr) => {
+                acc[curr.name] = curr.value
+                return acc
+            },{})
+    }
+
     const handleRequest = async () => {
+
+        const paramsObject = buildParams(params)
 
         let objPeticion = {
             url: url,
             method: method,
-            params: null,
-            body: null,
+            params: Object.keys(paramsObject).length ? paramsObject : null,
+            body: body ? JSON.parse(body) : null,
+            headers: {
+                Authorization: `${authType} ${auth}`
+            }
         }
 
         console.log(objPeticion)
