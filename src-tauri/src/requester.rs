@@ -7,7 +7,8 @@ pub struct HttpRequest {
     pub url: String,
     pub method: String,
     pub params: Option<std::collections::HashMap<String, String>>,
-    pub body: Option<serde_json::Value>
+    pub body: Option<serde_json::Value>,
+    pub headers: Option<std::collections::HashMap<String, String>>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -38,6 +39,12 @@ pub async fn fetch_data(req: HttpRequest) -> Result<HttpResponse, String>{
 
     if let Some(body) = req.body {
         request = request.json(&body);
+    }
+
+    if let Some(headers) = req.headers {
+        for(key, value ) in headers {
+            request = request.header(&key, &value);
+        }
     }
 
     let start = Instant::now();
