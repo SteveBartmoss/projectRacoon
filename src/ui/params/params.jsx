@@ -2,7 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { TextField } from "../textField/textField";
 import { setParamName, setParamValue } from "../../store/frameSlice";
 import { Box } from "../containers/containers";
-
+import './params.css'
+import addImg from '../../assets/add.svg'
 
 export function Params({elements}){
 
@@ -24,8 +25,13 @@ export function Params({elements}){
                 display: "flex",
                 flexDirection: "row"
             }}>
-                <p>Add</p>
-                <p>Delete All</p>
+                <div className="div-add">
+                    <p className="param-btn">Add</p>
+                    <img src={addImg} />
+                </div>
+                <div className="div-add">
+                    <p className="param-btn">Delete All</p>
+                </div>
             </Box>
             <Box styles={{
                 display: "flex",
