@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { TextField } from "../textField/textField";
-import { addParam, setParamName, setParamValue } from "../../store/frameSlice";
+import { addParam, cleanParams, setParamName, setParamValue } from "../../store/frameSlice";
 import { Box } from "../containers/containers";
 import './params.css'
 import addImg from '../../assets/add.svg'
@@ -33,6 +33,10 @@ export function Params({elements}){
         
     }
 
+    const handelDeleteAll=()=>{
+        dispatch(cleanParams({id: frameId, params: [{id: 1, name: "", value: ""}]}))
+    }
+
     return(
         <div>
             <p>Query parameters</p>
@@ -44,7 +48,7 @@ export function Params({elements}){
                     <p className="param-btn">Add</p>
                     <img src={addImg} />
                 </div>
-                <div className="div-add">
+                <div onClick={() => handelDeleteAll()} className="div-add">
                     <p className="param-btn">Delete All</p>
                 </div>
             </Box>
