@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { TextField } from "../textField/textField";
-import { addParam, cleanParams, setParamName, setParamValue } from "../../store/frameSlice";
+import { addParam, cleanParams, removeParam, setParamName, setParamValue } from "../../store/frameSlice";
 import { Box } from "../containers/containers";
 import './params.css'
 import addImg from '../../assets/add.svg'
+import deleteImg from '../../assets/delete.svg'
 
 export function Params({elements}){
 
@@ -35,6 +36,11 @@ export function Params({elements}){
 
     const handelDeleteAll=()=>{
         dispatch(cleanParams({id: frameId, params: [{id: 1, name: "", value: ""}]}))
+    }
+
+    const handleDeleteParam=(paramId)=>{
+        console.log("Entro")
+        dispatch(removeParam({id: frameId, paramId: paramId}))
     }
 
     return(
@@ -74,6 +80,9 @@ export function Params({elements}){
                             }}>
                                 <TextField textHolder={"value"} target={item.value} handleTarget={(event) => handleValue(event.target.value, item.id)} />
                             </Box>
+                           <div onClick={() => handleDeleteParam(item.id)} className="div-delete">
+                                <img className="img-delete" src={deleteImg} />
+                           </div>
                         </Box>
                     )
                 }
