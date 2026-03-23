@@ -39,7 +39,6 @@ export function Params({elements}){
     }
 
     const handleDeleteParam=(paramId)=>{
-        console.log("Entro")
         dispatch(removeParam({id: frameId, paramId: paramId}))
     }
 
