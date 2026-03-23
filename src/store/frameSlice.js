@@ -115,6 +115,13 @@ const frameSlice = createSlice({
             if(index !== -1){
                 state.listFrames[index].params.filter(element => element.id !== action.payload.paramId)
             }
+        },
+        cleanParams(state,action){
+            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+
+            if(index !== -1){
+                state.listFrames[index].params = action.payload.params
+            }
         }
     }
 })
@@ -132,7 +139,8 @@ export const {
     setParamName,
     setParamValue,
     addParam,
-    removeParam
+    removeParam,
+    cleanParams
 } = frameSlice.actions
 
 export default frameSlice.reducer
