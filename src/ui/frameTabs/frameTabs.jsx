@@ -24,7 +24,23 @@ export function FrameTabs({ elements }) {
 
         let counter = listFrames[listFrames.length - 1].id
 
-        dispatch(addFrame({ id: counter + 1, title: "New Request" }))
+        dispatch(addFrame({ 
+            id: counter + 1, 
+            title: "New Request", 
+            url: "",
+            method: "GET",
+            body: "",
+            params: [
+                {
+                    id: 1,
+                    name: "",
+                    value: "",
+                }
+            ],
+            auth: "",
+            authType: "",
+            response: {},
+        }))
 
     }
 
