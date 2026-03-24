@@ -74,7 +74,7 @@ export function FrameTabs({ elements }) {
 
     return (
 
-        <div>
+        <>
             <div className="container-head">
                 {
                     elements.map(item =>
@@ -97,7 +97,7 @@ export function FrameTabs({ elements }) {
                 )
             }
 
-        </div>
+        </>
     )
 
 }
