@@ -15,6 +15,18 @@ export function ResponseFrame({ objProps }) {
         }
     }
 
+    const setStatusResponse = (status) => {
+
+        if(!status ) return 'main'
+
+        if(status >= 200 && status < 300) return 'success'
+        if(status >= 300 && status < 400) return 'main'
+        if(status >= 400 && status < 500) return 'warning'
+        if(status >= 500) return 'error'
+
+        return 'main'
+    }
+
     return (
         <>
             <div className='div-container'>
@@ -24,7 +36,7 @@ export function ResponseFrame({ objProps }) {
                             margin: ".3rem",
                         }}
                     >
-                        <Chip text={`status: ${objProps?.status ?? ""}`} type={'main'}/>
+                        <Chip text={`status: ${objProps?.status ?? ""}`} type={setStatusResponse(objProps?.status)}/>
                     </Box>
                     <Box
                         styles={{
