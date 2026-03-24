@@ -78,7 +78,7 @@ export function FrameTabs({ elements }) {
             <div className="container-head">
                 {
                     elements.map(item =>
-                        <div className="div-tabs">
+                        <div key={item.id} className="div-tabs">
                             <Chip text={item.method} type={getColor(item.method)} />
                             <p className="tab" onClick={() => handleChangeTab(item.id)}>{item.title}</p>
                             <img className="img-close" onClick={() => handleRemoveTab(item.id)} src={closeImg} />
@@ -91,7 +91,7 @@ export function FrameTabs({ elements }) {
             </div>
             {
                 elements.map(item =>
-                    <div className={tabSelected !== item.id ? 'tab-close' : 'div-content-tab'}>
+                    <div key={item.id} className={tabSelected !== item.id ? 'tab-close' : 'div-content-tab'}>
                         <RequesLayout id={item.id} />
                     </div>
                 )
