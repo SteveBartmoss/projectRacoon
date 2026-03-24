@@ -2,6 +2,7 @@ import { useSelector } from "react-redux"
 import { Column, Row } from "../ui/containers/containers"
 import { Header } from "../ui/header/header"
 import { FrameTabs } from "../ui/frameTabs/frameTabs"
+import { FooterLayout } from "./FooterLayout"
 
 export function AppLayout(){
 
@@ -14,18 +15,9 @@ export function AppLayout(){
                     <Header />
                 </Row>
                 <Row>
-                    <div>
-                        <FrameTabs elements={frameItems} />
-                    </div>
+                    <FrameTabs elements={frameItems} />
                 </Row>
-                <Row>
-                    <p>
-                        Cliente http ligero
-                    </p>
-                    <p className="read-the-docs">
-                        Descubre mas sobre el proyecto aqui
-                    </p>
-                </Row>
+                <FooterLayout />
             </Column>
         </>
     )
