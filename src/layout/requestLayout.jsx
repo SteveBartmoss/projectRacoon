@@ -73,7 +73,7 @@ export function RequesLayout({id}) {
             title: "Body",
             content: <Box styles={{
                         width: "100%",
-                        height: "50%",
+                        height: "50vh",
                     }}>
                         <BodyForm body={body} setBody={handleBody} />
                     </Box> 
