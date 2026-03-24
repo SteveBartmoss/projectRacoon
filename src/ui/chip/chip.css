@@ -28,3 +28,13 @@
     background-color: rgba(216, 67, 21, .2);
     color: #D84315;
 }
+
+.redirect{
+    background-color: rgba(100, 108, 255, .2);
+    color: #646cff;
+}
+
+.alert{
+    background-color: rgba(255, 238, 0, .2);
+    color: #FFEE00;
+}
