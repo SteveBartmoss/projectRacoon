@@ -1,24 +1,27 @@
 import { useSelector } from "react-redux"
-import { Column, Row } from "../ui/containers/containers"
+import { Box, Column, Row } from "../ui/containers/containers"
 import { Header } from "../ui/header/header"
 import { FrameTabs } from "../ui/frameTabs/frameTabs"
 import { FooterLayout } from "./FooterLayout"
 
-export function AppLayout(){
+export function AppLayout() {
 
     const frameItems = useSelector((state) => state.frames.listFrames)
 
     return (
         <>
-            <Column>
+            <Box styles={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100vh",
+                width: "100vw"
+            }}>
                 <Row>
                     <Header />
                 </Row>
-                <Row>
-                    <FrameTabs elements={frameItems} />
-                </Row>
+                <FrameTabs elements={frameItems} />
                 <FooterLayout />
-            </Column>
+            </Box>
         </>
     )
 }
