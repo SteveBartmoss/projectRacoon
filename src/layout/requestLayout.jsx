@@ -132,7 +132,6 @@ export function RequesLayout({id}) {
                     styles={{
                         display: "flex",
                         flexDirection: "column",
-                        height: "100vh",
                         width: "40%"
                     }}
                 >
