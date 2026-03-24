@@ -10,6 +10,7 @@
 .div-status-bar {
     display: flex;
     flex-direction: row;
+    padding: .5rem;
 }
 
 .div-status-bar p {
