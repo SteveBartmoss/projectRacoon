@@ -4,6 +4,7 @@ import closeImg from '../../assets/close.svg'
 import { useDispatch, useSelector } from "react-redux";
 import { addFrame, removeFrame, setCurrentTab } from "../../store/frameSlice";
 import './frameTabs.css'
+import { Chip } from "../chip/chip";
 
 export function FrameTabs({ elements }) {
 
@@ -48,6 +49,28 @@ export function FrameTabs({ elements }) {
         dispatch(removeFrame(id))
     }
 
+    const getColor=(method)=>{
+
+        switch (method){
+            
+            case "GET":
+                return "success"
+
+            case "POST":
+                return "redirect"
+
+            case "PUT":
+                return "warning"
+            
+            case "PATCH":
+                return "alert"
+
+            case "DELETE":
+                return "error"
+        }
+
+    }
+
 
     return (
 
@@ -56,6 +79,7 @@ export function FrameTabs({ elements }) {
                 {
                     elements.map(item =>
                         <div className="div-tabs">
+                            <Chip text={item.method} type={getColor(item.method)} />
                             <p className="tab" onClick={() => handleChangeTab(item.id)}>{item.title}</p>
                             <img className="img-close" onClick={() => handleRemoveTab(item.id)} src={closeImg} />
                         </div>
