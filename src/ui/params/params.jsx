@@ -63,7 +63,7 @@ export function Params({elements}){
             }}>
                 {
                     elements.map(item => 
-                        <Box styles={{
+                        <Box key={item.id} styles={{
                             display: "flex",
                             flexDirection: "row"
                         }}>
