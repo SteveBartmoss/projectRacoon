@@ -12,7 +12,7 @@ export function Tab({ elements }) {
             <div className="container-head">
                 {
                     elements.map(item =>
-                        <div className='div-tabs'>
+                        <div key={item.id} className='div-tabs'>
                             <p className="tab" onClick={() => setCurrentTab(item.id)}>{item.title}</p>
                         </div>
                     )
@@ -21,7 +21,7 @@ export function Tab({ elements }) {
             <div>
                 {
                     elements.map(item =>
-                        <div className={currentTab !== item.id ? 'tab-close' : 'div-content-tab'}>
+                        <div key={item.id} className={currentTab !== item.id ? 'tab-close' : 'div-content-tab'}>
                             {
                                 item.content
                             }
