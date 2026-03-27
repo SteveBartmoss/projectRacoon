@@ -145,7 +145,7 @@ export function RequesLayout({id}) {
                         <Box
                             styles={{
                                 padding: "0.1rem .5rem",
-                                width: "4.5rem"
+                                width: "5 rem"
                             }}
                         >
                             <Select target={method} handleChange={(event) => handleMethod(event.target.value)} elements={methodElements} />
