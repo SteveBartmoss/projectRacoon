@@ -107,13 +107,9 @@ export function RequesLayout({id}) {
             }
         }
 
-        console.log(objPeticion)
-
         let data = await invoke("fetch_data", {
             req: objPeticion
         })
-
-        console.log(data)
 
         dispatch(setResponse({id: id, response: {
             status: data.status,
