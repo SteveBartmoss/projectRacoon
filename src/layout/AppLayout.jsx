@@ -13,12 +13,10 @@ export function AppLayout() {
             <Box styles={{
                 display: "flex",
                 flexDirection: "column",
-                height: "100vh",
-                width: "100vw"
+                height: "98vh",
+                width: "99vw"
             }}>
-                <Row>
-                    <Header />
-                </Row>
+                <Header />
                 <FrameTabs elements={frameItems} />
                 <FooterLayout />
             </Box>

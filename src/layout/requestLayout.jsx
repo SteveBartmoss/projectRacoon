@@ -12,12 +12,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAuth, setAuthType, setBody, setMethod, setResponse, setUrl } from "../store/frameSlice";
 
 
-export function RequesLayout({id}) {
+export function RequesLayout({ id }) {
 
     const frame = useSelector((state) => state.frames.listFrames.find(element => element.id === id))
     const dispatch = useDispatch()
 
-    const {url, method, body, params, auth, authType, response} = frame
+    const { url, method, body, params, auth, authType, response } = frame
 
     const methodElements = [
         {
@@ -43,23 +43,23 @@ export function RequesLayout({id}) {
     ]
 
     const handleUrl = (value) => {
-        dispatch(setUrl({id: id, url:value}))
+        dispatch(setUrl({ id: id, url: value }))
     }
 
     const handleMethod = (value) => {
-        dispatch(setMethod({id: id, method: value}))
+        dispatch(setMethod({ id: id, method: value }))
     }
 
     const handleBody = (value) => {
-        dispatch(setBody({id: id, body:value}))
+        dispatch(setBody({ id: id, body: value }))
     }
 
     const handleAuth = (value) => {
-        dispatch(setAuth({id: id, auth: value}))
+        dispatch(setAuth({ id: id, auth: value }))
     }
 
     const handleAuthType = (value) => {
-        dispatch(setAuthType({id: id, authType: value}))
+        dispatch(setAuthType({ id: id, authType: value }))
     }
 
     const tabsElements = [
@@ -72,11 +72,11 @@ export function RequesLayout({id}) {
             id: 2,
             title: "Body",
             content: <Box styles={{
-                        width: "100%",
-                        height: "50vh",
-                    }}>
-                        <BodyForm body={body} setBody={handleBody} />
-                    </Box> 
+                width: "100%",
+                height: "50vh",
+            }}>
+                <BodyForm body={body} setBody={handleBody} />
+            </Box>
         },
         {
             id: 3,
@@ -90,7 +90,7 @@ export function RequesLayout({id}) {
             .reduce((acc, curr) => {
                 acc[curr.name] = curr.value
                 return acc
-            },{})
+            }, {})
     }
 
     const handleRequest = async () => {
@@ -111,19 +111,23 @@ export function RequesLayout({id}) {
             req: objPeticion
         })
 
-        dispatch(setResponse({id: id, response: {
-            status: data.status,
-            time: data.time,
-            size: data.size,
-            body: data.body,
-        }}))
+        dispatch(setResponse({
+            id: id, response: {
+                status: data.status,
+                time: data.time,
+                size: data.size,
+                body: data.body,
+            }
+        }))
 
     }
 
     return (
         <>
-
-            <Row>
+            <Box styles={{
+                display: "flex",
+                flexDirection: "row",
+            }}>
                 <Box
                     styles={{
                         display: "flex",
@@ -165,7 +169,7 @@ export function RequesLayout({id}) {
                     <Tab elements={tabsElements} />
                 </Box>
                 <ResponseFrame objProps={response} />
-            </Row>
+            </Box>
         </>
     )
 
