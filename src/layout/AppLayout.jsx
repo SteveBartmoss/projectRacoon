@@ -16,9 +16,7 @@ export function AppLayout() {
                 height: "100vh",
                 width: "100vw"
             }}>
-                <Row>
-                    <Header />
-                </Row>
+                <Header />
                 <FrameTabs elements={frameItems} />
                 <FooterLayout />
             </Box>
