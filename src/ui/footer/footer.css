@@ -1,3 +1,8 @@
 .logo-tauri{
     height: 1rem;
+    margin: 0 .5rem;
+}
+
+.read-the-docs{
+    margin: 0;
 }
