@@ -13,8 +13,8 @@ export function AppLayout() {
             <Box styles={{
                 display: "flex",
                 flexDirection: "column",
-                height: "100vh",
-                width: "100vw"
+                height: "98vh",
+                width: "99vw"
             }}>
                 <Header />
                 <FrameTabs elements={frameItems} />
