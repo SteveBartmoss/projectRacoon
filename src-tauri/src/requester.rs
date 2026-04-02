@@ -1,6 +1,7 @@
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::time::Instant;
+use crate::AppState;
 
 #[derive(Serialize, Deserialize)]
 pub struct HttpRequest {
@@ -20,9 +21,12 @@ pub struct HttpResponse {
 }
 
 #[tauri::command]
-pub async fn fetch_data(req: HttpRequest) -> Result<HttpResponse, String>{
+pub async fn fetch_data( 
+    state: tauri::State<'_, AppState>,
+    req: HttpRequest
+) -> Result<HttpResponse, String>{
 
-    let client = Client::new();
+    let client = &state.client;
 
     let mut request = match req.method.as_str() {
         "GET" => client.get(&req.url),
