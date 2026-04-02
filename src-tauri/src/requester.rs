@@ -68,17 +68,32 @@ pub async fn fetch_data(
 
     let status = response.status().as_u16();
 
-    let text = response
-        .text()
+    let content_type = response
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("")
+        .to_string();
+
+    let bytes = response
+        .bytes()
         .await
         .map_err(|e| e.to_string())?;
 
     let duration = start.elapsed().as_millis();
 
-    let size = text.len();
-    
-    let body: serde_json::Value =
-        serde_json::from_str(&text).unwrap_or(serde_json::Value::String(text));
+    let size = bytes.len();
+
+    let body = if content_type.contains("application/json"){
+        serde_json::from_slice::<serde_json::Value>(&bytes)
+            .unwrap_or(serde_json::Value::String(
+                String::from_utf8_lossy(&bytes).to_string()
+            ))
+    } else {
+        serde_json::Value::String(
+            String::from_utf8_lossy(&bytes).to_string()
+        )
+    };
         
     Ok(HttpResponse {
         status,
