@@ -4,9 +4,18 @@ use std::time::Instant;
 use crate::AppState;
 
 #[derive(Serialize, Deserialize)]
+pub enum HttpMethod{
+    GET,
+    POST,
+    PUT,
+    PATCH,
+    DELETE
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct HttpRequest {
     pub url: String,
-    pub method: String,
+    pub method: HttpMethod,
     pub params: Option<std::collections::HashMap<String, String>>,
     pub body: Option<serde_json::Value>,
     pub headers: Option<std::collections::HashMap<String, String>>,
@@ -28,13 +37,12 @@ pub async fn fetch_data(
 
     let client = &state.client;
 
-    let mut request = match req.method.as_str() {
-        "GET" => client.get(&req.url),
-        "POST" => client.post(&req.url),
-        "PUT" => client.put(&req.url),
-        "PATCH" => client.patch(&req.url),
-        "DELETE" => client.delete(&req.url),
-        _ => return Err("Unsupported method".into())
+    let mut request = match req.method {
+        HttpMethod::GET => client.get(&req.url),
+        HttpMethod::POST => client.post(&req.url),
+        HttpMethod::PUT => client.put(&req.url),
+        HttpMethod::PATCH => client.patch(&req.url),
+        HttpMethod::DELETE => client.delete(&req.url),
     };
 
     if let Some(params) = req.params {
