@@ -10,3 +10,13 @@
     flex-direction: column;
     height: 100vh;
 }
+
+.v-box{
+    display: flex;
+    flex-direction: column;
+}
+
+.h-box{
+    display: flex;
+    flex-direction: row;
+}
