@@ -30,11 +30,16 @@ pub struct HttpResponse {
     pub body: serde_json::Value
 }
 
+#[derive(Serialize)]
+pub struct HttpError{
+    pub message: String
+}
+
 #[tauri::command]
 pub async fn fetch_data( 
     state: tauri::State<'_, AppState>,
     req: HttpRequest
-) -> Result<HttpResponse, String>{
+) -> Result<HttpResponse, HttpError>{
 
     let client = &state.client;
 
@@ -72,7 +77,9 @@ pub async fn fetch_data(
     let response = request
         .send()
         .await
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| HttpError {
+            message: e.to_string() 
+        })?;
 
     let status = response.status().as_u16();
 
@@ -86,7 +93,9 @@ pub async fn fetch_data(
     let bytes = response
         .bytes()
         .await
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| HttpError{
+            message: e.to_string()
+        })?;
 
     let duration = start.elapsed().as_millis();
 
