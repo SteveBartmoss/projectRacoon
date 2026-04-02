@@ -1,4 +1,4 @@
-import { Box, Row } from "../ui/containers/containers";
+import { Box } from "../ui/containers/containers";
 import { Footer } from "../ui/footer/footer";
 import { GitTag } from "../ui/tag/tag";
 
