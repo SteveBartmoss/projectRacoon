@@ -2,6 +2,7 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::time::Instant;
 use crate::AppState;
+use reqwest::header::{HeaderMap,HeaderName,HeaderValue};
 
 #[derive(Serialize, Deserialize)]
 pub enum HttpMethod{
@@ -54,9 +55,16 @@ pub async fn fetch_data(
     }
 
     if let Some(headers) = req.headers {
-        for(key, value ) in headers {
-            request = request.header(&key, &value);
+        let mut map = HeaderMap::new();
+
+        for (key, value) in headers {
+            map.insert(
+                HeaderName::from_bytes(key.as_bytes()).unwrap(),
+                HeaderValue::from_str(&value).unwrap(),
+            );
         }
+
+        request = request.headers(map);
     }
 
     let start = Instant::now();
