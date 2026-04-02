@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { Box, Column, Row } from "../ui/containers/containers"
+import { Box } from "../ui/containers/containers"
 import { Header } from "../ui/header/header"
 import { FrameTabs } from "../ui/frameTabs/frameTabs"
 import { FooterLayout } from "./FooterLayout"
