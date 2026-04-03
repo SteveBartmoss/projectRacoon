@@ -82,14 +82,16 @@ const frameSlice = createSlice({
             if(frame){
                 frame.method = action.payload.method
             }
-            
+
         },
         setBody(state, action) {
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
 
-            if (index !== -1) {
-                state.listFrames[index].body = action.payload.body
+            const frame = getFrame(state, action.payload.id)
+
+            if(frame){
+                frame.body = action.payload.body
             }
+            
         },
         setResponse(state, action) {
             const index = state.listFrames.findIndex(element => element.id === action.payload.id)
