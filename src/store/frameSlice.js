@@ -22,7 +22,7 @@ const initialState = {
     },
 
     framesIds: [1],
-
+    
     listFrames: [
         {
             id: 1,
@@ -45,34 +45,29 @@ const initialState = {
     currentTab: 1,
 }
 
-const getFrame = (state, id) => state.framesById[id]
+const getFrame = (state,id) => {
+    state.framesById[id]
+}
 
 const frameSlice = createSlice({
     name: 'frames',
     initialState,
     reducers: {
         addFrame(state, action) {
-            const  frame = action.payload
-            state.framesById[frame.id] = frame
-            state.framesIds.push(frame.id)
+            state.listFrames.push(action.payload)
         },
         setCurrentTab(state, action) {
             state.currentTab = action.payload
         },
         removeFrame(state, action) {
-            const id = action.payload
-
-            delete state.framesById[id]
-            state.framesIds = state.framesIds.filter(element => element !== id)
+            state.listFrames = state.listFrames.filter(element => element.id !== action.payload)
         },
         setUrl(state, action) {
+            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
 
-            const frame = getFrame(state, action.payload.id)
-
-            if (frame) {
-                frame.url = action.payload.url
+            if (index !== -1) {
+                state.listFrames[index].url = action.payload.url
             }
-            
         },
         setMethod(state, action) {
             const index = state.listFrames.findIndex(element => element.id === action.payload.id)
