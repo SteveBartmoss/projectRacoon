@@ -74,14 +74,15 @@ const frameSlice = createSlice({
             if(frame){
                 frame.url = action.payload.url
             }
-            
+
         },
         setMethod(state, action) {
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+            const frame = getFrame(state, action.payload.id)
 
-            if (index !== -1) {
-                state.listFrames[index].method = action.payload.method
+            if(frame){
+                frame.method = action.payload.method
             }
+            
         },
         setBody(state, action) {
             const index = state.listFrames.findIndex(element => element.id === action.payload.id)
