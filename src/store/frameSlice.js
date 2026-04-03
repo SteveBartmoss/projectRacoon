@@ -46,7 +46,7 @@ const initialState = {
 }
 
 const getFrame = (state,id) => {
-    state.framesById[id]
+    return state.framesById[id]
 }
 
 const frameSlice = createSlice({
