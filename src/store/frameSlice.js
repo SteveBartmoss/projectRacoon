@@ -99,14 +99,15 @@ const frameSlice = createSlice({
             if(frame){
                 frame.response = action.payload.response
             }
-            
+
         },
         setAuth(state, action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+            const frame = getFrame(state, action.payload.id)
 
-            if (index !== -1) {
-                state.listFrames[index].auth = action.payload.auth
+            if(frame){
+                frame.auth = action.payload.auth
             }
+            
         },
         setAuthType(state, action){
             const index = state.listFrames.findIndex(element => element.id === action.payload.id)
