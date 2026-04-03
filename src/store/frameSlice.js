@@ -161,14 +161,15 @@ const frameSlice = createSlice({
                     element => element.id !== action.payload.paramId
                 )
             }
-            
+
         },
         cleanParams(state,action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
-
-            if(index !== -1){
-                state.listFrames[index].params = action.payload.params
+            const frame = getFrame(state, action.payload.id)
+            
+            if(frame){
+                frame.params = action.payload.params
             }
+            
         }
     }
 })
