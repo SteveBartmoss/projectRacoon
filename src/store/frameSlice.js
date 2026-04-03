@@ -21,7 +21,7 @@ const initialState = {
         }
     },
 
-    framesIds: [1],
+    frameIds: [1],
     
     listFrames: [
         {
@@ -57,7 +57,7 @@ const frameSlice = createSlice({
             const frame = action.payload
 
             state.framesById[frame.id] = frame
-            state.framesIds.push(frame.id)
+            state.frameIds.push(frame.id)
         },
         setCurrentTab(state, action) {
             state.currentTab = action.payload
@@ -66,7 +66,7 @@ const frameSlice = createSlice({
             const id = action.payload
 
             delete state.framesById[id]
-            state.framesIds =  state.framesIds.filter(element => element !== id)
+            state.frameIds =  state.frameIds.filter(element => element !== id)
         },
         setUrl(state, action) {
             const frame = getFrame(state, action.payload.id)
@@ -116,7 +116,7 @@ const frameSlice = createSlice({
             if(frame){
                 frame.authType = action.payload.authType
             }
-            
+
         },
         setParamName(state,action){
             const index = state.listFrames.findIndex(element => element.id === action.payload.frameId)
