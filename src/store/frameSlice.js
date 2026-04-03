@@ -1,6 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    framesById: {
+        1: {
+            id: 1,
+            title: "New Request",
+            url: "",
+            method: "GET",
+            body: "",
+            params: [
+                {
+                    id: 1,
+                    name: "",
+                    value: "",
+                }
+            ],
+            auth: "",
+            authType: "",
+            response: {},
+        }
+    },
+
+    framesIds: [1],
+
     listFrames: [
         {
             id: 1,
@@ -23,25 +45,34 @@ const initialState = {
     currentTab: 1,
 }
 
+const getFrame = (state, id) => state.framesById[id]
+
 const frameSlice = createSlice({
     name: 'frames',
     initialState,
     reducers: {
         addFrame(state, action) {
-            state.listFrames.push(action.payload)
+            const  frame = action.payload
+            state.framesById[frame.id] = frame
+            state.framesIds.push(frame.id)
         },
         setCurrentTab(state, action) {
             state.currentTab = action.payload
         },
         removeFrame(state, action) {
-            state.listFrames = state.listFrames.filter(element => element.id !== action.payload)
+            const id = action.payload
+
+            delete state.framesById[id]
+            state.framesIds = state.framesIds.filter(element => element !== id)
         },
         setUrl(state, action) {
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
 
-            if (index !== -1) {
-                state.listFrames[index].url = action.payload.url
+            const frame = getFrame(state, action.payload.id)
+
+            if (frame) {
+                frame.url = action.payload.url
             }
+            
         },
         setMethod(state, action) {
             const index = state.listFrames.findIndex(element => element.id === action.payload.id)
