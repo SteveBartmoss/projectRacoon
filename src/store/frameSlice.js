@@ -63,7 +63,10 @@ const frameSlice = createSlice({
             state.currentTab = action.payload
         },
         removeFrame(state, action) {
-            state.listFrames = state.listFrames.filter(element => element.id !== action.payload)
+            const id = action.payload
+
+            delete state.framesById[id]
+            state.framesIds =  state.framesIds.filter(element => element !== id)
         },
         setUrl(state, action) {
             const index = state.listFrames.findIndex(element => element.id === action.payload.id)
