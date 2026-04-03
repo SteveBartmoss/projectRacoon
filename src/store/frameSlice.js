@@ -110,7 +110,6 @@ const frameSlice = createSlice({
 
         },
         setAuthType(state, action){
-
             const frame = getFrame(state, action.payload.id)
 
             if(frame){
@@ -133,7 +132,6 @@ const frameSlice = createSlice({
 
         },
         setParamValue(state,action){
-
             const frame = getFrame(state, action,payload.frameId)
 
             if(!frame) return
@@ -145,14 +143,15 @@ const frameSlice = createSlice({
             if(param){
                 param.value = action.payload.paramValue
             }
-            
+
         },
         addParam(state,action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+            const frame = getFrame(state, action.payload.id)
 
-            if(index !== -1){
-                state.listFrames[index].params.push(action.payload.param)
+            if(frame){
+                frame.params.push(action.payload.param)
             }
+            
         },
         removeParam(state,action){
             const index = state.listFrames.findIndex(element => element.id === action.payload.id)
