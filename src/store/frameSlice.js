@@ -119,16 +119,18 @@ const frameSlice = createSlice({
 
         },
         setParamName(state,action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.frameId)
-            let paramIndex = null
+            const frame = getFrame(state, action.payload.frameId)
 
-            if(index !== -1){
-                paramIndex = state.listFrames[index].params.findIndex(element => element.id === action.payload.paramId)
-            }
+            if(!frame) return
 
-            if(paramIndex !== -1){
-                state.listFrames[index].params[paramIndex].name = action.payload.paramName
+            const param = frame.params.find(
+                element => element.id === action.payload.paramId
+            )
+
+            if(param){
+                param.name = action.payload.action.payload.paramName
             }
+            
         },
         setParamValue(state,action){
             const index = state.listFrames.findIndex(element => element.id === action.payload.frameId)
