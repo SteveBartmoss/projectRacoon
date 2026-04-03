@@ -54,7 +54,10 @@ const frameSlice = createSlice({
     initialState,
     reducers: {
         addFrame(state, action) {
-            state.listFrames.push(action.payload)
+            const frame = action.payload
+
+            state.framesById[frame.id] = frame
+            state.framesIds.push(frame.id)
         },
         setCurrentTab(state, action) {
             state.currentTab = action.payload
