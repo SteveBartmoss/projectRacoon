@@ -151,14 +151,17 @@ const frameSlice = createSlice({
             if(frame){
                 frame.params.push(action.payload.param)
             }
-            
+
         },
         removeParam(state,action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+            const frame = getFrame(state,action.payload.id)
 
-            if(index !== -1){
-                state.listFrames[index].params = state.listFrames[index].params.filter(element => element.id !== action.payload.paramId)
+            if(frame){
+                frame.params = frame.params.filter(
+                    element => element.id !== action.payload.paramId
+                )
             }
+            
         },
         cleanParams(state,action){
             const index = state.listFrames.findIndex(element => element.id === action.payload.id)
