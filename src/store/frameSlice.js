@@ -69,11 +69,12 @@ const frameSlice = createSlice({
             state.framesIds =  state.framesIds.filter(element => element !== id)
         },
         setUrl(state, action) {
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+            const frame = getFrame(state, action.payload.id)
 
-            if (index !== -1) {
-                state.listFrames[index].url = action.payload.url
+            if(frame){
+                frame.url = action.payload.url
             }
+            
         },
         setMethod(state, action) {
             const index = state.listFrames.findIndex(element => element.id === action.payload.id)
