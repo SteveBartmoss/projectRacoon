@@ -138,7 +138,8 @@ const frameSlice = createSlice({
             const frame = getFrame(state, action.payload.id)
 
             if(frame){
-                frame.params.push(action.payload.param)
+                frame.paramsById[action.payload.param.id] = action.payload.param
+                frame.paramIds.push(action.payload.param.id)
             }
 
         },
