@@ -10,7 +10,7 @@ export function Params({elements}){
 
     const frameId = useSelector((state) => state.frames.currentTab)
     const dispatch = useDispatch()
-    const listFrames = useSelector((state) => state.frames.listFrames)
+    const frame = useSelector((state) => state.frames.framesById[frameId])
 
     const handleName=(value,paramId) => {
         dispatch(setParamName({frameId: frameId, paramId: paramId, paramName: value  }))
@@ -21,7 +21,6 @@ export function Params({elements}){
     }
 
     const handleAddParam=() => {
-        const frame = listFrames.find((element) => element.id == frameId)
 
         if(frame.params.length <= 0){
             dispatch(addParam({id: frameId,param: {id: 1, name: "", value: ""}}))
