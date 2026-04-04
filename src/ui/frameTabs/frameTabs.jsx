@@ -19,12 +19,20 @@ export function FrameTabs({ elements }) {
 
     const handleAddTab = () => {
         if (listFrames.length <= 0) {
-            dispatch(addFrame({ 
-                id: 1, 
+            dispatch(addFrame({
+                id: 1,
                 title: "New Request",
                 url: "",
                 method: "GET",
                 body: "",
+                paramsById: {
+                    1: {
+                        id: 1,
+                        name: "",
+                        value: "",
+                    },
+                },
+                paramIds: [1],
                 params: [
                     {
                         id: 1,
@@ -41,12 +49,20 @@ export function FrameTabs({ elements }) {
 
         let counter = listFrames[listFrames.length - 1]
 
-        dispatch(addFrame({ 
-            id: counter + 1, 
-            title: "New Request", 
+        dispatch(addFrame({
+            id: counter + 1,
+            title: "New Request",
             url: "",
             method: "GET",
             body: "",
+            paramsById: {
+                1: {
+                    id: 1,
+                    name: "",
+                    value: "",
+                },
+            },
+            paramIds: [1],
             params: [
                 {
                     id: 1,
@@ -65,10 +81,10 @@ export function FrameTabs({ elements }) {
         dispatch(removeFrame(id))
     }
 
-    const getColor=(method)=>{
+    const getColor = (method) => {
 
-        switch (method){
-            
+        switch (method) {
+
             case "GET":
                 return "success"
 
@@ -77,7 +93,7 @@ export function FrameTabs({ elements }) {
 
             case "PUT":
                 return "warning"
-            
+
             case "PATCH":
                 return "alert"
 
