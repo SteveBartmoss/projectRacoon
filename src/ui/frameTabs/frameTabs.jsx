@@ -33,13 +33,6 @@ export function FrameTabs({ elements }) {
                     },
                 },
                 paramIds: [1],
-                params: [
-                    {
-                        id: 1,
-                        name: "",
-                        value: "",
-                    }
-                ],
                 auth: "",
                 authType: "",
                 response: {},
@@ -63,13 +56,6 @@ export function FrameTabs({ elements }) {
                 },
             },
             paramIds: [1],
-            params: [
-                {
-                    id: 1,
-                    name: "",
-                    value: "",
-                }
-            ],
             auth: "",
             authType: "",
             response: {},
