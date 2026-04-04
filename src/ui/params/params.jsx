@@ -22,19 +22,19 @@ export function Params({elements}){
 
     const handleAddParam=() => {
 
-        if(frame.params.length <= 0){
+        if(frame.paramIds.length <= 0){
             dispatch(addParam({id: frameId,param: {id: 1, name: "", value: ""}}))
             return
         }
 
-        let counter = frame.params[frame.params.length - 1].id
+        let counter = frame.paramIds.length
 
         dispatch(addParam({id: frameId, param: {id: counter + 1, name: "", value: ""}}))
         
     }
 
     const handelDeleteAll=()=>{
-        dispatch(cleanParams({id: frameId, params: [{id: 1, name: "", value: ""}]}))
+        dispatch(cleanParams({id: frameId, param: {id: 1, name: "", value: ""}}))
     }
 
     const handleDeleteParam=(paramId)=>{
