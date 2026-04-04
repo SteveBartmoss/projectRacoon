@@ -8,7 +8,7 @@ import { Chip } from "../chip/chip";
 
 export function FrameTabs({ elements }) {
 
-    const listFrames = useSelector((state) => state.frames.listFrames)
+    const listFrames = useSelector((state) => state.frames.frameIds)
     const tabSelected = useSelector((state) => state.frames.currentTab)
 
     const dispatch = useDispatch()
@@ -19,11 +19,27 @@ export function FrameTabs({ elements }) {
 
     const handleAddTab = () => {
         if (listFrames.length <= 0) {
-            dispatch(addFrame({ id: 1, title: "New Request" }))
+            dispatch(addFrame({ 
+                id: 1, 
+                title: "New Request",
+                url: "",
+                method: "GET",
+                body: "",
+                params: [
+                    {
+                        id: 1,
+                        name: "",
+                        value: "",
+                    }
+                ],
+                auth: "",
+                authType: "",
+                response: {},
+            }))
             return
         }
 
-        let counter = listFrames[listFrames.length - 1].id
+        let counter = listFrames[listFrames.length - 1]
 
         dispatch(addFrame({ 
             id: counter + 1, 
