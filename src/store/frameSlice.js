@@ -16,13 +16,6 @@ const initialState = {
                 },
             },
             paramIds: [1],
-            params: [
-                {
-                    id: 1,
-                    name: "",
-                    value: "",
-                }
-            ],
             auth: "",
             authType: "",
             response: {},
