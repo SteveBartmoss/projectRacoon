@@ -8,6 +8,14 @@ const initialState = {
             url: "",
             method: "GET",
             body: "",
+            paramsById: {
+                1: {
+                    id: 1,
+                    name: "",
+                    value: "",
+                },
+            },
+            paramIds: [1],
             params: [
                 {
                     id: 1,
@@ -28,6 +36,10 @@ const initialState = {
 
 const getFrame = (state,id) => {
     return state.framesById[id]
+}
+
+const getParam = (frame,id) => {
+    return frame.paramsById[id]
 }
 
 const frameSlice = createSlice({
@@ -103,9 +115,7 @@ const frameSlice = createSlice({
 
             if(!frame) return
 
-            const param = frame.params.find(
-                element => element.id === action.payload.paramId
-            )
+            const param = getParam(framem,action.payload.paramId)
 
             if(param){
                 param.name = action.payload.paramName
