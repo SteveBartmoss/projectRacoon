@@ -115,7 +115,7 @@ const frameSlice = createSlice({
 
             if(!frame) return
 
-            const param = getParam(framem,action.payload.paramId)
+            const param = getParam(frame,action.payload.paramId)
 
             if(param){
                 param.name = action.payload.paramName
@@ -127,9 +127,7 @@ const frameSlice = createSlice({
 
             if(!frame) return
 
-            const param = frame.params.find(
-                element => element.id === action.payload.paramId
-            )
+            const param = getParam(frame,action.payload.paramId)
 
             if(param){
                 param.value = action.payload.paramValue
