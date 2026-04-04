@@ -14,7 +14,7 @@ import { setAuth, setAuthType, setBody, setMethod, setResponse, setUrl } from ".
 
 export function RequesLayout({ id }) {
 
-    const frame = useSelector((state) => state.frames.listFrames.find(element => element.id === id))
+    const frame = useSelector((state) => state.frames.framesById[id])
     const dispatch = useDispatch()
 
     const { url, method, body, params, auth, authType, response } = frame
