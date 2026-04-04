@@ -34,11 +34,11 @@ const initialState = {
     currentTab: 1,
 }
 
-const getFrame = (state,id) => {
+const getFrame = (state, id) => {
     return state.framesById[id]
 }
 
-const getParam = (frame,id) => {
+const getParam = (frame, id) => {
     return frame.paramsById[id]
 }
 
@@ -59,12 +59,12 @@ const frameSlice = createSlice({
             const id = action.payload
 
             delete state.framesById[id]
-            state.frameIds =  state.frameIds.filter(element => element !== id)
+            state.frameIds = state.frameIds.filter(element => element !== id)
         },
         setUrl(state, action) {
             const frame = getFrame(state, action.payload.id)
 
-            if(frame){
+            if (frame) {
                 frame.url = action.payload.url
             }
 
@@ -72,7 +72,7 @@ const frameSlice = createSlice({
         setMethod(state, action) {
             const frame = getFrame(state, action.payload.id)
 
-            if(frame){
+            if (frame) {
                 frame.method = action.payload.method
             }
 
@@ -81,7 +81,7 @@ const frameSlice = createSlice({
 
             const frame = getFrame(state, action.payload.id)
 
-            if(frame){
+            if (frame) {
                 frame.body = action.payload.body
             }
 
@@ -89,74 +89,81 @@ const frameSlice = createSlice({
         setResponse(state, action) {
             const frame = getFrame(state, action.payload.id)
 
-            if(frame){
+            if (frame) {
                 frame.response = action.payload.response
             }
 
         },
-        setAuth(state, action){
+        setAuth(state, action) {
             const frame = getFrame(state, action.payload.id)
 
-            if(frame){
+            if (frame) {
                 frame.auth = action.payload.auth
             }
 
         },
-        setAuthType(state, action){
+        setAuthType(state, action) {
             const frame = getFrame(state, action.payload.id)
 
-            if(frame){
+            if (frame) {
                 frame.authType = action.payload.authType
             }
 
         },
-        setParamName(state,action){
+        setParamName(state, action) {
             const frame = getFrame(state, action.payload.frameId)
 
-            if(!frame) return
+            if (!frame) return
 
-            const param = getParam(frame,action.payload.paramId)
+            const param = getParam(frame, action.payload.paramId)
 
-            if(param){
+            if (param) {
                 param.name = action.payload.paramName
             }
 
         },
-        setParamValue(state,action){
+        setParamValue(state, action) {
             const frame = getFrame(state, action.payload.frameId)
 
-            if(!frame) return
+            if (!frame) return
 
-            const param = getParam(frame,action.payload.paramId)
+            const param = getParam(frame, action.payload.paramId)
 
-            if(param){
+            if (param) {
                 param.value = action.payload.paramValue
             }
 
         },
-        addParam(state,action){
+        addParam(state, action) {
             const frame = getFrame(state, action.payload.id)
 
-            if(frame){
+            if (frame) {
                 frame.paramsById[action.payload.param.id] = action.payload.param
                 frame.paramIds.push(action.payload.param.id)
             }
 
         },
-        removeParam(state,action){
-            const frame = getFrame(state,action.payload.id)
+        removeParam(state, action) {
+            const frame = getFrame(state, action.payload.id)
 
-            if(frame){
+            if (frame) {
                 delete frame.paramsById[action.payload.paramId]
                 frame.paramIds = frame.paramIds.filter(element => element !== action.payload.paramId)
             }
 
         },
-        cleanParams(state,action){
+        cleanParams(state, action) {
             const frame = getFrame(state, action.payload.id)
-            
-            if(frame){
-                frame.paramsById = action.payload.params
+
+            if (frame) {
+                frame.paramsById = {
+                    1: {
+                        id: 1,
+                        name: "",
+                        value: "",
+                    },
+                }
+                frame.paramIds = [1]
             }
 
         }
