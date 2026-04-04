@@ -22,26 +22,7 @@ const initialState = {
     },
 
     frameIds: [1],
-    
-    listFrames: [
-        {
-            id: 1,
-            title: "New Request",
-            url: "",
-            method: "GET",
-            body: "",
-            params: [
-                {
-                    id: 1,
-                    name: "",
-                    value: "",
-                }
-            ],
-            auth: "",
-            authType: "",
-            response: {},
-        }
-    ],
+
     currentTab: 1,
 }
 
