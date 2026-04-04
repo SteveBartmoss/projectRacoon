@@ -17,7 +17,9 @@ export function RequesLayout({ id }) {
     const frame = useSelector((state) => state.frames.framesById[id])
     const dispatch = useDispatch()
 
-    const { url, method, body, params, auth, authType, response } = frame
+    const { url, method, body, paramsById, paramIds, auth, authType, response } = frame
+
+    const params = paramIds.map(id => paramsById[id])
 
     const methodElements = [
         {
