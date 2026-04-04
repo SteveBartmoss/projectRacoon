@@ -147,8 +147,8 @@ const frameSlice = createSlice({
             const frame = getFrame(state,action.payload.id)
 
             if(frame){
-                delete frame.paramsById[ction.payload.paramId]
-                frame.paramIds = frame.paramIds.filter(element => element !== id)
+                delete frame.paramsById[action.payload.paramId]
+                frame.paramIds = frame.paramIds.filter(element => element !== action.payload.paramId)
             }
 
         },
@@ -156,7 +156,7 @@ const frameSlice = createSlice({
             const frame = getFrame(state, action.payload.id)
             
             if(frame){
-                frame.params = action.payload.params
+                frame.paramsById = action.payload.params
             }
 
         }
