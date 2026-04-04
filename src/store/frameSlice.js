@@ -127,12 +127,12 @@ const frameSlice = createSlice({
             )
 
             if(param){
-                param.name = action.payload.action.payload.paramName
+                param.name = action.payload.paramName
             }
 
         },
         setParamValue(state,action){
-            const frame = getFrame(state, action,payload.frameId)
+            const frame = getFrame(state, action.payload.frameId)
 
             if(!frame) return
 
@@ -169,7 +169,7 @@ const frameSlice = createSlice({
             if(frame){
                 frame.params = action.payload.params
             }
-            
+
         }
     }
 })
