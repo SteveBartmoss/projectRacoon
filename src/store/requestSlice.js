@@ -55,46 +55,11 @@ const requestSlice = createSlice({
                 request[action.payload.field] = action.payload.value
             }
         },
-        setUrl(state, action) {
-            const request = getRequest(state, action.payload.id)
-
-            if (request) {
-                request.url = action.payload.url
-            }
-        },
-        setMethod(state, action) {
-            const request = getRequest(state, action.payload.id)
-
-            if (request) {
-                request.method = action.payload.method
-            }
-        },
-        setBody(state, action) {
-            const request = getRequest(state, action.payload.id)
-
-            if (request) {
-                request.body = action.payload.body
-            }
-        },
         setResponse(state, action) {
             const request = getRequest(state, action.payload.id)
 
             if (request) {
                 request.response = action.payload.response
-            }
-        },
-        setAuth(state, action) {
-            const request = getRequest(state, action.payload.id)
-
-            if (request) {
-                request.auth = action.payload.auth
-            }
-        },
-        setAuthType(state, action) {
-            const request = getRequest(state, action.payload.id)
-
-            if (request) {
-                request.authType = action.payload.authType
             }
         },
         setParamName(state, action) {
@@ -160,12 +125,7 @@ export const {
     addRequest,
     removeRequest,
     setInfo,
-    setUrl,
-    setMethod,
-    setBody,
     setResponse,
-    setAuth,
-    setAuthType,
     setParamName,
     setParamValue,
     addParam,
