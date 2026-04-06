@@ -5,9 +5,9 @@ import { FrameTabs } from "../ui/frameTabs/frameTabs"
 import { FooterLayout } from "./FooterLayout"
 
 export function AppLayout() {
-    
-    const frames = useSelector((state) => 
-        state.frames.frameIds.map(id => state.frames.framesById[id])
+
+    const tabs = useSelector((state) => 
+        state.tabs.tabIds.map(id => state.tabs.tabsById[id])
     )
 
     return (
@@ -19,7 +19,7 @@ export function AppLayout() {
                 width: "99vw"
             }}>
                 <Header />
-                <FrameTabs elements={frames} />
+                <FrameTabs elements={tabs} />
                 <FooterLayout />
             </Box>
         </>
