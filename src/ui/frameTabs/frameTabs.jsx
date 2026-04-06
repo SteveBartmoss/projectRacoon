@@ -27,6 +27,7 @@ export function FrameTabs({ elements }) {
             dispatch(addTab({
                 id: tabCounter,
                 title: "New Request",
+                method: "GET",
                 next: null,
                 prev: null,
             }))
@@ -56,6 +57,8 @@ export function FrameTabs({ elements }) {
 
         dispatch(addTab({
             id: counter,
+            title: "New Request",
+            method: "GET",
             next: null,
             prev: tabCounter
         }))
