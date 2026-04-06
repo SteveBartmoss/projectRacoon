@@ -7,6 +7,7 @@ const initialState = {
         1: {
             id: 1,
             title: "New Request",
+            method: "GET",
             next: null,
             prev: null,
         }
