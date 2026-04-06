@@ -13,11 +13,11 @@ export function Params({elements}){
     const frame = useSelector((state) => state.requests.requestsById[tabId])
 
     const handleName=(value,paramId) => {
-        dispatch(setParamName({frameId: tabId, paramId: paramId, paramName: value  }))
+        dispatch(setParamName({requestId: tabId, paramId: paramId, paramName: value  }))
     }
 
     const handleValue=(value, paramId) => {
-        dispatch(setParamValue({frameId: tabId, paramId: paramId, paramValue: value}))
+        dispatch(setParamValue({requestId: tabId, paramId: paramId, paramValue: value}))
     }
 
     const handleAddParam=() => {
