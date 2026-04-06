@@ -1,12 +1,14 @@
 import { useSelector } from "react-redux"
-import { Box, Column, Row } from "../ui/containers/containers"
+import { Box } from "../ui/containers/containers"
 import { Header } from "../ui/header/header"
 import { FrameTabs } from "../ui/frameTabs/frameTabs"
 import { FooterLayout } from "./FooterLayout"
 
 export function AppLayout() {
 
-    const frameItems = useSelector((state) => state.frames.listFrames)
+    const tabs = useSelector((state) => 
+        state.tabs.tabIds.map(id => state.tabs.tabsById[id])
+    )
 
     return (
         <>
@@ -17,7 +19,7 @@ export function AppLayout() {
                 width: "99vw"
             }}>
                 <Header />
-                <FrameTabs elements={frameItems} />
+                <FrameTabs elements={tabs} />
                 <FooterLayout />
             </Box>
         </>

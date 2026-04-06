@@ -14,11 +14,11 @@ export function GitTag() {
             </a>
             <img className="logo-git" src={github} />
             <a
-                href='https://github.com/SteveBartmoss/projectRacoon/releases/tag/v0.13.2'
+                href='https://github.com/SteveBartmoss/projectRacoon/releases/tag/v1.0.0'
                 target="_blank"
                 rel="noreferrer"
             >
-                0.13.2
+                1.6.0
             </a>
         </div>
     )
