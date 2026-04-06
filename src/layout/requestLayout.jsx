@@ -9,15 +9,16 @@ import { Tab } from "../ui/tab/tab";
 import { Params } from "../ui/params/params";
 import { Auth } from "../ui/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { setAuth, setAuthType, setBody, setMethod, setResponse, setUrl } from "../store/frameSlice";
+import { setAuth, setAuthType, setBody, setMethod, setUrl } from "../store/requestSlice";
+
 
 
 export function RequesLayout({ id }) {
 
-    const frame = useSelector((state) => state.frames.framesById[id])
+    const request = useSelector((state) => state.requests.requestsById[id])
     const dispatch = useDispatch()
 
-    const { url, method, body, paramsById, paramIds, auth, authType, response } = frame
+    const { url, method, body, paramsById, paramIds, auth, authType, response } = request
 
     const params = paramIds.map(id => paramsById[id])
 
