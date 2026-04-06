@@ -1,3 +1,4 @@
+import { createSlice } from "@reduxjs/toolkit"
 
 
 const initialState = {
@@ -5,6 +6,7 @@ const initialState = {
     tabsById: {
         1: {
             id: 1,
+            title: "New Request",
             next: null,
             prev: null,
         }
@@ -36,6 +38,12 @@ const tabSlice = createSlice({
 
             delete state.tabsById[id]
             state.tabIds = state.tabIds.filter(element => element !== id)
+        },
+        setCounter(state,action){
+            state.counter = action.payload
+        },
+        setNext(state,action){
+            state.tabsById[action.payload.prev].next = action.payload.next
         }
     }
 })
@@ -43,7 +51,9 @@ const tabSlice = createSlice({
 export const {
     addTab,
     setCurrentTab,
-    removeTab
+    removeTab,
+    setCounter,
+    setNext
 } = tabSlice.actions
 
 export default tabSlice.reducer
