@@ -10,6 +10,7 @@ import { Params } from "../ui/params/params";
 import { Auth } from "../ui/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { setInfo } from "../store/requestSlice";
+import { setMethod } from "../store/tabSlice";
 
 
 
@@ -51,6 +52,7 @@ export function RequesLayout({ id }) {
 
     const handleMethod = (value) => {
         dispatch(setInfo({id: id, field: "method", value: value}))
+        dispatch(setMethod({id: id, value: value}))
     }
 
     const handleBody = (value) => {
