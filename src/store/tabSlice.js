@@ -14,6 +14,7 @@ const initialState = {
     },
     tabIds: [1],
     currentTab: 1, 
+    head: 1,
 }
 
 const getTab = (state,id) => {
@@ -28,6 +29,8 @@ const tabSlice = createSlice({
 
             const tab = action.payload
 
+            tab.prev = state.head
+            state.heaf = tab.id
             state.tabsById[tab.id] = tab
             state.tabIds.push(tab.id)
         },
@@ -37,15 +40,32 @@ const tabSlice = createSlice({
         removeTab(state,action){
             const id = action.payload
 
+            const next = state.tabsById[id].next
+            const prev = state.tabsById[id].prev
+            
+            if(next && prev){
+                state.head = next
+            }
+
+            if (next){
+                state.tabsById[next].prev = prev
+                state.head = next
+            }
+
+            if(prev){
+                state.head = prev
+                state.tabsById[prev].next = next
+            }
+
             delete state.tabsById[id]
             state.tabIds = state.tabIds.filter(element => element !== id)
+
+            console.log(state.tabsById)
+
         },
         setCounter(state,action){
             state.counter = action.payload
         },
-        setNext(state,action){
-            state.tabsById[action.payload.prev].next = action.payload.next
-        }
     }
 })
 
