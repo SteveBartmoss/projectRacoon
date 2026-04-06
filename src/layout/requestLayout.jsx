@@ -114,8 +114,10 @@ export function RequesLayout({ id }) {
             req: objPeticion
         })
 
-        dispatch(setResponse({
-            id: id, response: {
+        dispatch(setInfo({
+            id: id, 
+            field: "response",
+            value: {
                 status: data.status,
                 time: data.time,
                 size: data.size,
