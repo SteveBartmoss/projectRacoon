@@ -2,11 +2,10 @@ import { RequesLayout } from "../../layout/requestLayout";
 import addImg from '../../assets/add.svg'
 import closeImg from '../../assets/close.svg'
 import { useDispatch, useSelector } from "react-redux";
-import { addFrame, removeFrame, setCurrentTab } from "../../store/frameSlice";
 import './frameTabs.css'
 import { Chip } from "../chip/chip";
 import { addRequest, removeRequest } from "../../store/requestSlice";
-import { addTab, removeTab, setCounter, setNext } from "../../store/tabSlice";
+import { addTab, removeTab, setCounter, setCurrentTab } from "../../store/tabSlice";
 
 export function FrameTabs({ elements }) {
 
@@ -60,10 +59,8 @@ export function FrameTabs({ elements }) {
             title: "New Request",
             method: "GET",
             next: null,
-            prev: tabCounter
+            prev: null
         }))
-
-        dispatch(setNext({ prev: tabCounter, next: counter }))
 
         dispatch(addRequest({
             id: counter,
