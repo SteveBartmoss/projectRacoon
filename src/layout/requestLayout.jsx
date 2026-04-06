@@ -9,7 +9,7 @@ import { Tab } from "../ui/tab/tab";
 import { Params } from "../ui/params/params";
 import { Auth } from "../ui/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { setAuth, setAuthType, setBody, setMethod, setUrl } from "../store/requestSlice";
+import { setInfo } from "../store/requestSlice";
 
 
 
@@ -46,23 +46,23 @@ export function RequesLayout({ id }) {
     ]
 
     const handleUrl = (value) => {
-        dispatch(setUrl({ id: id, url: value }))
+        dispatch(setInfo({id: id, field: "url", value: value }))
     }
 
     const handleMethod = (value) => {
-        dispatch(setMethod({ id: id, method: value }))
+        dispatch(setInfo({id: id, field: "method", value: value}))
     }
 
     const handleBody = (value) => {
-        dispatch(setBody({ id: id, body: value }))
+        dispatch(setInfo({id: id, field: "body", value: value}))
     }
 
     const handleAuth = (value) => {
-        dispatch(setAuth({ id: id, auth: value }))
+        dispatch(setInfo({id: id, field: "auth", value: value}))
     }
 
     const handleAuthType = (value) => {
-        dispatch(setAuthType({ id: id, authType: value }))
+        dispatch(setInfo({id: id, field: "authType", value: value}))
     }
 
     const tabsElements = [
