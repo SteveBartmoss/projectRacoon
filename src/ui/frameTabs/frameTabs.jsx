@@ -5,11 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { addFrame, removeFrame, setCurrentTab } from "../../store/frameSlice";
 import './frameTabs.css'
 import { Chip } from "../chip/chip";
+import { addRequest, removeRequest } from "../../store/requestSlice";
+import { addTab, removeTab, setCounter, setNext } from "../../store/tabSlice";
 
 export function FrameTabs({ elements }) {
 
-    const listFrames = useSelector((state) => state.frames.frameIds)
-    const tabSelected = useSelector((state) => state.frames.currentTab)
+    const listFrames = useSelector((state) => state.tabs.tabIds)
+    const tabSelected = useSelector((state) => state.tabs.currentTab)
+    const tabCounter = useSelector((state) => state.tabs.counter)
 
     const dispatch = useDispatch()
 
@@ -19,8 +22,17 @@ export function FrameTabs({ elements }) {
 
     const handleAddTab = () => {
         if (listFrames.length <= 0) {
-            dispatch(addFrame({
-                id: 1,
+            dispatch(setCounter(1))
+
+            dispatch(addTab({
+                id: tabCounter,
+                title: "New Request",
+                next: null,
+                prev: null,
+            }))
+
+            dispatch(addRequest({
+                id: tabCounter,
                 title: "New Request",
                 url: "",
                 method: "GET",
@@ -40,10 +52,18 @@ export function FrameTabs({ elements }) {
             return
         }
 
-        let counter = listFrames[listFrames.length - 1]
+        let counter = tabCounter + 1
 
-        dispatch(addFrame({
-            id: counter + 1,
+        dispatch(addTab({
+            id: counter,
+            next: null,
+            prev: tabCounter
+        }))
+
+        dispatch(setNext({ prev: tabCounter, next: counter }))
+
+        dispatch(addRequest({
+            id: counter,
             title: "New Request",
             url: "",
             method: "GET",
@@ -61,10 +81,13 @@ export function FrameTabs({ elements }) {
             response: {},
         }))
 
+        dispatch(setCounter(counter))
+
     }
 
     const handleRemoveTab = (id) => {
-        dispatch(removeFrame(id))
+        dispatch(removeTab(id))
+        dispatch(removeRequest(id))
     }
 
     const getColor = (method) => {
@@ -88,7 +111,6 @@ export function FrameTabs({ elements }) {
         }
 
     }
-
 
     return (
 
