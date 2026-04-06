@@ -2,9 +2,25 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     requestsById: {
-
+        1: {
+            id: 1,
+            url: "",
+            method: "GET",
+            body: "",
+            paramsById: {
+                1: {
+                    id: 1,
+                    name: "",
+                    value: "",
+                },
+            },
+            paramIds: [1],
+            auth: "",
+            authType: "",
+            response: {},
+        }
     },
-    requestIds: [],
+    requestIds: [1],
     counter: 1,
 }
 
@@ -23,10 +39,10 @@ const requestSlice = createSlice({
         addRequest(state, action) {
             const request = action.payload
 
-            state.requestIds[request.id] = request
-            state.requestIds.push(frame.id)
+            state.requestsById[request.id] = request
+            state.requestIds.push(request.id)
         },
-        removeFrame(state, action) {
+        removeRequest(state, action) {
             const id = action.payload
 
             delete state.requestsById[id]
@@ -136,7 +152,7 @@ const requestSlice = createSlice({
 
 export const {
     addRequest,
-    removeFrame,
+    removeRequest,
     setUrl,
     setMethod,
     setBody,
@@ -146,7 +162,7 @@ export const {
     setParamName,
     setParamValue,
     addParam,
-    removeParamm,
+    removeParam,
     cleanParams
 } = requestSlice.actions
 
