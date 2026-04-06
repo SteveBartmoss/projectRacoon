@@ -66,6 +66,13 @@ const tabSlice = createSlice({
         setCounter(state,action){
             state.counter = action.payload
         },
+        setMethod(state, action){
+            const tab = getTab(state, action.payload.id)
+
+            if(tab){
+                tab.method = action.payload.value
+            }
+        }
     }
 })
 
@@ -74,7 +81,8 @@ export const {
     setCurrentTab,
     removeTab,
     setCounter,
-    setNext
+    setNext,
+    setMethod,
 } = tabSlice.actions
 
 export default tabSlice.reducer
