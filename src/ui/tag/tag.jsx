@@ -18,7 +18,7 @@ export function GitTag() {
                 target="_blank"
                 rel="noreferrer"
             >
-                1.1.0
+                1.5.0
             </a>
         </div>
     )
