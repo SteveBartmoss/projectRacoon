@@ -48,6 +48,13 @@ const requestSlice = createSlice({
             delete state.requestsById[id]
             state.requestIds = state.requestIds.filter(element => element !== id)
         },
+        setInfo(state, action){
+            const request = getRequest(state, action.payload.id)
+
+            if(request){
+                request[action.payload.field] = action.payload.value
+            }
+        },
         setUrl(state, action) {
             const request = getRequest(state, action.payload.id)
 
@@ -152,6 +159,7 @@ const requestSlice = createSlice({
 export const {
     addRequest,
     removeRequest,
+    setInfo,
     setUrl,
     setMethod,
     setBody,
