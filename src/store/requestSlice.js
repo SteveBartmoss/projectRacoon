@@ -55,13 +55,6 @@ const requestSlice = createSlice({
                 request[action.payload.field] = action.payload.value
             }
         },
-        setResponse(state, action) {
-            const request = getRequest(state, action.payload.id)
-
-            if (request) {
-                request.response = action.payload.response
-            }
-        },
         setParamName(state, action) {
 
             const request = getRequest(state, action.payload.requestId)
@@ -125,7 +118,6 @@ export const {
     addRequest,
     removeRequest,
     setInfo,
-    setResponse,
     setParamName,
     setParamValue,
     addParam,
