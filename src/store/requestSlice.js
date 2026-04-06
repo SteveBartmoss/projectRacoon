@@ -93,7 +93,6 @@ const requestSlice = createSlice({
         setParamName(state, action) {
 
             const request = getRequest(state, action.payload.requestId)
-
             if (!request) return
 
             const param = getParam(request, action.payload.paramId)
@@ -128,7 +127,7 @@ const requestSlice = createSlice({
 
             if (request) {
                 delete request.paramsById[action.payload.paramId]
-                request.paramIds = request.paramIds.fitler(element => element !== action.payload.paramId)
+                request.paramIds = request.paramIds.filter(element => element !== action.payload.paramId)
             }
         },
         cleanParams(state, action) {
