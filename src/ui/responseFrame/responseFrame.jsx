@@ -1,7 +1,10 @@
 import { Chip } from '../chip/chip'
 import './responseFrame.css'
 import copy from "../../assets/copy.svg"
+import download from "../../assets/download.svg"
 import { Box } from '../containers/containers'
+import { save } from "@tauri-apps/plugin-dialog";
+import { writeFile } from '@tauri-apps/plugin-fs'
 
 export function ResponseFrame({ objProps }) {
 
@@ -25,6 +28,24 @@ export function ResponseFrame({ objProps }) {
         if(status >= 500) return 'error'
 
         return 'main'
+    }
+
+    const handleDownload = async () => {
+
+        const path = await save({
+            defaultPath: "response.json"
+        })
+
+        if(!path) return
+
+        const encoder = new TextEncoder()
+
+        const bytes = encoder.encode(
+            JSON.stringify(objProps.body, null, 2)
+        )
+
+        await writeFile(path,bytes)
+        
     }
 
     return (
@@ -58,6 +79,13 @@ export function ResponseFrame({ objProps }) {
                         }}
                     >
                         <img className="btn-clipboard" onClick={handleClipBoard} src={copy} />
+                    </Box>
+                    <Box
+                        styles={{
+                            margin: ".3rem",
+                        }}
+                    >
+                        <img className="btn-clipboard" onClick={handleDownload} src={download} />
                     </Box>
                 </div>
                 <div className='div-response'>
