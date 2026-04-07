@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { Btn } from "../ui/btn/btn";
-import { Box, Row } from "../ui/containers/containers";
+import { Box } from "../ui/containers/containers";
 import { Select } from "../ui/select/select";
 import { TextField } from "../ui/textField/textField";
 import { BodyForm } from "../ui/bodyForm/bodyForm";
@@ -9,15 +9,19 @@ import { Tab } from "../ui/tab/tab";
 import { Params } from "../ui/params/params";
 import { Auth } from "../ui/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { setAuth, setAuthType, setBody, setMethod, setResponse, setUrl } from "../store/frameSlice";
+import { setInfo } from "../store/requestSlice";
+import { setMethod } from "../store/tabSlice";
 
 
-export function RequesLayout({id}) {
 
-    const frame = useSelector((state) => state.frames.listFrames.find(element => element.id === id))
+export function RequesLayout({ id }) {
+
+    const request = useSelector((state) => state.requests.requestsById[id])
     const dispatch = useDispatch()
 
-    const {url, method, body, params, auth, authType, response} = frame
+    const { url, method, body, paramsById, paramIds, auth, authType, response } = request
+
+    const params = paramIds.map(id => paramsById[id])
 
     const methodElements = [
         {
@@ -43,23 +47,24 @@ export function RequesLayout({id}) {
     ]
 
     const handleUrl = (value) => {
-        dispatch(setUrl({id: id, url:value}))
+        dispatch(setInfo({id: id, field: "url", value: value }))
     }
 
     const handleMethod = (value) => {
-        dispatch(setMethod({id: id, method: value}))
+        dispatch(setInfo({id: id, field: "method", value: value}))
+        dispatch(setMethod({id: id, value: value}))
     }
 
     const handleBody = (value) => {
-        dispatch(setBody({id: id, body:value}))
+        dispatch(setInfo({id: id, field: "body", value: value}))
     }
 
     const handleAuth = (value) => {
-        dispatch(setAuth({id: id, auth: value}))
+        dispatch(setInfo({id: id, field: "auth", value: value}))
     }
 
     const handleAuthType = (value) => {
-        dispatch(setAuthType({id: id, authType: value}))
+        dispatch(setInfo({id: id, field: "authType", value: value}))
     }
 
     const tabsElements = [
@@ -72,11 +77,11 @@ export function RequesLayout({id}) {
             id: 2,
             title: "Body",
             content: <Box styles={{
-                        width: "100%",
-                        height: "50vh",
-                    }}>
-                        <BodyForm body={body} setBody={handleBody} />
-                    </Box> 
+                width: "100%",
+                height: "50vh",
+            }}>
+                <BodyForm body={body} setBody={handleBody} />
+            </Box>
         },
         {
             id: 3,
@@ -90,7 +95,7 @@ export function RequesLayout({id}) {
             .reduce((acc, curr) => {
                 acc[curr.name] = curr.value
                 return acc
-            },{})
+            }, {})
     }
 
     const handleRequest = async () => {
@@ -111,19 +116,25 @@ export function RequesLayout({id}) {
             req: objPeticion
         })
 
-        dispatch(setResponse({id: id, response: {
-            status: data.status,
-            time: data.time,
-            size: data.size,
-            body: data.body,
-        }}))
+        dispatch(setInfo({
+            id: id, 
+            field: "response",
+            value: {
+                status: data.status,
+                time: data.time,
+                size: data.size,
+                body: data.body,
+            }
+        }))
 
     }
 
     return (
         <>
-
-            <Row>
+            <Box styles={{
+                display: "flex",
+                flexDirection: "row",
+            }}>
                 <Box
                     styles={{
                         display: "flex",
@@ -165,7 +176,7 @@ export function RequesLayout({id}) {
                     <Tab elements={tabsElements} />
                 </Box>
                 <ResponseFrame objProps={response} />
-            </Row>
+            </Box>
         </>
     )
 

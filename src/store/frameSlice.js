@@ -1,26 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    listFrames: [
-        {
+    framesById: {
+        1: {
             id: 1,
             title: "New Request",
             url: "",
             method: "GET",
             body: "",
-            params: [
-                {
+            paramsById: {
+                1: {
                     id: 1,
                     name: "",
                     value: "",
-                }
-            ],
+                },
+            },
+            paramIds: [1],
             auth: "",
             authType: "",
             response: {},
         }
-    ],
+    },
+
+    frameIds: [1],
+
     currentTab: 1,
+}
+
+const getFrame = (state, id) => {
+    return state.framesById[id]
+}
+
+const getParam = (frame, id) => {
+    return frame.paramsById[id]
 }
 
 const frameSlice = createSlice({
@@ -28,100 +40,125 @@ const frameSlice = createSlice({
     initialState,
     reducers: {
         addFrame(state, action) {
-            state.listFrames.push(action.payload)
+            const frame = action.payload
+
+            state.framesById[frame.id] = frame
+            state.frameIds.push(frame.id)
         },
         setCurrentTab(state, action) {
             state.currentTab = action.payload
         },
         removeFrame(state, action) {
-            state.listFrames = state.listFrames.filter(element => element.id !== action.payload)
+            const id = action.payload
+
+            delete state.framesById[id]
+            state.frameIds = state.frameIds.filter(element => element !== id)
         },
         setUrl(state, action) {
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+            const frame = getFrame(state, action.payload.id)
 
-            if (index !== -1) {
-                state.listFrames[index].url = action.payload.url
+            if (frame) {
+                frame.url = action.payload.url
             }
+
         },
         setMethod(state, action) {
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+            const frame = getFrame(state, action.payload.id)
 
-            if (index !== -1) {
-                state.listFrames[index].method = action.payload.method
+            if (frame) {
+                frame.method = action.payload.method
             }
+
         },
         setBody(state, action) {
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
 
-            if (index !== -1) {
-                state.listFrames[index].body = action.payload.body
+            const frame = getFrame(state, action.payload.id)
+
+            if (frame) {
+                frame.body = action.payload.body
             }
+
         },
         setResponse(state, action) {
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+            const frame = getFrame(state, action.payload.id)
 
-            if (index !== -1) {
-                state.listFrames[index].response = action.payload.response
+            if (frame) {
+                frame.response = action.payload.response
             }
+
         },
-        setAuth(state, action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+        setAuth(state, action) {
+            const frame = getFrame(state, action.payload.id)
 
-            if (index !== -1) {
-                state.listFrames[index].auth = action.payload.auth
+            if (frame) {
+                frame.auth = action.payload.auth
             }
+
         },
-        setAuthType(state, action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+        setAuthType(state, action) {
+            const frame = getFrame(state, action.payload.id)
 
-            if (index !== -1) {
-                state.listFrames[index].authType = action.payload.authType
+            if (frame) {
+                frame.authType = action.payload.authType
             }
+
         },
-        setParamName(state,action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.frameId)
-            let paramIndex = null
+        setParamName(state, action) {
+            const frame = getFrame(state, action.payload.frameId)
 
-            if(index !== -1){
-                paramIndex = state.listFrames[index].params.findIndex(element => element.id === action.payload.paramId)
+            if (!frame) return
+
+            const param = getParam(frame, action.payload.paramId)
+
+            if (param) {
+                param.name = action.payload.paramName
             }
 
-            if(paramIndex !== -1){
-                state.listFrames[index].params[paramIndex].name = action.payload.paramName
-            }
         },
-        setParamValue(state,action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.frameId)
-            let paramIndex = null
+        setParamValue(state, action) {
+            const frame = getFrame(state, action.payload.frameId)
 
-            if(index !== -1){
-                paramIndex = state.listFrames[index].params.findIndex(element => element.id === action.payload.paramId)
+            if (!frame) return
+
+            const param = getParam(frame, action.payload.paramId)
+
+            if (param) {
+                param.value = action.payload.paramValue
             }
 
-            if(paramIndex !== -1){
-                state.listFrames[index].params[paramIndex].value = action.payload.paramValue
-            }
         },
-        addParam(state,action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+        addParam(state, action) {
+            const frame = getFrame(state, action.payload.id)
 
-            if(index !== -1){
-                state.listFrames[index].params.push(action.payload.param)
+            if (frame) {
+                frame.paramsById[action.payload.param.id] = action.payload.param
+                frame.paramIds.push(action.payload.param.id)
             }
+
         },
-        removeParam(state,action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+        removeParam(state, action) {
+            const frame = getFrame(state, action.payload.id)
 
-            if(index !== -1){
-                state.listFrames[index].params = state.listFrames[index].params.filter(element => element.id !== action.payload.paramId)
+            if (frame) {
+                delete frame.paramsById[action.payload.paramId]
+                frame.paramIds = frame.paramIds.filter(element => element !== action.payload.paramId)
             }
+
         },
-        cleanParams(state,action){
-            const index = state.listFrames.findIndex(element => element.id === action.payload.id)
+        cleanParams(state, action) {
+            const frame = getFrame(state, action.payload.id)
 
-            if(index !== -1){
-                state.listFrames[index].params = action.payload.params
+            if (frame) {
+                frame.paramsById = {
+                    1: {
+                        id: 1,
+                        name: "",
+                        value: "",
+                    },
+                }
+                frame.paramIds = [1]
             }
+
         }
     }
 })

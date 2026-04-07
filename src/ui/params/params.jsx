@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { TextField } from "../textField/textField";
-import { addParam, cleanParams, removeParam, setParamName, setParamValue } from "../../store/frameSlice";
+import { addParam, cleanParams, removeParam, setParamName, setParamValue } from "../../store/requestSlice";
 import { Box } from "../containers/containers";
 import './params.css'
 import addImg from '../../assets/add.svg'
@@ -8,38 +8,38 @@ import deleteImg from '../../assets/delete.svg'
 
 export function Params({elements}){
 
-    const frameId = useSelector((state) => state.frames.currentTab)
+    const tabId = useSelector((state) => state.tabs.currentTab)
     const dispatch = useDispatch()
-    const listFrames = useSelector((state) => state.frames.listFrames)
+    const frame = useSelector((state) => state.requests.requestsById[tabId])
 
     const handleName=(value,paramId) => {
-        dispatch(setParamName({frameId: frameId, paramId: paramId, paramName: value  }))
+        dispatch(setParamName({requestId: tabId, paramId: paramId, paramName: value  }))
     }
 
     const handleValue=(value, paramId) => {
-        dispatch(setParamValue({frameId: frameId, paramId: paramId, paramValue: value}))
+        dispatch(setParamValue({requestId: tabId, paramId: paramId, paramValue: value}))
     }
 
     const handleAddParam=() => {
-        const frame = listFrames.find((element) => element.id == frameId)
 
-        if(frame.params.length <= 0){
-            dispatch(addParam({id: frameId,param: {id: 1, name: "", value: ""}}))
+        if(frame.paramIds.length <= 0){
+            dispatch(addParam({id: tabId,param: {id: 1, name: "", value: ""}}))
             return
         }
 
-        let counter = frame.params[frame.params.length - 1].id
+        let counter = frame.paramIds.length
 
-        dispatch(addParam({id: frameId, param: {id: counter + 1, name: "", value: ""}}))
+        dispatch(addParam({id: tabId, param: {id: counter + 1, name: "", value: ""}}))
         
     }
 
     const handelDeleteAll=()=>{
-        dispatch(cleanParams({id: frameId, params: [{id: 1, name: "", value: ""}]}))
+        dispatch(addParam({id: tabId, param: {id: counter + 1, name: "", value: ""}}))
+        dispatch(cleanParams({id: tabId, param: {id: 1, name: "", value: ""}}))
     }
 
     const handleDeleteParam=(paramId)=>{
-        dispatch(removeParam({id: frameId, paramId: paramId}))
+        dispatch(removeParam({id: tabId, paramId: paramId}))
     }
 
     return(

@@ -1,11 +1,21 @@
-use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::time::Instant;
+use crate::AppState;
+use reqwest::header::{HeaderMap,HeaderName,HeaderValue};
+
+#[derive(Serialize, Deserialize)]
+pub enum HttpMethod{
+    GET,
+    POST,
+    PUT,
+    PATCH,
+    DELETE
+}
 
 #[derive(Serialize, Deserialize)]
 pub struct HttpRequest {
     pub url: String,
-    pub method: String,
+    pub method: HttpMethod,
     pub params: Option<std::collections::HashMap<String, String>>,
     pub body: Option<serde_json::Value>,
     pub headers: Option<std::collections::HashMap<String, String>>,
@@ -19,18 +29,25 @@ pub struct HttpResponse {
     pub body: serde_json::Value
 }
 
+#[derive(Serialize)]
+pub struct HttpError{
+    pub message: String
+}
+
 #[tauri::command]
-pub async fn fetch_data(req: HttpRequest) -> Result<HttpResponse, String>{
+pub async fn fetch_data( 
+    state: tauri::State<'_, AppState>,
+    req: HttpRequest
+) -> Result<HttpResponse, HttpError>{
 
-    let client = Client::new();
+    let client = &state.client;
 
-    let mut request = match req.method.as_str() {
-        "GET" => client.get(&req.url),
-        "POST" => client.post(&req.url),
-        "PUT" => client.put(&req.url),
-        "PATCH" => client.patch(&req.url),
-        "DELETE" => client.delete(&req.url),
-        _ => return Err("Unsupported method".into())
+    let mut request = match req.method {
+        HttpMethod::GET => client.get(&req.url),
+        HttpMethod::POST => client.post(&req.url),
+        HttpMethod::PUT => client.put(&req.url),
+        HttpMethod::PATCH => client.patch(&req.url),
+        HttpMethod::DELETE => client.delete(&req.url),
     };
 
     if let Some(params) = req.params {
@@ -42,9 +59,16 @@ pub async fn fetch_data(req: HttpRequest) -> Result<HttpResponse, String>{
     }
 
     if let Some(headers) = req.headers {
-        for(key, value ) in headers {
-            request = request.header(&key, &value);
+        let mut map = HeaderMap::new();
+
+        for (key, value) in headers {
+            map.insert(
+                HeaderName::from_bytes(key.as_bytes()).unwrap(),
+                HeaderValue::from_str(&value).unwrap(),
+            );
         }
+
+        request = request.headers(map);
     }
 
     let start = Instant::now();
@@ -52,21 +76,40 @@ pub async fn fetch_data(req: HttpRequest) -> Result<HttpResponse, String>{
     let response = request
         .send()
         .await
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| HttpError {
+            message: e.to_string() 
+        })?;
 
     let status = response.status().as_u16();
 
-    let text = response
-        .text()
+    let content_type = response
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("")
+        .to_string();
+
+    let bytes = response
+        .bytes()
         .await
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| HttpError{
+            message: e.to_string()
+        })?;
 
     let duration = start.elapsed().as_millis();
 
-    let size = text.len();
-    
-    let body: serde_json::Value =
-        serde_json::from_str(&text).unwrap_or(serde_json::Value::String(text));
+    let size = bytes.len();
+
+    let body = if content_type.contains("application/json"){
+        serde_json::from_slice::<serde_json::Value>(&bytes)
+            .unwrap_or(serde_json::Value::String(
+                String::from_utf8_lossy(&bytes).to_string()
+            ))
+    } else {
+        serde_json::Value::String(
+            String::from_utf8_lossy(&bytes).to_string()
+        )
+    };
         
     Ok(HttpResponse {
         status,
