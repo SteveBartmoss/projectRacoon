@@ -94,6 +94,7 @@ const requestSlice = createSlice({
                         id: 1,
                         name: "",
                         value: "",
+                        ative: true
                     }
                 }
                 request.paramIds = [1]
