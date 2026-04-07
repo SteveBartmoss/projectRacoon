@@ -23,7 +23,7 @@ export function Params({elements}){
     const handleAddParam=() => {
 
         if(frame.paramIds.length <= 0){
-            dispatch(addParam({id: tabId,param: {id: 1, name: "", value: ""}}))
+            dispatch(addParam({id: tabId,param: {id: 1, name: "", value: "", ative: true}}))
             return
         }
 
@@ -34,8 +34,7 @@ export function Params({elements}){
     }
 
     const handelDeleteAll=()=>{
-        dispatch(addParam({id: tabId, param: {id: counter + 1, name: "", value: ""}}))
-        dispatch(cleanParams({id: tabId, param: {id: 1, name: "", value: ""}}))
+        dispatch(cleanParams({id: tabId, param: {id: 1, name: "", value: "", ative: true}}))
     }
 
     const handleDeleteParam=(paramId)=>{
