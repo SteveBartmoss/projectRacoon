@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { TextField } from "../textField/textField";
-import { addParam, cleanParams, removeParam, setParamName, setParamValue } from "../../store/requestSlice";
+import { addParam, cleanParams, removeParam, setParamInfo } from "../../store/requestSlice";
 import { Box } from "../containers/containers";
 import './params.css'
 import addImg from '../../assets/add.svg'
@@ -13,11 +13,11 @@ export function Params({elements}){
     const frame = useSelector((state) => state.requests.requestsById[tabId])
 
     const handleName=(value,paramId) => {
-        dispatch(setParamName({requestId: tabId, paramId: paramId, paramName: value  }))
+        dispatch(setParamInfo({requestId: tabId, paramId: paramId, field: "name", paramValue: value}))
     }
 
     const handleValue=(value, paramId) => {
-        dispatch(setParamValue({requestId: tabId, paramId: paramId, paramValue: value}))
+        dispatch(setParamInfo({requestId: tabId, paramId: paramId, field: "value", paramValue: value}))
     }
 
     const handleAddParam=() => {
