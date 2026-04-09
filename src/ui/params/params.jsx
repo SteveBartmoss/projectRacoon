@@ -6,42 +6,42 @@ import './params.css'
 import addImg from '../../assets/add.svg'
 import deleteImg from '../../assets/delete.svg'
 
-export function Params({elements}){
+export function Params({ elements }) {
 
     const tabId = useSelector((state) => state.tabs.currentTab)
     const dispatch = useDispatch()
     const frame = useSelector((state) => state.requests.requestsById[tabId])
 
-    const handleName=(value,paramId) => {
-        dispatch(setParamInfo({requestId: tabId, paramId: paramId, field: "name", paramValue: value}))
+    const handleName = (value, paramId) => {
+        dispatch(setParamInfo({ requestId: tabId, paramId: paramId, field: "name", paramValue: value }))
     }
 
-    const handleValue=(value, paramId) => {
-        dispatch(setParamInfo({requestId: tabId, paramId: paramId, field: "value", paramValue: value}))
+    const handleValue = (value, paramId) => {
+        dispatch(setParamInfo({ requestId: tabId, paramId: paramId, field: "value", paramValue: value }))
     }
 
-    const handleAddParam=() => {
+    const handleAddParam = () => {
 
-        if(frame.paramIds.length <= 0){
-            dispatch(addParam({id: tabId,param: {id: 1, name: "", value: "", ative: true}}))
+        if (frame.paramIds.length <= 0) {
+            dispatch(addParam({ id: tabId, param: { id: 1, name: "", value: "", ative: true } }))
             return
         }
 
         let counter = frame.paramIds.length
 
-        dispatch(addParam({id: tabId, param: {id: counter + 1, name: "", value: ""}}))
-        
+        dispatch(addParam({ id: tabId, param: { id: counter + 1, name: "", value: "" } }))
+
     }
 
-    const handelDeleteAll=()=>{
-        dispatch(cleanParams({id: tabId, param: {id: 1, name: "", value: "", ative: true}}))
+    const handelDeleteAll = () => {
+        dispatch(cleanParams({ id: tabId, param: { id: 1, name: "", value: "", ative: true } }))
     }
 
-    const handleDeleteParam=(paramId)=>{
-        dispatch(removeParam({id: tabId, paramId: paramId}))
+    const handleDeleteParam = (paramId) => {
+        dispatch(removeParam({ id: tabId, paramId: paramId }))
     }
 
-    return(
+    return (
         <div>
             <p>Query parameters</p>
             <Box styles={{
@@ -61,7 +61,7 @@ export function Params({elements}){
                 flexDirection: "column"
             }}>
                 {
-                    elements.map(item => 
+                    elements.map(item =>
                         <Box key={item.id} styles={{
                             display: "flex",
                             flexDirection: "row"
@@ -70,7 +70,7 @@ export function Params({elements}){
                                 width: "40%",
                                 margin: "1rem"
                             }}>
-                                <TextField textHolder={"name"} target={item.name} handleTarget={(event) => handleName(event.target.value, item.id)}  />
+                                <TextField textHolder={"name"} target={item.name} handleTarget={(event) => handleName(event.target.value, item.id)} />
                             </Box>
                             <Box styles={{
                                 width: "40%",
@@ -78,9 +78,19 @@ export function Params({elements}){
                             }}>
                                 <TextField textHolder={"value"} target={item.value} handleTarget={(event) => handleValue(event.target.value, item.id)} />
                             </Box>
-                           <div onClick={() => handleDeleteParam(item.id)} className="div-delete">
+                            <Box styles={{
+                                width: "5%",
+                                display: "flex",
+                                flexDirection: "row",
+                                ustifyContent: "center",
+                                alignItems: "center",
+                                margin: "1rem"
+                            }}>
+                                <input type="checkbox" value={item.ative} />
+                            </Box>
+                            <div onClick={() => handleDeleteParam(item.id)} className="div-delete">
                                 <img className="img-delete" src={deleteImg} />
-                           </div>
+                            </div>
                         </Box>
                     )
                 }
