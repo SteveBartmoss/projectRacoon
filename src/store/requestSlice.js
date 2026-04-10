@@ -12,6 +12,7 @@ const initialState = {
                     id: 1,
                     name: "",
                     value: "",
+                    active: true,
                 },
             },
             paramIds: [1],
@@ -55,27 +56,16 @@ const requestSlice = createSlice({
                 request[action.payload.field] = action.payload.value
             }
         },
-        setParamName(state, action) {
-
+        setParamInfo(state,action){
+            
             const request = getRequest(state, action.payload.requestId)
-            if (!request) return
+
+            if(!request) return
 
             const param = getParam(request, action.payload.paramId)
 
-            if (param) {
-                param.name = action.payload.paramName
-            }
-        },
-        setParamValue(state, action) {
-
-            const request = getRequest(state, action.payload.requestId)
-
-            if (!request) return
-
-            const param = getParam(request, action.payload.paramId)
-
-            if (param) {
-                param.value = action.payload.paramValue
+            if(param){
+                param[action.payload.field] = action.payload.paramValue
             }
         },
         addParam(state, action) {
@@ -104,6 +94,7 @@ const requestSlice = createSlice({
                         id: 1,
                         name: "",
                         value: "",
+                        ative: true
                     }
                 }
                 request.paramIds = [1]
@@ -118,8 +109,7 @@ export const {
     addRequest,
     removeRequest,
     setInfo,
-    setParamName,
-    setParamValue,
+    setParamInfo,
     addParam,
     removeParam,
     cleanParams
