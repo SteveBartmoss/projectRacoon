@@ -21,10 +21,14 @@ export function Params({ elements }) {
         dispatch(setParamInfo({ requestId: tabId, paramId: paramId, field: "value", paramValue: value }))
     }
 
+    const handleAtiveParam = (value, paramId) => {
+        dispatch(setParamInfo({requestId: tabId, paramId: paramId, field: "active", paramValue: value}))
+    }
+
     const handleAddParam = () => {
 
         if (frame.paramIds.length <= 0) {
-            dispatch(addParam({ id: tabId, param: { id: 1, name: "", value: "", ative: true } }))
+            dispatch(addParam({ id: tabId, param: { id: 1, name: "", value: "", active: true } }))
             return
         }
 
@@ -35,7 +39,7 @@ export function Params({ elements }) {
     }
 
     const handelDeleteAll = () => {
-        dispatch(cleanParams({ id: tabId, param: { id: 1, name: "", value: "", ative: true } }))
+        dispatch(cleanParams({ id: tabId, param: { id: 1, name: "", value: "", active: true } }))
     }
 
     const handleDeleteParam = (paramId) => {
@@ -87,7 +91,7 @@ export function Params({ elements }) {
                                 alignItems: "center",
                                 margin: "1rem"
                             }}>
-                                <CheckInput target={item.active} />
+                                <CheckInput target={item.active} handleTarget={(event) => handleAtiveParam(event.target.checked, item.id) } />
                             </Box>
                             <div onClick={() => handleDeleteParam(item.id)} className="div-delete">
                                 <img className="img-delete" src={deleteImg} />
