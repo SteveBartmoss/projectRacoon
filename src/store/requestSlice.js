@@ -12,7 +12,7 @@ const initialState = {
                     id: 1,
                     name: "",
                     value: "",
-                    ative: true,
+                    active: true,
                 },
             },
             paramIds: [1],
