@@ -34,7 +34,7 @@ export function Params({ elements }) {
 
         let counter = frame.paramIds.length
 
-        dispatch(addParam({ id: tabId, param: { id: counter + 1, name: "", value: "" } }))
+        dispatch(addParam({ id: tabId, param: { id: counter + 1, name: "", value: "",active: true } }))
 
     }
 
