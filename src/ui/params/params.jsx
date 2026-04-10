@@ -5,6 +5,7 @@ import { Box } from "../containers/containers";
 import './params.css'
 import addImg from '../../assets/add.svg'
 import deleteImg from '../../assets/delete.svg'
+import { CheckInput } from "../checkbox/checkbox";
 
 export function Params({ elements }) {
 
@@ -82,11 +83,11 @@ export function Params({ elements }) {
                                 width: "5%",
                                 display: "flex",
                                 flexDirection: "row",
-                                ustifyContent: "center",
+                                justifyContent: "center",
                                 alignItems: "center",
                                 margin: "1rem"
                             }}>
-                                <input type="checkbox" value={item.ative} />
+                                <CheckInput target={item.active} />
                             </Box>
                             <div onClick={() => handleDeleteParam(item.id)} className="div-delete">
                                 <img className="img-delete" src={deleteImg} />
