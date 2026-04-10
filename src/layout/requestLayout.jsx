@@ -91,6 +91,7 @@ export function RequesLayout({ id }) {
     ]
 
     const buildParams = (paramsArray) => {
+        paramsArray = paramsArray.filter(element => element.active)
         return paramsArray.filter(p => p.name && p.value)
             .reduce((acc, curr) => {
                 acc[curr.name] = curr.value
