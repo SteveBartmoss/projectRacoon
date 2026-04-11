@@ -15,8 +15,8 @@ export function AppLayout() {
             <Box styles={{
                 display: "flex",
                 flexDirection: "column",
-                height: "98vh",
-                width: "99vw"
+                height: "100vh",
+                width: "100vw"
             }}>
                 <Header />
                 <FrameTabs elements={tabs} />
