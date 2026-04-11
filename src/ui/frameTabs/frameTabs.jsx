@@ -42,9 +42,19 @@ export function FrameTabs({ elements }) {
                         id: 1,
                         name: "",
                         value: "",
+                        active: true,
                     },
                 },
                 paramIds: [1],
+                headersById: {
+                    1: {
+                        id: 1,
+                        name: "",
+                        value: "",
+                        active: true,
+                    }
+                },
+                headerIds: [1],
                 auth: "",
                 authType: "",
                 response: {},
@@ -74,9 +84,19 @@ export function FrameTabs({ elements }) {
                     id: 1,
                     name: "",
                     value: "",
+                    active: true,
                 },
             },
             paramIds: [1],
+            headersById: {
+                1: {
+                    id: 1,
+                    name: "",
+                    value: "",
+                    active: true,
+                }
+            },
+            headerIds: [1],
             auth: "",
             authType: "",
             response: {},
@@ -120,7 +140,7 @@ export function FrameTabs({ elements }) {
             <div className="container-head">
                 {
                     elements.map(item =>
-                        <div key={item.id} className={tabSelected === item.id ? "tab-active":"div-tabs"}>
+                        <div key={item.id} className={tabSelected === item.id ? "tab-active" : "div-tabs"}>
                             <Chip text={item.method} type={getColor(item.method)} />
                             <p className="tab" onClick={() => handleChangeTab(item.id)}>{item.title}</p>
                             <img className="img-close" onClick={() => handleRemoveTab(item.id)} src={closeImg} />
