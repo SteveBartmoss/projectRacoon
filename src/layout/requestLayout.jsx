@@ -140,17 +140,28 @@ export function RequesLayout({ id }) {
         const paramsObject = buildParams(params)
         const headersObject = buildHeaders(headers)
 
-        const finalHeaders = {}
+        const finalHeaders = {...headersObject}
 
         if(auth && authType){
             finalHeaders.Authorization = `${authType} ${auth}`
+        }
+
+        let parsedBody = null
+
+        if(body){
+            try{
+                parsedBody = JSON.parse(body)
+            }catch{
+                alert("Invalid JSON body")
+                return
+            }
         }
 
         let objPeticion = {
             url: url,
             method: method,
             params: Object.keys(paramsObject).length ? paramsObject : null,
-            body: body ? JSON.parse(body) : null,
+            body: parsedBody,
             headers: finalHeaders
         }
 
