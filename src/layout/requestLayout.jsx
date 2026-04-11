@@ -11,6 +11,7 @@ import { Auth } from "../ui/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { setInfo } from "../store/requestSlice";
 import { setMethod } from "../store/tabSlice";
+import { Headers } from "../ui/headers/headers";
 
 
 
@@ -19,9 +20,11 @@ export function RequesLayout({ id }) {
     const request = useSelector((state) => state.requests.requestsById[id])
     const dispatch = useDispatch()
 
-    const { url, method, body, paramsById, paramIds, auth, authType, response, description } = request
+    const { url, method, body, paramsById, paramIds, headersById, headerIds, auth, authType, response, description } = request
 
     const params = paramIds.map(id => paramsById[id])
+
+    const headers = headerIds.map(id => headersById[id])
 
     const methodElements = [
         {
@@ -94,6 +97,11 @@ export function RequesLayout({ id }) {
         },
         {
             id: 4,
+            title: "Headers",
+            content: <Headers elements={headers} />
+        },
+        {
+            id: 5,
             title: "Docs",
             content: <Box styles={{
                 width: "100%",
@@ -113,16 +121,29 @@ export function RequesLayout({ id }) {
             }, {})
     }
 
+    const buildHeaders = (headersArray) => {
+        headersArray = headersArray.filter(element => element.active)
+        return headersArray.filter(h => h.name && h.value )
+            .reduce((acc, curr) => {
+                acc[curr.name] = curr.value
+                return acc
+            },{})
+    }
+
     const handleRequest = async () => {
 
         const paramsObject = buildParams(params)
+        const headersObject = buildHeaders(headers)
 
         let objPeticion = {
             url: url,
             method: method,
             params: Object.keys(paramsObject).length ? paramsObject : null,
             body: body ? JSON.parse(body) : null,
-            headers: {
+            headers: Object.keys(headersObject).length ? {
+                Authorization: `${authType} ${auth}`,
+                ...headersObject
+            } : {
                 Authorization: `${authType} ${auth}`
             }
         }
