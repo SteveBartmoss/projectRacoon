@@ -16,6 +16,15 @@ const initialState = {
                 },
             },
             paramIds: [1],
+            headersById: {
+                1:{
+                    id: 1,
+                    name: "",
+                    value: "",
+                    actibe: true,
+                }
+            },
+            headerIds: [1],
             auth: "",
             authType: "",
             response: {},
@@ -24,6 +33,7 @@ const initialState = {
     },
     requestIds: [1],
     counter: 1,
+    counterHeaders: 1,
 }
 
 const getRequest = (state, id) => {
@@ -32,6 +42,10 @@ const getRequest = (state, id) => {
 
 const getParam = (request, id) => {
     return request.paramsById[id]
+}
+
+const getHeader = (request, id) => {
+    returfn = request.headersById[id]
 }
 
 const requestSlice = createSlice({
@@ -102,6 +116,52 @@ const requestSlice = createSlice({
             }
 
             state.counter = 1
+        },
+        setHeaderInfo(state,action){
+
+            const request = getRequest(state, action.payload.requestId)
+
+            if(!request) return
+
+            const header = getHeader(request, action.payload.headerId)
+
+            if(header){
+                header[action.payload.field] = action.payload.headerValue
+            }
+        },
+        addHeader(state,action){
+
+            const request = getRequest(state, action.payload.id)
+
+            if(request) {
+                request.headersById[action.payload.header.id] = action.payload.header
+                request.paramIds.push(action.payload.header.id)
+            }
+        },
+        removeHeader(state,action){
+            const request = getRequest(state, action.payload.id)
+
+            if(request){
+                delete request.headersById[action.payload.headerId]
+                request.headerIds = request.headerIds.filter(element => element !== action.payload.headerId)
+            }
+        },
+        cleanHeaders(state,action){
+            const request = getRequest(state, action.payload.id)
+
+            if(request){
+                request.headersById = {
+                    1: {
+                        id: 1,
+                        name: "",
+                        value: "",
+                        active: true
+                    }
+                }
+                request.headerIds = [1]
+            }
+
+            state.counterHeaders = 1
         }
     }
 })
@@ -113,7 +173,11 @@ export const {
     setParamInfo,
     addParam,
     removeParam,
-    cleanParams
+    cleanParams,
+    setHeaderInfo,
+    addHeader,
+    removeHeader,
+    cleanHeaders,
 } = requestSlice.actions
 
 export default requestSlice.reducer
