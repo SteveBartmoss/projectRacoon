@@ -34,3 +34,9 @@ A lightweight HTTP client built with React + Tauri + Rust.
 - Rust
 - Tauri
 - Reqwest
+
+## Urls de prueba
+
+https://jsonplaceholder.typicode.com/posts
+
+https://httpbin.org/get
