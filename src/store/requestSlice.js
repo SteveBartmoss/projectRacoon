@@ -21,7 +21,7 @@ const initialState = {
                     id: 1,
                     name: "",
                     value: "",
-                    actibe: true,
+                    active: true,
                 }
             },
             headerIds: [1],
