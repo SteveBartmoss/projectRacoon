@@ -1,0 +1,24 @@
+.div-errors{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0 .5rem;
+}
+
+.div-errors p{
+    margin: 0;
+}
+
+.div-element{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0 .2rem;
+}
+
+.icon{
+    width: 1rem;
+}
