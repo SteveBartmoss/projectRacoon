@@ -19,7 +19,7 @@ export function RequesLayout({ id }) {
     const request = useSelector((state) => state.requests.requestsById[id])
     const dispatch = useDispatch()
 
-    const { url, method, body, paramsById, paramIds, auth, authType, response } = request
+    const { url, method, body, paramsById, paramIds, auth, authType, response, description } = request
 
     const params = paramIds.map(id => paramsById[id])
 
@@ -66,6 +66,10 @@ export function RequesLayout({ id }) {
     const handleAuthType = (value) => {
         dispatch(setInfo({id: id, field: "authType", value: value}))
     }
+    
+    const handleDescription = (value) => {
+        dispatch(setInfo({id: id, field: 'description', value: value}))
+    }
 
     const tabsElements = [
         {
@@ -87,6 +91,16 @@ export function RequesLayout({ id }) {
             id: 3,
             title: "Auth",
             content: <Auth auth={auth} authType={authType} setAuth={handleAuth} setAuthType={handleAuthType} />
+        },
+        {
+            id: 4,
+            title: "Docs",
+            content: <Box styles={{
+                width: "100%",
+                height: "50vh",
+            }}>
+                <BodyForm body={description} setBody={handleDescription} />
+            </Box>
         }
     ]
 
