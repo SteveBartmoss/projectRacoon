@@ -19,6 +19,7 @@ const initialState = {
             auth: "",
             authType: "",
             response: {},
+            description: ""
         }
     },
     requestIds: [1],
