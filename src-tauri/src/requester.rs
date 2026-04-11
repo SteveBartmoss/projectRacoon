@@ -58,17 +58,25 @@ pub async fn fetch_data(
         request = request.json(&body);
     }
 
-    if let Some(headers) = req.headers {
-        let mut map = HeaderMap::new();
+    if let Some(headers) = &req.headers {
 
-        for (key, value) in headers {
-            map.insert(
-                HeaderName::from_bytes(key.as_bytes()).unwrap(),
-                HeaderValue::from_str(&value).unwrap(),
-            );
+        for(key, value) in headers {
+
+            let name = HeaderName::from_bytes(key.trim().as_bytes())
+                .map_err(|e| HttpError {
+                    message: format!("Invalid header name: {}",e)
+                })?;
+            
+            let val = HeaderValue::from_str(value.trim())
+                .map_err(|e| HttpError {
+                    message: format!("invalid header value: {}",e)
+                })?;
+
+            request = request.header(name, val);
+
         }
 
-        request = request.headers(map);
+        
     }
 
     let start = Instant::now();
