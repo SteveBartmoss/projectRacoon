@@ -48,6 +48,7 @@ export function FrameTabs({ elements }) {
                 auth: "",
                 authType: "",
                 response: {},
+                description: ""
             }))
             return
         }
@@ -79,6 +80,7 @@ export function FrameTabs({ elements }) {
             auth: "",
             authType: "",
             response: {},
+            description: ""
         }))
 
         dispatch(setCounter(counter))
