@@ -113,21 +113,26 @@ export function RequesLayout({ id }) {
     ]
 
     const buildParams = (paramsArray) => {
-        paramsArray = paramsArray.filter(element => element.active)
-        return paramsArray.filter(p => p.name && p.value)
-            .reduce((acc, curr) => {
-                acc[curr.name] = curr.value
-                return acc
-            }, {})
+        return paramsArray.reduce((acc, p) => {
+            if(!p.active) return acc
+            if(!p.name || !p.value) return acc
+
+            acc[p.name] = p.value
+
+            return acc
+        },{})
+
     }
 
     const buildHeaders = (headersArray) => {
-        headersArray = headersArray.filter(element => element.active)
-        return headersArray.filter(h => h.name && h.value )
-            .reduce((acc, curr) => {
-                acc[curr.name] = curr.value
-                return acc
-            },{})
+        return headersArray.reduce((acc, h) => {
+            if(!h.active) return acc
+            if(!h.name || !h.value) return acc
+
+            acc[h.name.trim()] = h.value
+
+            return acc
+        },{})
     }
 
     const handleRequest = async () => {
@@ -135,17 +140,18 @@ export function RequesLayout({ id }) {
         const paramsObject = buildParams(params)
         const headersObject = buildHeaders(headers)
 
+        const finalHeaders = {}
+
+        if(auth && authType){
+            finalHeaders.Authorization = `${authType} ${auth}`
+        }
+
         let objPeticion = {
             url: url,
             method: method,
             params: Object.keys(paramsObject).length ? paramsObject : null,
             body: body ? JSON.parse(body) : null,
-            headers: Object.keys(headersObject).length ? {
-                Authorization: `${authType} ${auth}`,
-                ...headersObject
-            } : {
-                Authorization: `${authType} ${auth}`
-            }
+            headers: finalHeaders
         }
 
         let data = await invoke("fetch_data", {
