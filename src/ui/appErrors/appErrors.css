@@ -7,6 +7,11 @@
     padding: 0 .5rem;
 }
 
+.div-errors:hover{
+    background: #67686E;
+    cursor: pointer;
+}
+
 .div-errors p{
     margin: 0;
 }
