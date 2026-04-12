@@ -10,12 +10,16 @@ import { Params } from "../ui/params/params";
 import { Auth } from "../ui/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { setInfo } from "../store/requestSlice";
-import { setMethod } from "../store/tabSlice";
+import { setCounter, setMethod } from "../store/tabSlice";
 import { Headers } from "../ui/headers/headers";
+import { addMessage, setErrorCounter } from "../store/errorsSlice";
 
 
 
 export function RequesLayout({ id }) {
+
+    const errors = useSelector((state) => state.errors.errorCounter)
+    const warnings = useSelector((state) => state.errors.warningCounter)
 
     const request = useSelector((state) => state.requests.requestsById[id])
     const dispatch = useDispatch()
@@ -151,8 +155,10 @@ export function RequesLayout({ id }) {
         if(body){
             try{
                 parsedBody = JSON.parse(body)
-            }catch{
-                alert("Invalid JSON body")
+            }catch(error){
+                dispatch(addMessage({error: true, message:{...error,alert: "Invalid JSON body"}}))
+                dispatch(setErrorCounter({error: true, counter: errors + 1}))
+                console.log("Invalid JSON body")
                 return
             }
         }
