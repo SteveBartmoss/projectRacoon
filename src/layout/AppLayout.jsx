@@ -3,7 +3,7 @@ import { Box } from "../ui/containers/containers"
 import { Header } from "../ui/header/header"
 import { FrameTabs } from "../ui/frameTabs/frameTabs"
 import { FooterLayout } from "./FooterLayout"
-import { WidgetsLayout } from "./WidgetsLayout"
+import { ResizeLayout, WidgetsLayout } from "./WidgetsLayout"
 
 export function AppLayout() {
 
@@ -21,7 +21,7 @@ export function AppLayout() {
             }}>
                 <Header />
                 <FrameTabs elements={tabs} />
-                <WidgetsLayout />
+                <ResizeLayout />
                 <FooterLayout />
             </Box>
         </>
