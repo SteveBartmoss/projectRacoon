@@ -153,7 +153,7 @@ export function FrameTabs({ elements }) {
             </div>
             {
                 elements.map(item =>
-                    <div key={item.id} className={tabSelected !== item.id ? 'tab-close' : 'div-content-tab'}>
+                    <div key={item.id} className={tabSelected !== item.id ? 'tab-close' : 'div-content-tab-frame'}>
                         <RequesLayout id={item.id} />
                     </div>
                 )
