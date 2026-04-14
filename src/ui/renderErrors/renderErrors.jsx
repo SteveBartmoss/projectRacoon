@@ -7,7 +7,12 @@ export function RenderErrors() {
     const messsages = useSelector((state) => state.errors.errorMessages)
 
     return (
-        <Box>
+        <Box styles={{
+            display: "flex",
+            flexDirection: "column",
+            overflowY: "scroll",
+        }}
+        >
             {
                 messsages.map(item =>
                     <pre>
