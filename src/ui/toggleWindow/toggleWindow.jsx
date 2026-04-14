@@ -64,7 +64,7 @@ export function ResizeWindow({ children }) {
             const delta = startY - event.clientY
 
             // Máximo 80% de la altura de la ventana
-            const maxHeight = window.innerHeight * 0.9
+            const maxHeight = window.innerHeight * 0.89
 
             const newHeight = Math.min(maxHeight, Math.max(100, startHeight + delta))
 
