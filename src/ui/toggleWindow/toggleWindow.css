@@ -4,14 +4,16 @@
 
 .div-toggle{
     height: 100px;
-    overflow: auto;
+    min-height: 50px; /* Altura mínima que deseas */
+    max-height: 100%; /* No excede el contenedor */
 }
 
 .resize-handle {
-    height: 2px;
+    height: 2px; /* Un poco más grande para mejor usabilidad */
     cursor: row-resize;
     background-color: rgba(255,255,255,0.05);
     transition: background .2s ease;
+    flex-shrink: 0;
 }
 
 .resize-handle:hover {
@@ -30,6 +32,6 @@
 
 .panel-resize {
     position: relative;
-    position: relative;
-    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
