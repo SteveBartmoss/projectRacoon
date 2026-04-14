@@ -156,9 +156,18 @@ export function RequesLayout({ id }) {
             try{
                 parsedBody = JSON.parse(body)
             }catch(error){
-                dispatch(addMessage({error: true, message:{...error,alert: "Invalid JSON body"}}))
+                dispatch(addMessage(
+                    {
+                        error: true, 
+                        message:{
+                            errorMessage:error.message, 
+                            alert: "Invalid JSON body",
+                            url: url,
+                            method: method,
+                        }
+                    }))
                 dispatch(setErrorCounter({error: true, counter: errors + 1}))
-                console.log("Invalid JSON body")
+                console.log(error.message)
                 return
             }
         }
