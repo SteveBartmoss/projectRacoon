@@ -9,7 +9,8 @@ export function FooterLayout() {
         <Box styles={{
             display: "flex",
             flexDirection: "row",
-            background: "#1e2326"
+            background: "#1e2326",
+            zIndex: 10
         }}>
             <AppErrors />
             <GitTag />
