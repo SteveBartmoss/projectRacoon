@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { Box } from "../containers/containers";
-
+import './renderErrors.css'
 
 export function RenderErrors() {
 
@@ -10,12 +10,13 @@ export function RenderErrors() {
         <Box styles={{
             display: "flex",
             flexDirection: "column",
-            overflowY: "scroll",
+            maxHeight: "100%",
+            overflowY: "scroll",            
         }}
         >
             {
                 messsages.map(item =>
-                    <pre>
+                    <pre className="pre-error">
                         {JSON.stringify(item, null, 2)}
                     </pre>
                 )
