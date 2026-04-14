@@ -63,7 +63,7 @@ export function ResizeWindow({children}){
         const onMouseMove = (event) => {
             const delta = startY - event.clientY
 
-            const newHeight = Math.max(120, startHeight + delta)
+            const newHeight = Math.max(100, startHeight + delta)
 
             panelRef.current.style.height = `${newHeight}px`
         }
