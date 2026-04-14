@@ -45,7 +45,7 @@ export function ToggleWindow({ children }) {
     )
 }
 
-export function ResizeWindow({children}){
+export function ResizeWindow({ children }) {
 
     const windowShow = useSelector((state) => state.appInfo.showErrorsWindow)
 
@@ -63,7 +63,10 @@ export function ResizeWindow({children}){
         const onMouseMove = (event) => {
             const delta = startY - event.clientY
 
-            const newHeight = Math.max(100, startHeight + delta)
+            // Máximo 80% de la altura de la ventana
+            const maxHeight = window.innerHeight * 0.9
+
+            const newHeight = Math.min(maxHeight, Math.max(100, startHeight + delta))
 
             panelRef.current.style.height = `${newHeight}px`
         }
