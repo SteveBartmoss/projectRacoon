@@ -1,4 +1,4 @@
-import { ResizeWindow, ToggleWindow } from "../ui/toggleWindow/toggleWindow";
+import { ResizeTabs, ResizeWindow, ToggleWindow } from "../ui/toggleWindow/toggleWindow";
 import { Tab } from "../ui/tab/tab";
 import { RenderErrors } from "../ui/renderErrors/renderErrors";
 
@@ -32,7 +32,7 @@ export function ResizeLayout(){
 
     return(
         <ResizeWindow>
-            <Tab elements={tabElements} />
+            <ResizeTabs elements={tabElements} />
         </ResizeWindow>
     )
 }
