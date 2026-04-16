@@ -1,6 +1,8 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import './toggleWindow.css'
-import { useRef } from "react"
+import { useRef, useState } from "react"
+import closeSvg from '../../assets/close.svg'
+import { setShowErrorWindow } from "../../store/appSlice"
 
 export function ToggleWindow({ children }) {
 
@@ -88,5 +90,44 @@ export function ResizeWindow({ children }) {
                 {children}
             </div>
         </div>
+    )
+}
+
+export function ResizeTabs({ elements }) {
+
+    const [currentTab, setCurrentTab] = useState(1)
+
+    const dispatch = useDispatch()
+
+    const handleCloseResize = () => {
+        dispatch(setShowErrorWindow({ value: false }))
+    }
+
+    return (
+        <>
+            <div className="container-resize-head">
+                {
+                    elements.map(item =>
+                        <div key={item.id} className="div-resize-tabs">
+                            <p className="resize-tab" onClick={() => setCurrentTab(item.id)} >{item.title}</p>
+                        </div>
+                    )
+                }
+                <div className="btn-resize-close">
+                    <img className="svg-close" onClick={handleCloseResize} src={closeSvg} />
+                </div>
+            </div>
+            <div>
+                {
+                    elements.map(item =>
+                        <div key={item.id} className={currentTab !== item.id ? 'tab-resize-close' : 'div-content-resize-tab'}>
+                            {
+                                item.content
+                            }
+                        </div>
+                    )
+                }
+            </div>
+        </>
     )
 }
