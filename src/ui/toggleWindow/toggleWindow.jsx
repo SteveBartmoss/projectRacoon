@@ -117,7 +117,7 @@ export function ResizeTabs({ elements }) {
                     <img className="svg-close" onClick={handleCloseResize} src={closeSvg} />
                 </div>
             </div>
-            <div>
+            <>
                 {
                     elements.map(item =>
                         <div key={item.id} className={currentTab !== item.id ? 'tab-resize-close' : 'div-content-resize-tab'}>
@@ -127,7 +127,7 @@ export function ResizeTabs({ elements }) {
                         </div>
                     )
                 }
-            </div>
+            </>
         </>
     )
 }
