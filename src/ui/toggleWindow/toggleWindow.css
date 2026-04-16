@@ -4,9 +4,8 @@
 
 .div-toggle{
     height: 100px;
-    min-height: 50px; /* Altura mínima que deseas */
-    max-height: 100%; /* No excede el contenedor */
-    overflow-y: scroll;
+    min-height: 50px;
+    max-height: 100%;
 }
 
 .resize-handle {
