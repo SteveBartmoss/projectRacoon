@@ -6,8 +6,8 @@ import { setShowErrorWindow } from '../../store/appSlice'
 
 export function AppErrors(){
 
-    const errors = useSelector((state) => state.errors.errorCounter)
-    const warnings = useSelector((state) => state.errors.warningCounter)
+    const errors = useSelector((state) => state.errors.errorMessages)
+    const warnings = useSelector((state) => state.errors.warningMessages)
     const dispatch = useDispatch()
     const showError = useSelector((state)=> state.appInfo.showErrorsWindow)
 
@@ -20,11 +20,11 @@ export function AppErrors(){
         <div onClick={handleShowErrors} className='div-errors'>
             <div className='div-element'>
                  <img className='icon' src={errorImg} />
-                <p>{errors}</p>
+                <p>{errors.length}</p>
             </div>
             <div className='div-element'>
                 <img className='icon' src={warningImg} />
-                <p>{warnings}</p>
+                <p>{warnings.length}</p>
             </div>
         </div>
     )
