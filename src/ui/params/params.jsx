@@ -46,8 +46,28 @@ export function Params({ elements }) {
         dispatch(removeParam({ id: tabId, paramId: paramId }))
     }
 
+    const getPreviewUrl = () => {
+
+        if(!frame.url) return '...'
+
+        const url = new URL(frame.url)
+
+        elements?.forEach(item => {
+            if(item.name && item.value && item.active){
+                url.searchParams.set(item.name, item.value)
+            }
+        })
+
+        return url.toString()
+
+    }
+
     return (
         <div>
+            <div className="div-url-preview">
+                <p>Url Preview</p>
+                <p>{getPreviewUrl()}</p>
+            </div>
             <p>Query parameters</p>
             <Box styles={{
                 display: "flex",
