@@ -166,8 +166,6 @@ export function RequesLayout({ id }) {
                             method: method,
                         }
                     }))
-                dispatch(setErrorCounter({error: true, counter: errors + 1}))
-                console.log(error.message)
                 return
             }
         }
