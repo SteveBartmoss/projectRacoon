@@ -38,9 +38,10 @@
     padding: .3rem;
 }
 
-.div-content-tab{
+.div-content-tab-frame{
     border: 1px solid rgba(255, 255, 255, 0.05);
     height: 90%;
+    overflow-y: scroll;
 }
 
 .img-close:hover {

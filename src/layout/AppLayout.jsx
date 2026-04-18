@@ -3,6 +3,7 @@ import { Box } from "../ui/containers/containers"
 import { Header } from "../ui/header/header"
 import { FrameTabs } from "../ui/frameTabs/frameTabs"
 import { FooterLayout } from "./FooterLayout"
+import { ResizeLayout, WidgetsLayout } from "./WidgetsLayout"
 
 export function AppLayout() {
 
@@ -15,11 +16,12 @@ export function AppLayout() {
             <Box styles={{
                 display: "flex",
                 flexDirection: "column",
-                height: "98vh",
-                width: "99vw"
+                height: "100vh",
+                width: "100vw"
             }}>
                 <Header />
                 <FrameTabs elements={tabs} />
+                <ResizeLayout />
                 <FooterLayout />
             </Box>
         </>

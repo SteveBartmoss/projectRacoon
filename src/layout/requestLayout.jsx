@@ -10,18 +10,25 @@ import { Params } from "../ui/params/params";
 import { Auth } from "../ui/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { setInfo } from "../store/requestSlice";
-import { setMethod } from "../store/tabSlice";
+import { setCounter, setMethod } from "../store/tabSlice";
+import { Headers } from "../ui/headers/headers";
+import { addMessage, setErrorCounter } from "../store/errorsSlice";
 
 
 
 export function RequesLayout({ id }) {
 
+    const errors = useSelector((state) => state.errors.errorCounter)
+    const warnings = useSelector((state) => state.errors.warningCounter)
+
     const request = useSelector((state) => state.requests.requestsById[id])
     const dispatch = useDispatch()
 
-    const { url, method, body, paramsById, paramIds, auth, authType, response } = request
+    const { url, method, body, paramsById, paramIds, headersById, headerIds, auth, authType, response, description } = request
 
     const params = paramIds.map(id => paramsById[id])
+
+    const headers = headerIds.map(id => headersById[id])
 
     const methodElements = [
         {
@@ -66,6 +73,10 @@ export function RequesLayout({ id }) {
     const handleAuthType = (value) => {
         dispatch(setInfo({id: id, field: "authType", value: value}))
     }
+    
+    const handleDescription = (value) => {
+        dispatch(setInfo({id: id, field: 'description', value: value}))
+    }
 
     const tabsElements = [
         {
@@ -87,30 +98,84 @@ export function RequesLayout({ id }) {
             id: 3,
             title: "Auth",
             content: <Auth auth={auth} authType={authType} setAuth={handleAuth} setAuthType={handleAuthType} />
+        },
+        {
+            id: 4,
+            title: "Headers",
+            content: <Headers elements={headers} />
+        },
+        {
+            id: 5,
+            title: "Docs",
+            content: <Box styles={{
+                width: "100%",
+                height: "50vh",
+            }}>
+                <BodyForm body={description} setBody={handleDescription} />
+            </Box>
         }
     ]
 
     const buildParams = (paramsArray) => {
-        paramsArray = paramsArray.filter(element => element.active)
-        return paramsArray.filter(p => p.name && p.value)
-            .reduce((acc, curr) => {
-                acc[curr.name] = curr.value
-                return acc
-            }, {})
+        return paramsArray.reduce((acc, p) => {
+            if(!p.active) return acc
+            if(!p.name || !p.value) return acc
+
+            acc[p.name] = p.value
+
+            return acc
+        },{})
+
+    }
+
+    const buildHeaders = (headersArray) => {
+        return headersArray.reduce((acc, h) => {
+            if(!h.active) return acc
+            if(!h.name || !h.value) return acc
+
+            acc[h.name.trim()] = h.value
+
+            return acc
+        },{})
     }
 
     const handleRequest = async () => {
 
         const paramsObject = buildParams(params)
+        const headersObject = buildHeaders(headers)
+
+        const finalHeaders = {...headersObject}
+
+        if(auth && authType){
+            finalHeaders.Authorization = `${authType} ${auth}`
+        }
+
+        let parsedBody = null
+
+        if(body){
+            try{
+                parsedBody = JSON.parse(body)
+            }catch(error){
+                dispatch(addMessage(
+                    {
+                        error: true, 
+                        message:{
+                            errorMessage:error.message, 
+                            alert: "Invalid JSON body",
+                            url: url,
+                            method: method,
+                        }
+                    }))
+                return
+            }
+        }
 
         let objPeticion = {
             url: url,
             method: method,
             params: Object.keys(paramsObject).length ? paramsObject : null,
-            body: body ? JSON.parse(body) : null,
-            headers: {
-                Authorization: `${authType} ${auth}`
-            }
+            body: parsedBody,
+            headers: finalHeaders
         }
 
         let data = await invoke("fetch_data", {

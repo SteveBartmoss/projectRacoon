@@ -1,83 +1,62 @@
 import { useDispatch, useSelector } from "react-redux";
-import { TextField } from "../textField/textField";
-import { addParam, cleanParams, removeParam, setParamInfo } from "../../store/requestSlice";
-import { Box } from "../containers/containers";
-import './params.css'
 import addImg from '../../assets/add.svg'
 import deleteImg from '../../assets/delete.svg'
+import { Box } from "../containers/containers";
+import { TextField } from "../textField/textField";
+import { addHeader, cleanHeaders, removeHeader, setHeaderInfo } from "../../store/requestSlice";
 import { CheckInput } from "../checkbox/checkbox";
+import './headers.css'
 
-export function Params({ elements }) {
+export function Headers({elements}){
 
     const tabId = useSelector((state) => state.tabs.currentTab)
     const dispatch = useDispatch()
     const frame = useSelector((state) => state.requests.requestsById[tabId])
 
-    const handleName = (value, paramId) => {
-        dispatch(setParamInfo({ requestId: tabId, paramId: paramId, field: "name", paramValue: value }))
+    const handleName = (value, headerId) => {
+        dispatch(setHeaderInfo({requestId: tabId, headerId: headerId, field: "name", headerValue: value}))
     }
 
-    const handleValue = (value, paramId) => {
-        dispatch(setParamInfo({ requestId: tabId, paramId: paramId, field: "value", paramValue: value }))
+    const handleValue = (value, headerId) => {
+        dispatch(setHeaderInfo({requestId: tabId, headerId: headerId, field: "value", headerValue: value}))
     }
 
-    const handleAtiveParam = (value, paramId) => {
-        dispatch(setParamInfo({requestId: tabId, paramId: paramId, field: "active", paramValue: value}))
+    const handleActiveHeader = (value, headerId) => {
+        dispatch(setHeaderInfo({requestId: tabId, headerId: headerId, field: "active", headerValue: value }))
     }
 
-    const handleAddParam = () => {
+    const handleAddHeader = () => {
 
-        if (frame.paramIds.length <= 0) {
-            dispatch(addParam({ id: tabId, param: { id: 1, name: "", value: "", active: true } }))
+        if(frame.headerIds.length <=0){
+            dispatch(addHeader({id: tabId, header: {id: 1, name: "", value: "", active: true}}))
             return
         }
 
-        let counter = frame.paramIds.length
+        let counter = frame.headerIds.length
 
-        dispatch(addParam({ id: tabId, param: { id: counter + 1, name: "", value: "",active: true } }))
-
+        dispatch(addHeader({id: tabId, header: {id: counter+1, name:"", value: "", active: true}}))
     }
 
-    const handelDeleteAll = () => {
-        dispatch(cleanParams({ id: tabId, param: { id: 1, name: "", value: "", active: true } }))
+    const handleDeleteAll = () => {
+        dispatch(cleanHeaders({id: tabId, header: {id: 1, name: "", value: "", active: true} }))
     }
 
-    const handleDeleteParam = (paramId) => {
-        dispatch(removeParam({ id: tabId, paramId: paramId }))
-    }
-
-    const getPreviewUrl = () => {
-
-        if(!frame.url) return '...'
-
-        const url = new URL(frame.url)
-
-        elements?.forEach(item => {
-            if(item.name && item.value && item.active){
-                url.searchParams.set(item.name, item.value)
-            }
-        })
-
-        return url.toString()
-
+    const handleDeleteHeader = (headerId) => {
+        dispatch(removeHeader({ id: tabId, headerId: headerId}))
     }
 
     return (
         <div>
-            <div className="div-url-preview">
-                <p>Url Preview</p>
-                <p>{getPreviewUrl()}</p>
-            </div>
-            <p>Query parameters</p>
+            <p>Headers</p>
             <Box styles={{
                 display: "flex",
                 flexDirection: "row"
             }}>
-                <div onClick={() => handleAddParam()} className="div-add">
+                <div onClick={()=> handleAddHeader()} className="div-add">
                     <p className="param-btn">Add</p>
                     <img src={addImg} />
                 </div>
-                <div onClick={() => handelDeleteAll()} className="div-add">
+                <div onClick={() => handleDeleteAll()} className="div-add">
                     <p className="param-btn">Delete All</p>
                 </div>
             </Box>
@@ -86,7 +65,7 @@ export function Params({ elements }) {
                 flexDirection: "column"
             }}>
                 {
-                    elements.map(item =>
+                    elements.map(item => 
                         <Box key={item.id} styles={{
                             display: "flex",
                             flexDirection: "row"
@@ -111,9 +90,9 @@ export function Params({ elements }) {
                                 alignItems: "center",
                                 margin: "1rem"
                             }}>
-                                <CheckInput target={item.active} handleTarget={(event) => handleAtiveParam(event.target.checked, item.id) } />
+                                <CheckInput target={item.active} handleTarget={(event) => handleActiveHeader(event.target.checked, item.id)} />
                             </Box>
-                            <div onClick={() => handleDeleteParam(item.id)} className="div-delete">
+                            <div onClick={() => handleDeleteHeader(item.id)} className="div-delete">
                                 <img className="img-delete" src={deleteImg} />
                             </div>
                         </Box>

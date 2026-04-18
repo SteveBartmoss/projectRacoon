@@ -3,7 +3,6 @@
     font-size: 1.3rem;
     margin: .7rem;
 }
-
 .div-add{
     display: flex;
     flex-direction: row;
@@ -28,10 +27,4 @@
 
 .img-delete:hover {
     background-color: #1a1a1a;
-}
-
-.div-url-preview{
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    margin: .3rem;
-    padding: .3rem;
 }
