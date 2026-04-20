@@ -12,14 +12,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { setInfo } from "../store/requestSlice";
 import { setCounter, setMethod } from "../store/tabSlice";
 import { Headers } from "../ui/headers/headers";
-import { addMessage, setErrorCounter } from "../store/errorsSlice";
+import { addMessage } from "../store/errorsSlice";
 
 
 
 export function RequesLayout({ id }) {
-
-    const errors = useSelector((state) => state.errors.errorCounter)
-    const warnings = useSelector((state) => state.errors.warningCounter)
 
     const request = useSelector((state) => state.requests.requestsById[id])
     const dispatch = useDispatch()
