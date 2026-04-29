@@ -19,7 +19,7 @@ export function Menu({ elements, title }) {
             <div onMouseLeave={handleClose}  className={show ? 'display-menu-list' : 'display-menu-none'}>
                 {
                     elements.map(item =>
-                        <div>
+                        <div className="display-menu-item" onClick={item.action}>
                             {item.title}
                         </div>
                     )
