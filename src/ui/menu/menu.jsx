@@ -1,5 +1,5 @@
 import { useState } from "react"
-
+import './menu.css'
 
 export function Menu({ elements, title }) {
 
@@ -15,12 +15,12 @@ export function Menu({ elements, title }) {
 
     return (
         <div className="display-menu" onMouseEnter={handleOpen}>
-            <div>{title}</div>
+            <div className="display-menu-title">{title}</div>
             <div onMouseLeave={handleClose}  className={show ? 'display-menu-list' : 'display-menu-none'}>
                 {
                     elements.map(item =>
                         <div>
-                            {item}
+                            {item.title}
                         </div>
                     )
                 }
