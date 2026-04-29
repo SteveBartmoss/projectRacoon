@@ -7,6 +7,8 @@
     "core:default",
     "opener:default",
     "dialog:allow-save",
-    "fs:allow-write-file"
+    "fs:allow-write-file",
+    "core:window:allow-create",
+    "core:webview:allow-create-webview-window"
   ]
 }
