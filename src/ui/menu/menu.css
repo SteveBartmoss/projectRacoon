@@ -36,3 +36,15 @@
 .display-menu-title:hover{
     background-color: #1a1a1a;
 }
+
+.display-menu-item{
+    cursor: pointer;
+}
+
+.display-menu-item{
+    cursor: pointer;
+}
+
+.display-menu-item:hover{
+    color: #63b3ed;
+}
