@@ -21,6 +21,7 @@ export function FrameTabs({ elements }) {
     }
 
     const handleAddTab = () => {
+
         if (listFrames.length <= 0) {
             dispatch(setCounter(1))
 
@@ -33,38 +34,7 @@ export function FrameTabs({ elements }) {
             }))
 
             dispatch(addRequest(loadEmptyRequest(tabCounter)))
-
-            /*
-            dispatch(addRequest({
-                id: tabCounter,
-                title: "New Request",
-                url: "",
-                method: "GET",
-                body: "",
-                paramsById: {
-                    1: {
-                        id: 1,
-                        name: "",
-                        value: "",
-                        active: true,
-                    },
-                },
-                paramIds: [1],
-                headersById: {
-                    1: {
-                        id: 1,
-                        name: "",
-                        value: "",
-                        active: true,
-                    }
-                },
-                headerIds: [1],
-                auth: "",
-                authType: "",
-                response: {},
-                description: ""
-            }))
-            */
+            
             return
         }
 
@@ -79,38 +49,6 @@ export function FrameTabs({ elements }) {
         }))
 
         dispatch(addRequest(loadEmptyRequest(counter)))
-        
-        /*
-        dispatch(addRequest({
-            id: counter,
-            title: "New Request",
-            url: "",
-            method: "GET",
-            body: "",
-            paramsById: {
-                1: {
-                    id: 1,
-                    name: "",
-                    value: "",
-                    active: true,
-                },
-            },
-            paramIds: [1],
-            headersById: {
-                1: {
-                    id: 1,
-                    name: "",
-                    value: "",
-                    active: true,
-                }
-            },
-            headerIds: [1],
-            auth: "",
-            authType: "",
-            response: {},
-            description: ""
-        }))
-        */
 
         dispatch(setCounter(counter))
 
