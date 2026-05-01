@@ -6,6 +6,7 @@ import './frameTabs.css'
 import { Chip } from "../chip/chip";
 import { addRequest, removeRequest } from "../../store/requestSlice";
 import { addTab, removeTab, setCounter, setCurrentTab } from "../../store/tabSlice";
+import { loadEmptyRequest } from "../../utils/requestUtils";
 
 export function FrameTabs({ elements }) {
 
@@ -31,6 +32,9 @@ export function FrameTabs({ elements }) {
                 prev: null,
             }))
 
+            dispatch(addRequest(loadEmptyRequest(tabCounter)))
+
+            /*
             dispatch(addRequest({
                 id: tabCounter,
                 title: "New Request",
@@ -60,6 +64,7 @@ export function FrameTabs({ elements }) {
                 response: {},
                 description: ""
             }))
+            */
             return
         }
 
@@ -73,6 +78,9 @@ export function FrameTabs({ elements }) {
             prev: null
         }))
 
+        dispatch(addRequest(loadEmptyRequest(counter)))
+        
+        /*
         dispatch(addRequest({
             id: counter,
             title: "New Request",
@@ -102,6 +110,7 @@ export function FrameTabs({ elements }) {
             response: {},
             description: ""
         }))
+        */
 
         dispatch(setCounter(counter))
 
