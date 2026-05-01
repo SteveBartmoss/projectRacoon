@@ -8,6 +8,7 @@ import { open, save } from "@tauri-apps/plugin-dialog"
 import { readFile, writeFile } from "@tauri-apps/plugin-fs"
 import { addTab, setCounter } from "../../store/tabSlice"
 import { addRequest } from "../../store/requestSlice"
+import { loadRequest } from "../../utils/requestUtils"
 
 export function Header() {
 
@@ -62,8 +63,6 @@ export function Header() {
         const decoder = new TextDecoder()
         const json = JSON.parse(decoder.decode(bytes))
 
-        console.log(json)
-
         if (listFrames.length <= 0) {
             dispatch(setCounter(1))
 
@@ -75,21 +74,8 @@ export function Header() {
                 prev: null,
             }))
 
-            dispatch(addRequest({
-                id: tabCounter,
-                title: "New Request",
-                url: json.url,
-                method: json.method,
-                body: json.body,
-                paramsById: json.paramsById,
-                paramIds: json.paramIds,
-                headersById: json.headersById,
-                headerIds: json.headerIds,
-                auth: json.auth,
-                authType: json.authType,
-                response: json.response,
-                description: json.description
-            }))
+            dispatch(addRequest(loadRequest(tabCounter,'New Request',json)))
+
             return
         }
 
@@ -103,21 +89,7 @@ export function Header() {
             prev: null
         }))
 
-        dispatch(addRequest({
-            id: counter,
-            title: "New Request",
-            url: json.url,
-            method: json.method,
-            body: json.body,
-            paramsById: json.paramsById,
-            paramIds: json.paramIds,
-            headersById: json.headersById,
-            headerIds: json.headerIds,
-            auth: json.auth,
-            authType: json.authType,
-            response: json.response,
-            description: json.description
-        }))
+        dispatch(addRequest(loadRequest(counter,'New Request',json)))
 
         dispatch(setCounter(counter))
 
