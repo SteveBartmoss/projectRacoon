@@ -30,9 +30,9 @@ const tabSlice = createSlice({
             const tab = action.payload
 
             tab.prev = state.head
-            state.tabsById[state.head].next = tab.id
-            state.head = tab.id
             state.tabsById[tab.id] = tab
+            state.head = tab.id
+            state.tabsById[state.head].next = tab.id
             state.tabIds.push(tab.id)
         },
         setCurrentTab(state,action){
@@ -43,8 +43,6 @@ const tabSlice = createSlice({
 
             const next = state.tabsById[id].next
             const prev = state.tabsById[id].prev
-
-            console.log(next)
             
             if(next && prev){
                 state.head = next
