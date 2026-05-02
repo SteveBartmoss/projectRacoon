@@ -29,16 +29,18 @@ const tabSlice = createSlice({
 
             const tab = action.payload
 
-            if(state.tabIds.length){
+            if(state.tabIds.length > 0){
                 state.tabsById[state.head].next = tab.id
                 tab.prev = state.head
                 state.tabsById[tab.id] = tab
                 state.head = tab.id
                 state.tabIds.push(tab.id)
+                state.currentTab = tab.id
             } else {
                 state.tabsById[tab.id] = tab
                 state.head = tab.id
                 state.tabIds.push(tab.id)
+                state.currentTab = tab.id
             }
         },
         setCurrentTab(state,action){
@@ -70,7 +72,10 @@ const tabSlice = createSlice({
             delete state.tabsById[id]
             state.tabIds = state.tabIds.filter(element => element !== id)
 
-            console.log(state.tabsById)
+            if(state.tabIds.length <=0){
+                state.currentTab = 0
+                state.counter = 0
+            }
 
         },
         setCounter(state,action){
