@@ -116,7 +116,7 @@ export function Header() {
                 display: "flex",
                 flexDirection: "row",
             }}>
-                <div>
+                <div className="div-logo">
                     <img className="logo" src={logo} />
                 </div>
                 <MenuLayout>
