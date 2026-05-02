@@ -26,14 +26,14 @@ export function FrameTabs({ elements }) {
             dispatch(setCounter(1))
 
             dispatch(addTab({
-                id: tabCounter,
+                id: 1,
                 title: "New Request",
                 method: "GET",
                 next: null,
                 prev: null,
             }))
 
-            dispatch(addRequest(loadEmptyRequest(tabCounter)))
+            dispatch(addRequest(loadEmptyRequest(1)))
             
             return
         }
