@@ -6,6 +6,7 @@ import './frameTabs.css'
 import { Chip } from "../chip/chip";
 import { addRequest, removeRequest } from "../../store/requestSlice";
 import { addTab, removeTab, setCounter, setCurrentTab } from "../../store/tabSlice";
+import { loadEmptyRequest } from "../../utils/requestUtils";
 
 export function FrameTabs({ elements }) {
 
@@ -20,46 +21,20 @@ export function FrameTabs({ elements }) {
     }
 
     const handleAddTab = () => {
+
         if (listFrames.length <= 0) {
             dispatch(setCounter(1))
 
             dispatch(addTab({
-                id: tabCounter,
+                id: 1,
                 title: "New Request",
                 method: "GET",
                 next: null,
                 prev: null,
             }))
 
-            dispatch(addRequest({
-                id: tabCounter,
-                title: "New Request",
-                url: "",
-                method: "GET",
-                body: "",
-                paramsById: {
-                    1: {
-                        id: 1,
-                        name: "",
-                        value: "",
-                        active: true,
-                    },
-                },
-                paramIds: [1],
-                headersById: {
-                    1: {
-                        id: 1,
-                        name: "",
-                        value: "",
-                        active: true,
-                    }
-                },
-                headerIds: [1],
-                auth: "",
-                authType: "",
-                response: {},
-                description: ""
-            }))
+            dispatch(addRequest(loadEmptyRequest(1)))
+            
             return
         }
 
@@ -73,35 +48,7 @@ export function FrameTabs({ elements }) {
             prev: null
         }))
 
-        dispatch(addRequest({
-            id: counter,
-            title: "New Request",
-            url: "",
-            method: "GET",
-            body: "",
-            paramsById: {
-                1: {
-                    id: 1,
-                    name: "",
-                    value: "",
-                    active: true,
-                },
-            },
-            paramIds: [1],
-            headersById: {
-                1: {
-                    id: 1,
-                    name: "",
-                    value: "",
-                    active: true,
-                }
-            },
-            headerIds: [1],
-            auth: "",
-            authType: "",
-            response: {},
-            description: ""
-        }))
+        dispatch(addRequest(loadEmptyRequest(counter)))
 
         dispatch(setCounter(counter))
 
