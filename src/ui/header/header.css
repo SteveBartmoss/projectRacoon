@@ -3,3 +3,10 @@
 .logo{
     width: 1.5rem;
 }
+
+.div-logo{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
