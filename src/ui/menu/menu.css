@@ -46,7 +46,7 @@
 .display-menu-item{
     cursor: pointer;
     padding: .1rem;
-    border-radius: .2rem    ;
+    border-radius: .2rem;
 }
 
 .display-menu-item:hover{
