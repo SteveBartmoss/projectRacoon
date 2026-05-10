@@ -40,3 +40,10 @@ A lightweight HTTP client built with React + Tauri + Rust.
 https://jsonplaceholder.typicode.com/posts
 
 https://httpbin.org/get
+
+### subir una nueva version 
+
+```bash
+git tag v0.13.1
+git push origin v0.13.1
+```
