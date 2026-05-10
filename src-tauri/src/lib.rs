@@ -23,8 +23,12 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet,fetch_data])
-        .invoke_handler(tauri::generate_handler![config::load_config,config::save_config])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            fetch_data,
+            config::load_config,
+            config::save_config
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
