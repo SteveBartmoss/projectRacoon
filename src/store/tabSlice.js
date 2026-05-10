@@ -13,7 +13,8 @@ const initialState = {
         }
     },
     tabIds: [1],
-    currentTab: 1, 
+    currentTab: 1,
+    contexTab: 1, 
     head: 1,
 }
 
@@ -45,6 +46,9 @@ const tabSlice = createSlice({
         },
         setCurrentTab(state,action){
             state.currentTab = action.payload
+        },
+        setContextTab(state,action){
+            state.contexTab = action.payload
         },
         removeTab(state,action){
             const id = action.payload
@@ -94,6 +98,7 @@ const tabSlice = createSlice({
 export const {
     addTab,
     setCurrentTab,
+    setContextTab,
     removeTab,
     setCounter,
     setNext,
