@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { open, save } from "@tauri-apps/plugin-dialog"
 import { readFile, writeFile } from "@tauri-apps/plugin-fs"
 import { addTab, setCounter } from "../../store/tabSlice"
-import { addRequest } from "../../store/requestSlice"
+import { addRequest, setInfo } from "../../store/requestSlice"
 import { loadRequest } from "../../utils/requestUtils"
 
 export function Header() {
@@ -45,6 +45,12 @@ export function Header() {
 
         await writeFile(path, bytes)
 
+        dispatch(setInfo({
+            id: tabSelected,
+            field: "path",
+            value: path
+        }))
+
     }
 
     const handleOpenFile = async () => {
@@ -76,6 +82,12 @@ export function Header() {
 
             dispatch(addRequest(loadRequest(tabCounter,'New Request',json)))
 
+            dispatch(setInfo({
+                id: tabCounter,
+                field: "path",
+                value: path
+            }))
+
             return
         }
 
@@ -92,6 +104,12 @@ export function Header() {
         dispatch(addRequest(loadRequest(counter,'New Request',json)))
 
         dispatch(setCounter(counter))
+
+        dispatch(setInfo({
+            id: counter,
+            field: "path",
+            value: path
+        }))
 
     }
 
