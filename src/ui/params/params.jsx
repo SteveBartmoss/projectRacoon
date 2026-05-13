@@ -6,6 +6,7 @@ import './params.css'
 import addImg from '../../assets/add.svg'
 import deleteImg from '../../assets/delete.svg'
 import { CheckInput } from "../checkbox/checkbox";
+import { useMemo } from "react";
 
 export function Params({ elements }) {
 
@@ -22,7 +23,7 @@ export function Params({ elements }) {
     }
 
     const handleAtiveParam = (value, paramId) => {
-        dispatch(setParamInfo({requestId: tabId, paramId: paramId, field: "active", paramValue: value}))
+        dispatch(setParamInfo({ requestId: tabId, paramId: paramId, field: "active", paramValue: value }))
     }
 
     const handleAddParam = () => {
@@ -34,7 +35,7 @@ export function Params({ elements }) {
 
         let counter = frame.paramIds.length
 
-        dispatch(addParam({ id: tabId, param: { id: counter + 1, name: "", value: "",active: true } }))
+        dispatch(addParam({ id: tabId, param: { id: counter + 1, name: "", value: "", active: true } }))
 
     }
 
@@ -48,25 +49,32 @@ export function Params({ elements }) {
 
     const getPreviewUrl = () => {
 
-        if(!frame.url) return '...'
+        if (!frame.url) return '...'
 
-        const url = new URL(frame.url)
+        try {
+            const url = new URL(frame.url)
 
-        elements?.forEach(item => {
-            if(item.name && item.value && item.active){
-                url.searchParams.set(item.name, item.value)
-            }
-        })
+            elements?.forEach(item => {
+                if (item.name && item.value && item.active) {
+                    url.searchParams.set(item.name, item.value)
+                }
+            })
 
-        return url.toString()
+            return url.toString()
+        } catch(error){
+
+            return frame.url; 
+        }
 
     }
+
+    const previewUrl = useMemo(()=>getPreviewUrl(), [frame.url, elements])
 
     return (
         <div>
             <div className="div-url-preview">
                 <p>Url Preview</p>
-                <p>{getPreviewUrl()}</p>
+                <p>{previewUrl}</p>
             </div>
             <p>Query parameters</p>
             <Box styles={{
@@ -111,7 +119,7 @@ export function Params({ elements }) {
                                 alignItems: "center",
                                 margin: "1rem"
                             }}>
-                                <CheckInput target={item.active} handleTarget={(event) => handleAtiveParam(event.target.checked, item.id) } />
+                                <CheckInput target={item.active} handleTarget={(event) => handleAtiveParam(event.target.checked, item.id)} />
                             </Box>
                             <div onClick={() => handleDeleteParam(item.id)} className="div-delete">
                                 <img className="img-delete" src={deleteImg} />
