@@ -22,7 +22,7 @@ export function Params({ elements }) {
     }
 
     const handleAtiveParam = (value, paramId) => {
-        dispatch(setParamInfo({requestId: tabId, paramId: paramId, field: "active", paramValue: value}))
+        dispatch(setParamInfo({ requestId: tabId, paramId: paramId, field: "active", paramValue: value }))
     }
 
     const handleAddParam = () => {
@@ -34,7 +34,7 @@ export function Params({ elements }) {
 
         let counter = frame.paramIds.length
 
-        dispatch(addParam({ id: tabId, param: { id: counter + 1, name: "", value: "",active: true } }))
+        dispatch(addParam({ id: tabId, param: { id: counter + 1, name: "", value: "", active: true } }))
 
     }
 
@@ -48,17 +48,21 @@ export function Params({ elements }) {
 
     const getPreviewUrl = () => {
 
-        if(!frame.url) return '...'
+        try {
+            if (!frame.url) return '...'
 
-        const url = new URL(frame.url)
+            const url = new URL(frame.url)
 
-        elements?.forEach(item => {
-            if(item.name && item.value && item.active){
-                url.searchParams.set(item.name, item.value)
-            }
-        })
+            elements?.forEach(item => {
+                if (item.name && item.value && item.active) {
+                    url.searchParams.set(item.name, item.value)
+                }
+            })
 
-        return url.toString()
+            return url.toString()
+        } catch (error) {
+            return frame.url;
+        }
 
     }
 
@@ -111,7 +115,7 @@ export function Params({ elements }) {
                                 alignItems: "center",
                                 margin: "1rem"
                             }}>
-                                <CheckInput target={item.active} handleTarget={(event) => handleAtiveParam(event.target.checked, item.id) } />
+                                <CheckInput target={item.active} handleTarget={(event) => handleAtiveParam(event.target.checked, item.id)} />
                             </Box>
                             <div onClick={() => handleDeleteParam(item.id)} className="div-delete">
                                 <img className="img-delete" src={deleteImg} />
