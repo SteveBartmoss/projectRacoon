@@ -1,17 +1,40 @@
+import { useEffect } from "react";
 
 
-export function ComandObserver({children}){
+export function ComandObserver({ children }) {
 
-    const handleKeyDown = (event) => {
+    useEffect(() => {
 
-        const key = event.key;
+        const handleKeyDown = (event) => {
 
-        console.log(key)
-    }
+            const tag = event.target.tagName;
 
-    return(
-        <div>
-            {children}
-        </div>
-    )
+            const isTyping =
+                tag === "INPUT" ||
+                tag === "TEXTAREA" ||
+                event.target.isContentEditable;
+
+            if (isTyping) return;
+
+            //console.log(event.key, event.code);
+
+            if (event.ctrlKey && event.code === "KeyS") {
+                event.preventDefault();
+                console.log("Guardar");
+            }
+
+            if(event.ctrlKey && event.code == "KeyN"){
+                event.preventDefault();
+                console.log("Nueva tab");
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () =>
+            window.removeEventListener("keydown", handleKeyDown);
+
+    }, []);
+
+    return children
 }
