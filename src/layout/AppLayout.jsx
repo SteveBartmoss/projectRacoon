@@ -7,10 +7,11 @@ import { ResizeLayout, WidgetsLayout } from "./WidgetsLayout"
 import { invoke } from "@tauri-apps/api/core"
 import { useEffect } from "react"
 import { setConfig } from "../store/appSlice"
+import { ComandObserver } from "../ui/comandObserver/comandObserver"
 
 export function AppLayout() {
 
-    const tabs = useSelector((state) => 
+    const tabs = useSelector((state) =>
         state.tabs.tabIds.map(id => state.tabs.tabsById[id])
     )
 
@@ -28,21 +29,23 @@ export function AppLayout() {
 
     useEffect(() => {
         initConfig()
-    },[]);
+    }, []);
 
     return (
         <>
-            <Box styles={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100vh",
-                width: "100vw"
-            }}>
-                <Header />
-                <FrameTabs elements={tabs} />
-                <ResizeLayout />
-                <FooterLayout />
-            </Box>
+            <ComandObserver>
+                <Box styles={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100vh",
+                    width: "100vw"
+                }}>
+                    <Header />
+                    <FrameTabs elements={tabs} />
+                    <ResizeLayout />
+                    <FooterLayout />
+                </Box>
+            </ComandObserver>
         </>
     )
 }
