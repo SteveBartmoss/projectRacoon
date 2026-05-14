@@ -1,7 +1,17 @@
+import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { useEffect } from "react";
 
 
 export function ComandObserver({ children }) {
+
+    const handleNewWindow = () => {
+        const webview = new WebviewWindow(`window-${Date.now()}`, {
+            url: '/',
+            title: 'Raccoon',
+            width: 800,
+            height: 600,
+        })
+    }
 
     useEffect(() => {
 
@@ -16,8 +26,6 @@ export function ComandObserver({ children }) {
 
             if (isTyping) return;
 
-            //console.log(event.key, event.code);
-
             if (event.ctrlKey && event.code === "KeyS") {
                 event.preventDefault();
                 console.log("Guardar");
@@ -26,6 +34,11 @@ export function ComandObserver({ children }) {
             if(event.ctrlKey && event.code == "KeyN"){
                 event.preventDefault();
                 console.log("Nueva tab");
+            }
+
+            if(event.ctrlKey && event.shiftKey && event.code === "KeyN"){
+                event.preventDefault();
+                handleNewWindow()
             }
         };
 
