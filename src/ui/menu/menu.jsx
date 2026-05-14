@@ -37,7 +37,12 @@ export function Menu({ elements, title }) {
                 {
                     elements.map(item =>
                         <div className="display-menu-item" onClick={item.action}>
-                            {item.title}
+                            <div>
+                                {item.title}
+                            </div>
+                            <div className="item-comand">
+                                {item.command}
+                            </div>
                         </div>
                     )
                 }
