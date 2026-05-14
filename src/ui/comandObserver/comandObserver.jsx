@@ -1,9 +1,11 @@
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
-import { save } from "@tauri-apps/plugin-dialog";
-import { writeFile } from "@tauri-apps/plugin-fs";
+import { open, save } from "@tauri-apps/plugin-dialog";
+import { readFile, writeFile } from "@tauri-apps/plugin-fs";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setInfo } from "../../store/requestSlice";
+import { addRequest, setInfo } from "../../store/requestSlice";
+import { addTab, setCounter } from "../../store/tabSlice";
+import { loadRequest } from "../../utils/requestUtils";
 
 
 export function ComandObserver({ children }) {
@@ -30,7 +32,7 @@ export function ComandObserver({ children }) {
             defaultPath: "newrequest.json"
         })
 
-        if(!path) return
+        if (!path) return
 
         const encoder = new TextEncoder()
 
@@ -47,6 +49,66 @@ export function ComandObserver({ children }) {
         }))
     }
 
+    const handleOpenFile = async () => {
+
+        const path = await open({
+            multiple: false,
+            filters: [{
+                name: 'JSON',
+                extensions: ['json']
+            }]
+        })
+
+        if (!path) return
+
+        const bytes = await readFile(path)
+        const decoder = new TextDecoder()
+        const json = JSON.parse(decoder.decode(bytes))
+
+        if (listFrames.length <= 0) {
+            dispatch(setCounter(1))
+
+            dispatch(addTab({
+                id: tabCounter,
+                title: "New Request",
+                method: json.method,
+                next: null,
+                prev: null,
+            }))
+
+            dispatch(addRequest(loadRequest(tabCounter, 'New Request', json)))
+
+            dispatch(setInfo({
+                id: tabCounter,
+                field: "path",
+                value: path
+            }))
+
+            return
+        }
+
+        let counter = tabCounter + 1
+
+        dispatch(addTab({
+            id: counter,
+            title: "New Request",
+            method: json.method,
+            next: null,
+            prev: null
+        }))
+
+        dispatch(addRequest(loadRequest(counter, 'New Request', json)))
+
+        dispatch(setCounter(counter))
+
+        dispatch(setInfo({
+            id: counter,
+            field: "path",
+            value: path
+        }))
+
+    }
+
     useEffect(() => {
 
         const handleKeyDown = (event) => {
@@ -60,26 +122,47 @@ export function ComandObserver({ children }) {
 
             if (isTyping) return;
 
+            console.log({
+                key: event.key,
+                code: event.code,
+                ctrl: event.ctrlKey,
+                shift: event.shiftKey,
+                alt: event.altKey,
+                meta: event.metaKey
+            });
+
             if (event.ctrlKey && event.code === "KeyS") {
                 event.preventDefault();
                 handleSaveTab()
             }
 
-            if(event.ctrlKey && event.code == "KeyN"){
+            if (event.ctrlKey && event.code == "KeyN") {
                 event.preventDefault();
                 console.log("Nueva tab");
             }
 
-            if(event.ctrlKey && event.shiftKey && event.code === "KeyN"){
+            if (event.ctrlKey && event.shiftKey && event.code === "KeyN") {
                 event.preventDefault();
                 handleNewWindow()
             }
-        };
 
-        window.addEventListener("keydown", handleKeyDown);
+            if (event.ctrlKey && event.code == "KeyO") {
+                console.log('Nuevo archivo')
+                event.preventDefault();
+                handleOpenFile()
+            }
+
+        }
+
+        window.addEventListener("keydown", handleKeyDown, {
+            capture: true
+        });
 
         return () =>
-            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("keydown", handleKeyDown, {
+                capture: true
+            });
+
 
     }, []);
 
