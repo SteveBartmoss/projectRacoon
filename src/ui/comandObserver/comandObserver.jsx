@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequest, setInfo } from "../../store/requestSlice";
 import { addTab, setCounter } from "../../store/tabSlice";
-import { loadRequest } from "../../utils/requestUtils";
+import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
 
 
 export function ComandObserver({ children }) {
@@ -69,17 +69,17 @@ export function ComandObserver({ children }) {
             dispatch(setCounter(1))
 
             dispatch(addTab({
-                id: tabCounter,
+                id: 1,
                 title: "New Request",
                 method: json.method,
                 next: null,
                 prev: null,
             }))
 
-            dispatch(addRequest(loadRequest(tabCounter, 'New Request', json)))
+            dispatch(addRequest(loadRequest(1, 'New Request', json)))
 
             dispatch(setInfo({
-                id: tabCounter,
+                id: 1,
                 field: "path",
                 value: path
             }))
@@ -106,6 +106,39 @@ export function ComandObserver({ children }) {
             field: "path",
             value: path
         }))
+
+    }
+
+    const handleAddTab = () => {
+        if(listFrames.length <=0){
+            dispatch(setCounter(1))
+
+            dispatch(addTab({
+                id: 1,
+                title: "New Request",
+                method: "GET",
+                next: null,
+                prev: null,
+            }))
+
+            dispatch(addRequest(loadEmptyRequest(1)))
+
+            return
+        }
+
+        let counter = tabCounter + 1
+
+        dispatch(addTab({
+            id: counter,
+            title: "New Request",
+            method: "GET",
+            next: null,
+            prev: null
+        }))
+
+        dispatch(addRequest(loadEmptyRequest(counter)))
+
+        dispatch(setCounter(counter))
 
     }
 
@@ -139,6 +172,7 @@ export function ComandObserver({ children }) {
             if (event.ctrlKey && event.code == "KeyN") {
                 event.preventDefault();
                 console.log("Nueva tab");
+                handleAddTab()
             }
 
             if (event.ctrlKey && event.shiftKey && event.code === "KeyN") {
