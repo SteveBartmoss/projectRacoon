@@ -6,7 +6,7 @@ import './frameTabs.css'
 import { Chip } from "../chip/chip";
 import { addRequest, removeRequest } from "../../store/requestSlice";
 import { addTab, removeTab, setContextTab, setCounter, setCurrentTab } from "../../store/tabSlice";
-import { loadEmptyRequest } from "../../utils/requestUtils";
+import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
 import { useEffect, useRef, useState } from "react";
 import { MenuHelper } from "../menuHelper/menuHelper";
 
@@ -16,6 +16,9 @@ export function FrameTabs({ elements }) {
     const tabSelected = useSelector((state) => state.tabs.currentTab)
     const tabCounter = useSelector((state) => state.tabs.counter)
     const tabContext = useSelector((state) => state.tabs.contexTab)
+
+    const swapTab = useSelector((state) => state.tabs.tabsById[tabSelected])
+    const swapRequest = useSelector((state) => state.requests.requestsById[tabSelected])
 
     const dispatch = useDispatch()
 
@@ -66,10 +69,30 @@ export function FrameTabs({ elements }) {
         dispatch(removeRequest(id))
     }
 
-    const hanleRemoveTabMenu = () =>{
-        console.log(tabContext)
+    const handleRemoveTabMenu = () => {
         dispatch(removeTab(tabContext))
         dispatch(removeRequest(tabContext))
+    }
+
+    const handleDuplicateTab = () => {
+        
+        console.log(swapTab)
+        console.log(swapRequest)
+
+        let counter = tabCounter + 1
+
+        dispatch(addTab({
+            id: counter,
+            title: swapTab.title,
+            method: swapTab.method,
+            next: null,
+            prev: null
+        }))
+
+        dispatch(addRequest(loadRequest(counter,swapTab.title,swapRequest)))
+
+        dispatch(setCounter(counter))
+
     }
 
     const getColor = (method) => {
@@ -98,8 +121,13 @@ export function FrameTabs({ elements }) {
         {
             id: 1,
             title: 'close',
-            action: hanleRemoveTabMenu
+            action: handleRemoveTabMenu
         },
+        {
+            id: 2,
+            title: 'duplicate request',
+            action: handleDuplicateTab
+        }
     ]
 
     return (
