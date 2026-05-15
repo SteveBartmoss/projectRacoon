@@ -1,7 +1,7 @@
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { open, save } from "@tauri-apps/plugin-dialog";
 import { readFile, writeFile } from "@tauri-apps/plugin-fs";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequest, setInfo } from "../../store/requestSlice";
 import { addTab, setCounter } from "../../store/tabSlice";
@@ -15,6 +15,12 @@ export function ComandObserver({ children }) {
     const listFrames = useSelector((state) => state.tabs.tabIds)
     const tabCounter = useSelector((state) => state.tabs.counter)
 
+    const tabCounterRef = useRef(tabCounter)
+    const listFramesRef = useRef(listFrames)
+    const requestRef = useRef(request)
+    const tabSelectedRef = useRef(tabSelected)
+
+
     const dispatch = useDispatch()
 
     const handleNewWindow = () => {
@@ -26,7 +32,7 @@ export function ComandObserver({ children }) {
         })
     }
 
-    const handleSaveTab = async () => {
+    const handleSaveTab = async (request,tabSelected) => {
 
         const path = await save({
             defaultPath: "newrequest.json"
@@ -49,7 +55,7 @@ export function ComandObserver({ children }) {
         }))
     }
 
-    const handleOpenFile = async () => {
+    const handleOpenFile = async (counter,frames) => {
 
         const path = await open({
             multiple: false,
@@ -65,7 +71,7 @@ export function ComandObserver({ children }) {
         const decoder = new TextDecoder()
         const json = JSON.parse(decoder.decode(bytes))
 
-        if (listFrames.length <= 0) {
+        if (frames.length <= 0) {
             dispatch(setCounter(1))
 
             dispatch(addTab({
@@ -87,30 +93,32 @@ export function ComandObserver({ children }) {
             return
         }
 
-        let counter = tabCounter + 1
+        let newCounter = counter + 1
+
+        dispatch(setCounter(newCounter))
 
         dispatch(addTab({
-            id: counter,
+            id: newCounter,
             title: "New Request",
             method: json.method,
             next: null,
             prev: null
         }))
 
-        dispatch(addRequest(loadRequest(counter, 'New Request', json)))
-
-        dispatch(setCounter(counter))
+        dispatch(addRequest(loadRequest(newCounter, 'New Request', json)))
 
         dispatch(setInfo({
-            id: counter,
+            id: newCounter,
             field: "path",
             value: path
         }))
 
     }
 
-    const handleAddTab = () => {
-        if(listFrames.length <=0){
+    const handleAddTab = (counter,frames) => {
+
+        if(frames.length <=0){
+
             dispatch(setCounter(1))
 
             dispatch(addTab({
@@ -124,23 +132,31 @@ export function ComandObserver({ children }) {
             dispatch(addRequest(loadEmptyRequest(1)))
 
             return
+
         }
 
-        let counter = tabCounter + 1
+        let newCounter = counter + 1
+
+        dispatch(setCounter(newCounter))
 
         dispatch(addTab({
-            id: counter,
+            id: newCounter,
             title: "New Request",
             method: "GET",
             next: null,
             prev: null
         }))
 
-        dispatch(addRequest(loadEmptyRequest(counter)))
-
-        dispatch(setCounter(counter))
+        dispatch(addRequest(loadEmptyRequest(newCounter)))
 
     }
+
+    useEffect(() => {
+        tabCounterRef.current = tabCounter;
+        listFramesRef.current = listFrames;
+        requestRef.current = request;
+        tabSelectedRef.current = tabSelected;
+    }, [tabCounter,listFrames,request,tabSelected])
 
     useEffect(() => {
 
@@ -166,13 +182,13 @@ export function ComandObserver({ children }) {
 
             if (event.ctrlKey && event.code === "KeyS") {
                 event.preventDefault();
-                handleSaveTab()
+                handleSaveTab(requestRef,tabSelectedRef)
             }
 
             if (event.ctrlKey && event.code == "KeyN") {
                 event.preventDefault();
                 console.log("Nueva tab");
-                handleAddTab()
+                handleAddTab(tabCounterRef.current,listFramesRef.current)
             }
 
             if (event.ctrlKey && event.shiftKey && event.code === "KeyN") {
@@ -183,7 +199,7 @@ export function ComandObserver({ children }) {
             if (event.ctrlKey && event.code == "KeyO") {
                 console.log('Nuevo archivo')
                 event.preventDefault();
-                handleOpenFile()
+                handleOpenFile(tabCounterRef.current,listFramesRef.current)
             }
 
         }
