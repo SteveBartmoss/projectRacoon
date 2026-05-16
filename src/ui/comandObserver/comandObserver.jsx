@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addRequest, setInfo } from "../../store/requestSlice";
 import { addTab, setCounter } from "../../store/tabSlice";
 import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
+import { createNewTab } from "../../utils/tabsManagerThunks";
 
 
 export function ComandObserver({ children }) {
@@ -32,7 +33,7 @@ export function ComandObserver({ children }) {
         })
     }
 
-    const handleSaveTab = async (request,tabSelected) => {
+    const handleSaveTab = async (request, tabSelected) => {
 
         const path = await save({
             defaultPath: "newrequest.json"
@@ -55,7 +56,7 @@ export function ComandObserver({ children }) {
         }))
     }
 
-    const handleOpenFile = async (counter,frames) => {
+    const handleOpenFile = async (counter, frames) => {
 
         const path = await open({
             multiple: false,
@@ -72,8 +73,18 @@ export function ComandObserver({ children }) {
         const json = JSON.parse(decoder.decode(bytes))
 
         if (frames.length <= 0) {
-            dispatch(setCounter(1))
 
+            dispatch(createNewTab({
+                tab: {
+                    title: "New Request",
+                    method: json.method,
+                    next: null,
+                    prev: null,
+                },
+                request: loadRequest(1, 'New Request', json)
+            }))
+
+            /*
             dispatch(addTab({
                 id: 1,
                 title: "New Request",
@@ -83,6 +94,7 @@ export function ComandObserver({ children }) {
             }))
 
             dispatch(addRequest(loadRequest(1, 'New Request', json)))
+            */
 
             dispatch(setInfo({
                 id: 1,
@@ -95,8 +107,17 @@ export function ComandObserver({ children }) {
 
         let newCounter = counter + 1
 
-        dispatch(setCounter(newCounter))
+        dispatch(createNewTab({
+            tab: {
+                title: "New Request",
+                method: json.method,
+                next: null,
+                prev: null
+            },
+            request: loadRequest(newCounter, 'New Request', json)
+        }))
 
+        /*
         dispatch(addTab({
             id: newCounter,
             title: "New Request",
@@ -106,6 +127,7 @@ export function ComandObserver({ children }) {
         }))
 
         dispatch(addRequest(loadRequest(newCounter, 'New Request', json)))
+        */
 
         dispatch(setInfo({
             id: newCounter,
@@ -115,12 +137,21 @@ export function ComandObserver({ children }) {
 
     }
 
-    const handleAddTab = (counter,frames) => {
+    const handleAddTab = (counter, frames) => {
 
-        if(frames.length <=0){
+        if (frames.length <= 0) {
 
-            dispatch(setCounter(1))
+            dispatch(createNewTab({
+                tab: {
+                    title: "New Request",
+                    method: "GET",
+                    next: null,
+                    prev: null,
+                },
+                request: loadEmptyRequest(1)
+            }))
 
+            /*
             dispatch(addTab({
                 id: 1,
                 title: "New Request",
@@ -130,6 +161,7 @@ export function ComandObserver({ children }) {
             }))
 
             dispatch(addRequest(loadEmptyRequest(1)))
+            */
 
             return
 
@@ -137,8 +169,17 @@ export function ComandObserver({ children }) {
 
         let newCounter = counter + 1
 
-        dispatch(setCounter(newCounter))
+        dispatch(createNewTab({
+            tab: {
+                title: "New Request",
+                method: "GET",
+                next: null,
+                prev: null
+            },
+            request: loadEmptyRequest(newCounter)
+        }))
 
+        /*
         dispatch(addTab({
             id: newCounter,
             title: "New Request",
@@ -148,6 +189,7 @@ export function ComandObserver({ children }) {
         }))
 
         dispatch(addRequest(loadEmptyRequest(newCounter)))
+        */
 
     }
 
@@ -156,7 +198,7 @@ export function ComandObserver({ children }) {
         listFramesRef.current = listFrames;
         requestRef.current = request;
         tabSelectedRef.current = tabSelected;
-    }, [tabCounter,listFrames,request,tabSelected])
+    }, [tabCounter, listFrames, request, tabSelected])
 
     useEffect(() => {
 
@@ -182,13 +224,13 @@ export function ComandObserver({ children }) {
 
             if (event.ctrlKey && event.code === "KeyS") {
                 event.preventDefault();
-                handleSaveTab(requestRef,tabSelectedRef)
+                handleSaveTab(requestRef, tabSelectedRef)
             }
 
             if (event.ctrlKey && event.code == "KeyN") {
                 event.preventDefault();
                 console.log("Nueva tab");
-                handleAddTab(tabCounterRef.current,listFramesRef.current)
+                handleAddTab(tabCounterRef.current, listFramesRef.current)
             }
 
             if (event.ctrlKey && event.shiftKey && event.code === "KeyN") {
@@ -199,7 +241,7 @@ export function ComandObserver({ children }) {
             if (event.ctrlKey && event.code == "KeyO") {
                 console.log('Nuevo archivo')
                 event.preventDefault();
-                handleOpenFile(tabCounterRef.current,listFramesRef.current)
+                handleOpenFile(tabCounterRef.current, listFramesRef.current)
             }
 
         }
