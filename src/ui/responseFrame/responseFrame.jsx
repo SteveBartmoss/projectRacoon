@@ -8,6 +8,7 @@ import { save } from "@tauri-apps/plugin-dialog"
 import { writeFile } from '@tauri-apps/plugin-fs'
 import { useDispatch, useSelector } from 'react-redux'
 import { setInfo } from '../../store/requestSlice'
+import { ToolTip } from '../toolTip/toolTip'
 
 export function ResponseFrame({ objProps }) {
 
@@ -95,21 +96,27 @@ export function ResponseFrame({ objProps }) {
                             margin: ".3rem",
                         }}
                     >
-                        <img className="btn-clipboard" onClick={handleClipBoard} src={copy} />
+                        <ToolTip text={'Copiar respuesta'}>
+                            <img className="btn-clipboard" onClick={handleClipBoard} src={copy} />
+                        </ToolTip>
                     </Box>
                     <Box
                         styles={{
                             margin: ".3rem",
                         }}
                     >
-                        <img className="btn-clipboard" onClick={handleDownload} src={download} />
+                        <ToolTip text={'Descargar respuesta'}>
+                            <img className="btn-clipboard" onClick={handleDownload} src={download} />
+                        </ToolTip>
                     </Box>
                     <Box
                         styles={{
                             margin: ".3rem",
                         }}
                     >
-                        <img className="btn-clipboard" onClick={cleanResponse} src={clean} />
+                        <ToolTip text={'Limpiar respuesta'}>
+                            <img className="btn-clipboard" onClick={cleanResponse} src={clean} />
+                        </ToolTip>
                     </Box>
                 </div>
                 <div className='div-response'>
