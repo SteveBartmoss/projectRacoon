@@ -34,7 +34,6 @@ export function FrameTabs({ elements }) {
     const handleAddTab = () => {
 
         if (listFrames.length <= 0) {
-            dispatch(setCounter(1))
 
             /*
             dispatch(addTab({
@@ -50,7 +49,6 @@ export function FrameTabs({ elements }) {
 
             dispatch(createNewTab({
                 tab: {
-                    id: 1,
                     title: "New Request",
                     method: "GET",
                     next: null,
@@ -66,7 +64,6 @@ export function FrameTabs({ elements }) {
 
         dispatch(createNewTab({
             tab: {
-                id: counter,
                 title: "New Request",
                 method: "GET",
                 next: null,
@@ -86,8 +83,6 @@ export function FrameTabs({ elements }) {
 
         dispatch(addRequest(loadEmptyRequest(counter)))
         */
-
-        dispatch(setCounter(counter))
 
     }
 
@@ -110,7 +105,6 @@ export function FrameTabs({ elements }) {
         dispatch(createNewTab(
             {
                 tab: {
-                    id: counter,
                     title: swapTab.title,
                     method: swapTab.method,
                     next: null,
@@ -131,8 +125,6 @@ export function FrameTabs({ elements }) {
 
         dispatch(addRequest(loadRequest(counter, swapTab.title, swapRequest)))
         */
-        
-        dispatch(setCounter(counter))
 
     }
 
