@@ -9,6 +9,7 @@ import { addTab, removeTab, setContextTab, setCounter, setCurrentTab } from "../
 import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
 import { useEffect, useRef, useState } from "react";
 import { MenuHelper } from "../menuHelper/menuHelper";
+import { createNewTab } from "../../utils/tabsManagerThunks";
 
 export function FrameTabs({ elements }) {
 
@@ -35,6 +36,7 @@ export function FrameTabs({ elements }) {
         if (listFrames.length <= 0) {
             dispatch(setCounter(1))
 
+            /*
             dispatch(addTab({
                 id: 1,
                 title: "New Request",
@@ -44,12 +46,36 @@ export function FrameTabs({ elements }) {
             }))
 
             dispatch(addRequest(loadEmptyRequest(1)))
+            */
+
+            dispatch(createNewTab({
+                tab: {
+                    id: 1,
+                    title: "New Request",
+                    method: "GET",
+                    next: null,
+                    prev: null,
+                },
+                request: loadEmptyRequest(1)
+            }))
 
             return
         }
 
         let counter = tabCounter + 1
 
+        dispatch(createNewTab({
+            tab: {
+                id: counter,
+                title: "New Request",
+                method: "GET",
+                next: null,
+                prev: null
+            },
+            request: loadEmptyRequest(counter)
+        }))
+
+        /*
         dispatch(addTab({
             id: counter,
             title: "New Request",
@@ -59,6 +85,7 @@ export function FrameTabs({ elements }) {
         }))
 
         dispatch(addRequest(loadEmptyRequest(counter)))
+        */
 
         dispatch(setCounter(counter))
 
@@ -75,7 +102,7 @@ export function FrameTabs({ elements }) {
     }
 
     const handleDuplicateTab = () => {
-        
+
         console.log(swapTab)
         console.log(swapRequest)
 
@@ -89,7 +116,7 @@ export function FrameTabs({ elements }) {
             prev: null
         }))
 
-        dispatch(addRequest(loadRequest(counter,swapTab.title,swapRequest)))
+        dispatch(addRequest(loadRequest(counter, swapTab.title, swapRequest)))
 
         dispatch(setCounter(counter))
 
@@ -142,7 +169,7 @@ export function FrameTabs({ elements }) {
                                 handleChangeContextTab(item.id)
                             }} className={tabSelected === item.id ? "tab-active" : "div-tabs"}>
                                 <Chip text={item.method} type={getColor(item.method)} />
-                                <p className="tab" onClick={() => handleChangeTab(item.id) } >{item.title}</p>
+                                <p className="tab" onClick={() => handleChangeTab(item.id)} >{item.title}</p>
                                 <img className="img-close" onClick={() => handleRemoveTab(item.id)} src={closeImg} />
                             </div>
                         </MenuHelper>
