@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::time::Instant;
 use crate::AppState;
-use reqwest::header::{HeaderMap,HeaderName,HeaderValue};
+use reqwest::header::{HeaderName,HeaderValue};
 
 #[derive(Serialize, Deserialize)]
 pub enum HttpMethod{
