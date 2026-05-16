@@ -50,3 +50,23 @@ export function loadEmptyRequest(id) {
         description: ""
     }
 }
+
+export function getRequestColor(method) {
+    switch (method) {
+
+        case "GET":
+            return "success"
+
+        case "POST":
+            return "redirect"
+
+        case "PUT":
+            return "warning"
+
+        case "PATCH":
+            return "alert"
+
+        case "DELETE":
+            return "error"
+    }
+}
