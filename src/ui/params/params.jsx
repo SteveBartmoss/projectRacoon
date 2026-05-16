@@ -6,6 +6,7 @@ import './params.css'
 import addImg from '../../assets/add.svg'
 import deleteImg from '../../assets/delete.svg'
 import { CheckInput } from "../checkbox/checkbox";
+import { useMemo } from "react";
 
 export function Params({ elements }) {
 
@@ -48,9 +49,9 @@ export function Params({ elements }) {
 
     const getPreviewUrl = () => {
 
-        try {
-            if (!frame.url) return '...'
+        if (!frame.url) return '...'
 
+        try {
             const url = new URL(frame.url)
 
             elements?.forEach(item => {
@@ -60,17 +61,20 @@ export function Params({ elements }) {
             })
 
             return url.toString()
-        } catch (error) {
-            return frame.url;
+        } catch(error){
+
+            return frame.url; 
         }
 
     }
+
+    const previewUrl = useMemo(()=>getPreviewUrl(), [frame.url, elements])
 
     return (
         <div>
             <div className="div-url-preview">
                 <p>Url Preview</p>
-                <p>{getPreviewUrl()}</p>
+                <p>{previewUrl}</p>
             </div>
             <p>Query parameters</p>
             <Box styles={{

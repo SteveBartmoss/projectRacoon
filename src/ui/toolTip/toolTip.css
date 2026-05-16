@@ -1,0 +1,30 @@
+.display-tool-tip{
+    position: relative;
+}
+
+.display-tool-tip-none{
+    display: none
+}
+
+.display-tool-tip-text{
+    width: max-content;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #3d3a3a;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: .1rem;
+    z-index: 1;
+    border-radius: .2rem;
+    white-space: nowrap;
+}
+
+.display-menu-helper-item{
+    cursor: pointer;
+    border-radius: .2rem;
+}
+
+.display-menu-helper-item:hover{
+    color: #63b3ed;
+    background-color: #1a1a1a;
+}

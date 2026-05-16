@@ -5,19 +5,29 @@ import { useDispatch, useSelector } from "react-redux";
 import './frameTabs.css'
 import { Chip } from "../chip/chip";
 import { addRequest, removeRequest } from "../../store/requestSlice";
-import { addTab, removeTab, setCounter, setCurrentTab } from "../../store/tabSlice";
-import { loadEmptyRequest } from "../../utils/requestUtils";
+import { addTab, removeTab, setContextTab, setCounter, setCurrentTab } from "../../store/tabSlice";
+import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
+import { useEffect, useRef, useState } from "react";
+import { MenuHelper } from "../menuHelper/menuHelper";
 
 export function FrameTabs({ elements }) {
 
     const listFrames = useSelector((state) => state.tabs.tabIds)
     const tabSelected = useSelector((state) => state.tabs.currentTab)
     const tabCounter = useSelector((state) => state.tabs.counter)
+    const tabContext = useSelector((state) => state.tabs.contexTab)
+
+    const swapTab = useSelector((state) => state.tabs.tabsById[tabSelected])
+    const swapRequest = useSelector((state) => state.requests.requestsById[tabSelected])
 
     const dispatch = useDispatch()
 
     const handleChangeTab = (id) => {
         dispatch(setCurrentTab(id))
+    }
+
+    const handleChangeContextTab = (id) => {
+        dispatch(setContextTab(id))
     }
 
     const handleAddTab = () => {
@@ -34,7 +44,7 @@ export function FrameTabs({ elements }) {
             }))
 
             dispatch(addRequest(loadEmptyRequest(1)))
-            
+
             return
         }
 
@@ -59,6 +69,32 @@ export function FrameTabs({ elements }) {
         dispatch(removeRequest(id))
     }
 
+    const handleRemoveTabMenu = () => {
+        dispatch(removeTab(tabContext))
+        dispatch(removeRequest(tabContext))
+    }
+
+    const handleDuplicateTab = () => {
+        
+        console.log(swapTab)
+        console.log(swapRequest)
+
+        let counter = tabCounter + 1
+
+        dispatch(addTab({
+            id: counter,
+            title: swapTab.title,
+            method: swapTab.method,
+            next: null,
+            prev: null
+        }))
+
+        dispatch(addRequest(loadRequest(counter,swapTab.title,swapRequest)))
+
+        dispatch(setCounter(counter))
+
+    }
+
     const getColor = (method) => {
 
         switch (method) {
@@ -81,17 +117,35 @@ export function FrameTabs({ elements }) {
 
     }
 
+    const options = [
+        {
+            id: 1,
+            title: 'close',
+            action: handleRemoveTabMenu
+        },
+        {
+            id: 2,
+            title: 'duplicate request',
+            action: handleDuplicateTab
+        }
+    ]
+
     return (
 
         <>
             <div className="container-head">
                 {
                     elements.map(item =>
-                        <div key={item.id} className={tabSelected === item.id ? "tab-active" : "div-tabs"}>
-                            <Chip text={item.method} type={getColor(item.method)} />
-                            <p className="tab" onClick={() => handleChangeTab(item.id)}>{item.title}</p>
-                            <img className="img-close" onClick={() => handleRemoveTab(item.id)} src={closeImg} />
-                        </div>
+                        <MenuHelper key={item.id} options={options} >
+                            <div onContextMenu={(e) => {
+                                e.preventDefault()
+                                handleChangeContextTab(item.id)
+                            }} className={tabSelected === item.id ? "tab-active" : "div-tabs"}>
+                                <Chip text={item.method} type={getColor(item.method)} />
+                                <p className="tab" onClick={() => handleChangeTab(item.id) } >{item.title}</p>
+                                <img className="img-close" onClick={() => handleRemoveTab(item.id)} src={closeImg} />
+                            </div>
+                        </MenuHelper>
                     )
                 }
                 <div className="btn-add">

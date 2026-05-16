@@ -41,15 +41,23 @@
 
 .display-menu-item{
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .display-menu-item{
     cursor: pointer;
     padding: .1rem;
-    border-radius: .2rem    ;
+    border-radius: .2rem;
 }
 
 .display-menu-item:hover{
     color: #63b3ed;
     background-color: #1a1a1a;
+}
+
+.item-comand{
+    font-size: .8rem;
+    color: rgba(255, 255, 255, 0.5);
 }

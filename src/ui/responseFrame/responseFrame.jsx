@@ -2,11 +2,19 @@ import { Chip } from '../chip/chip'
 import './responseFrame.css'
 import copy from "../../assets/copy.svg"
 import download from "../../assets/download.svg"
+import clean from "../../assets/delete.svg"
 import { Box } from '../containers/containers'
-import { save } from "@tauri-apps/plugin-dialog";
+import { save } from "@tauri-apps/plugin-dialog"
 import { writeFile } from '@tauri-apps/plugin-fs'
+import { useDispatch, useSelector } from 'react-redux'
+import { setInfo } from '../../store/requestSlice'
+import { ToolTip } from '../toolTip/toolTip'
 
 export function ResponseFrame({ objProps }) {
+
+    const activeTab = useSelector((state) => state.tabs.currentTab)
+
+    const dispatch = useDispatch()
 
     const handleClipBoard = async () => {
         try{
@@ -48,6 +56,16 @@ export function ResponseFrame({ objProps }) {
         
     }
 
+    const cleanResponse = async () => {
+
+        dispatch(setInfo({
+            id: activeTab,
+            field: "response",
+            value: {}
+        }))
+
+    }
+
     return (
         <>
             <div className='div-container'>
@@ -78,14 +96,27 @@ export function ResponseFrame({ objProps }) {
                             margin: ".3rem",
                         }}
                     >
-                        <img className="btn-clipboard" onClick={handleClipBoard} src={copy} />
+                        <ToolTip text={'Copiar respuesta'}>
+                            <img className="btn-clipboard" onClick={handleClipBoard} src={copy} />
+                        </ToolTip>
                     </Box>
                     <Box
                         styles={{
                             margin: ".3rem",
                         }}
                     >
-                        <img className="btn-clipboard" onClick={handleDownload} src={download} />
+                        <ToolTip text={'Descargar respuesta'}>
+                            <img className="btn-clipboard" onClick={handleDownload} src={download} />
+                        </ToolTip>
+                    </Box>
+                    <Box
+                        styles={{
+                            margin: ".3rem",
+                        }}
+                    >
+                        <ToolTip text={'Limpiar respuesta'}>
+                            <img className="btn-clipboard" onClick={cleanResponse} src={clean} />
+                        </ToolTip>
                     </Box>
                 </div>
                 <div className='div-response'>
