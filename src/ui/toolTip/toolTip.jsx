@@ -1,6 +1,7 @@
 import { useState } from "react"
+import './toolTip.css'
 
-export function ToolTip({ children, tex }) {
+export function ToolTip({ children, text }) {
 
     const [show, setShow] = useState(false)
 
