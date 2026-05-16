@@ -9,7 +9,7 @@ import { addTab, removeTab, setContextTab, setCounter, setCurrentTab } from "../
 import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
 import { useEffect, useRef, useState } from "react";
 import { MenuHelper } from "../menuHelper/menuHelper";
-import { createNewTab } from "../../utils/tabsManagerThunks";
+import { createNewTab, deleteTab } from "../../utils/tabsManagerThunks";
 
 export function FrameTabs({ elements }) {
 
@@ -92,22 +92,35 @@ export function FrameTabs({ elements }) {
     }
 
     const handleRemoveTab = (id) => {
-        dispatch(removeTab(id))
-        dispatch(removeRequest(id))
+        dispatch(deleteTab(id))
+        //dispatch(removeTab(id))
+        //dispatch(removeRequest(id))
     }
 
     const handleRemoveTabMenu = () => {
-        dispatch(removeTab(tabContext))
-        dispatch(removeRequest(tabContext))
+        dispatch(deleteTab(tabContext))
+        //dispatch(removeTab(tabContext))
+        //dispatch(removeRequest(tabContext))
     }
 
     const handleDuplicateTab = () => {
 
-        console.log(swapTab)
-        console.log(swapRequest)
-
         let counter = tabCounter + 1
 
+        dispatch(createNewTab(
+            {
+                tab: {
+                    id: counter,
+                    title: swapTab.title,
+                    method: swapTab.method,
+                    next: null,
+                    prev: null
+                },
+                request: loadRequest(counter, swapTab.title, swapRequest)
+            }
+        ))
+
+        /*
         dispatch(addTab({
             id: counter,
             title: swapTab.title,
@@ -117,7 +130,8 @@ export function FrameTabs({ elements }) {
         }))
 
         dispatch(addRequest(loadRequest(counter, swapTab.title, swapRequest)))
-
+        */
+        
         dispatch(setCounter(counter))
 
     }
