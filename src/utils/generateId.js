@@ -1,8 +1,7 @@
 
 export class IDGenerator {
-    constructor(){
-        this.counter = 0
-    }
+   
+    static counter = 0
 
     static generate() {
         
