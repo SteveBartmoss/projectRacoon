@@ -9,6 +9,7 @@ import { readFile, writeFile } from "@tauri-apps/plugin-fs"
 import { addTab, setCounter } from "../../store/tabSlice"
 import { addRequest, setInfo } from "../../store/requestSlice"
 import { loadRequest } from "../../utils/requestUtils"
+import { createNewTab } from "../../utils/tabsManagerThunks"
 
 export function Header() {
 
@@ -70,8 +71,18 @@ export function Header() {
         const json = JSON.parse(decoder.decode(bytes))
 
         if (listFrames.length <= 0) {
-            dispatch(setCounter(1))
 
+            dispatch(createNewTab({
+                tab: {
+                    title: "New Request",
+                    method: json.method,
+                    next: null,
+                    prev: null,
+                },
+                request: loadRequest(tabCounter, 'New Request', json)
+            }))
+
+            /*
             dispatch(addTab({
                 id: tabCounter,
                 title: "New Request",
@@ -87,12 +98,24 @@ export function Header() {
                 field: "path",
                 value: path
             }))
+            */
 
             return
         }
 
         let counter = tabCounter + 1
 
+        dispatch(createNewTab({
+            tab: {
+                title: "New Request",
+                method: json.method,
+                next: null,
+                prev: null,
+            },
+            request: loadRequest(counter,'New Request',json)
+        }))
+
+        /*
         dispatch(addTab({
             id: counter,
             title: "New Request",
@@ -102,8 +125,7 @@ export function Header() {
         }))
 
         dispatch(addRequest(loadRequest(counter,'New Request',json)))
-
-        dispatch(setCounter(counter))
+        */
 
         dispatch(setInfo({
             id: counter,
