@@ -9,7 +9,7 @@ import { readFile, writeFile } from "@tauri-apps/plugin-fs"
 import { addTab } from "../../store/tabSlice"
 import { addRequest, setInfo } from "../../store/requestSlice"
 import { loadRequest } from "../../utils/requestUtils"
-import { createNewTab } from "../../utils/tabsManagerThunks"
+import { createNewTab, crerateTabFromJson } from "../../store/thunks/tabsManagerThunks"
 
 export function Header() {
 
@@ -68,10 +68,7 @@ export function Header() {
         const decoder = new TextDecoder()
         const json = JSON.parse(decoder.decode(bytes))
 
-        dispatch(createNewTab({
-            tab: {},
-            request: loadRequest(1, 'New Request', json)
-        }))
+        dispatch(crerateTabFromJson(json))
 
         //todo: pasar esto al createNewTab
         dispatch(setInfo({
