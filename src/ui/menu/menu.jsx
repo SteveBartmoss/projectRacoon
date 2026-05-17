@@ -36,7 +36,10 @@ export function Menu({ elements, title }) {
             <div className={show ? 'display-menu-list' : 'display-menu-none'}>
                 {
                     elements.map(item =>
-                        <div className="display-menu-item" onClick={item.action}>
+                        <div className="display-menu-item" onClick={() => {
+                            item.action()
+                            handleClose()
+                        }}>
                             <div>
                                 {item.title}
                             </div>
