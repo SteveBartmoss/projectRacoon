@@ -47,3 +47,10 @@ https://httpbin.org/get
 git tag v0.13.1
 git push origin v0.13.1
 ```
+
+### subir una nueva version prerelease
+
+```bash
+git tag pre-v0.13.1
+git push origin v0.13.1
+```
