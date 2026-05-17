@@ -10,6 +10,7 @@ import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
 import { useEffect, useRef, useState } from "react";
 import { MenuHelper } from "../menuHelper/menuHelper";
 import { createNewTab, deleteTab } from "../../utils/tabsManagerThunks";
+import { FrameTabHeader } from "./frameTabHeader";
 
 export function FrameTabs({ elements }) {
 
@@ -48,12 +49,7 @@ export function FrameTabs({ elements }) {
             */
 
             dispatch(createNewTab({
-                tab: {
-                    title: "New Request",
-                    method: "GET",
-                    next: null,
-                    prev: null,
-                },
+                tab: {},
                 request: loadEmptyRequest(1)
             }))
 
@@ -63,12 +59,7 @@ export function FrameTabs({ elements }) {
         let counter = tabCounter + 1
 
         dispatch(createNewTab({
-            tab: {
-                title: "New Request",
-                method: "GET",
-                next: null,
-                prev: null
-            },
+            tab: {},
             request: loadEmptyRequest(counter)
         }))
 
@@ -104,13 +95,8 @@ export function FrameTabs({ elements }) {
 
         dispatch(createNewTab(
             {
-                tab: {
-                    title: swapTab.title,
-                    method: swapTab.method,
-                    next: null,
-                    prev: null
-                },
-                request: loadRequest(counter, swapTab.title, swapRequest)
+                tab: {},
+                request: loadRequest(counter, swapRequest.title, swapRequest)
             }
         ))
 
@@ -169,15 +155,8 @@ export function FrameTabs({ elements }) {
             <div className="container-head">
                 {
                     elements.map(item =>
-                        <MenuHelper key={item.id} options={options} >
-                            <div onContextMenu={(e) => {
-                                e.preventDefault()
-                                handleChangeContextTab(item.id)
-                            }} className={tabSelected === item.id ? "tab-active" : "div-tabs"}>
-                                <Chip text={item.method} type={getColor(item.method)} />
-                                <p className="tab" onClick={() => handleChangeTab(item.id)} >{item.title}</p>
-                                <img className="img-close" onClick={() => handleRemoveTab(item.id)} src={closeImg} />
-                            </div>
+                        <MenuHelper key={item.id} options={options}>
+                            <FrameTabHeader tabRequest={item} />
                         </MenuHelper>
                     )
                 }
