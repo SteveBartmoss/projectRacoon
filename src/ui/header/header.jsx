@@ -81,16 +81,19 @@ export function Header() {
 
     const options = [
         {
+            id: 1,
             title: 'New',
             action: handleNewWindow,
             command: 'Ctrl+Shift+N'
         },
         {
+            id: 2,
             title: 'Save',
             action: handleSaveTab,
             command: 'Ctrl+S'
         },
         {
+            id: 3,
             title: 'Open',
             action: handleOpenFile,
             command: 'Ctrl+O'
