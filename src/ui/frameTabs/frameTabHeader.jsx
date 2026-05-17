@@ -4,7 +4,7 @@ import { setContextTab, setCurrentTab } from "../../store/tabSlice";
 import { Chip } from "../chip/chip";
 import { getRequestColor } from "../../utils/requestUtils";
 import closeImg from '../../assets/close.svg'
-import { deleteTab } from "../../utils/tabsManagerThunks";
+import { deleteTab } from "../../store/thunks/tabsManagerThunks";
 
 export function FrameTabHeader({tabRequest}){
 
