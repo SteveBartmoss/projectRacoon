@@ -10,13 +10,13 @@ export const createNewTab = () => (dispatch) => {
 
     dispatch(addTab({id}))
 
-    const {title, url, method, body, paramsById, paramIds, headersById, headerIds, auth, authType, response, description} = loadEmptyRequest()
+    const request = loadEmptyRequest()
 
-    dispatch(addRequest({id,title, url, method, body, paramsById, paramIds, headersById, headerIds, auth, authType, response, description}))
+    dispatch(addRequest({id,...request}))
     
 }
 
-export const crerateTabFromJson = (json) => (dispatch) => {
+export const crerateTabFromJson = (json,path=null) => (dispatch) => {
 
     const id = IDGenerator.generate()
 
