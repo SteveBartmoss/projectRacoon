@@ -101,7 +101,6 @@ export const {
     setContextTab,
     removeTab,
     setCounter,
-    setNext,
     setMethod,
 } = tabSlice.actions
 
