@@ -69,3 +69,14 @@ export function getRequestColor(method) {
             return "error"
     }
 }
+
+export function buildOptions (arrayOptions) {
+    return arrayOptions.reduce((acc, p) => {
+        if(!p.active) return acc
+        if(!p.name || !p.value) return acc
+
+        acc[p.name] = p.value
+
+        return acc
+    },{})
+}
