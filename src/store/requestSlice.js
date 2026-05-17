@@ -1,37 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    requestsById: {
-        1: {
-            id: 1,
-            url: "",
-            method: "GET",
-            body: "",
-            paramsById: {
-                1: {
-                    id: 1,
-                    name: "",
-                    value: "",
-                    active: true,
-                },
-            },
-            paramIds: [1],
-            headersById: {
-                1:{
-                    id: 1,
-                    name: "",
-                    value: "",
-                    active: true,
-                }
-            },
-            headerIds: [1],
-            auth: "",
-            authType: "",
-            response: {},
-            description: "",
-            path: ""
-        }
-    },
+    requestsById: {},
     requestIds: [1],
     counter: 1,
     counterHeaders: 1,
@@ -46,7 +16,7 @@ const getParam = (request, id) => {
 }
 
 const getHeader = (request, id) => {
-    returfn = request.headersById[id]
+    return request.headersById[id]
 }
 
 const requestSlice = createSlice({
@@ -66,6 +36,11 @@ const requestSlice = createSlice({
             state.requestIds = state.requestIds.filter(element => element !== id)
         },
         setInfo(state, action){
+
+            if(action.payload.field === 'id'){
+                throw new Error('Acceso a una propiedad sensible')
+            }
+
             const request = getRequest(state, action.payload.id)
 
             if(request){
@@ -73,6 +48,10 @@ const requestSlice = createSlice({
             }
         },
         setParamInfo(state,action){
+
+            if(action.payload.field === 'id'){
+                throw new Error('Acceso a una propiedad sensible')
+            }
             
             const request = getRequest(state, action.payload.requestId)
 
@@ -120,6 +99,10 @@ const requestSlice = createSlice({
         },
         setHeaderInfo(state,action){
 
+            if(action.payload.field === 'id'){
+                throw new Error('Acceso a una propiedad sensible')
+            }
+
             const request = getRequest(state, action.payload.requestId)
 
             if(!request) return
@@ -136,7 +119,7 @@ const requestSlice = createSlice({
 
             if(request) {
                 request.headersById[action.payload.header.id] = action.payload.header
-                request.paramIds.push(action.payload.header.id)
+                request.headerIds.push(action.payload.header.id)
             }
         },
         removeHeader(state,action){
