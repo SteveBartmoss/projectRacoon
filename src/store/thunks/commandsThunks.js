@@ -1,9 +1,9 @@
 import { open, save } from "@tauri-apps/plugin-dialog"
 import { readFile, writeFile } from "@tauri-apps/plugin-fs"
 import { setInfo } from "../requestSlice"
-import { loadTabJson, pushNewTab } from "./tabsThunks"
 import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils"
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow"
+import { createNewTab,crerateTabFromJson } from "./tabsManagerThunks"
 
 
 export const saveCurrentTab = () => async (dispatch, getState) => {
@@ -37,7 +37,7 @@ export const openFileAsNewTab = () => async (dispatch, getState) => {
     const decoder = new TextDecoder()
     const json = JSON.parse(decoder.decode(bytes))
 
-    await dispatch(loadTabJson(json))
+    await dispatch(crerateTabFromJson(json))
 
     // Todo: manejarlo dentro de la tab que se acaba de crear
     //dispatch(setInfo({ id: newCounter, field: 'path', value: path }));
@@ -45,9 +45,7 @@ export const openFileAsNewTab = () => async (dispatch, getState) => {
 
 export const newEmptyTab = () => async (dispatch, getState) => {
 
-    await dispatch(pushNewTab({
-        request: loadEmptyRequest(1)
-    }))
+    await dispatch(createNewTab())
 
 }
 
