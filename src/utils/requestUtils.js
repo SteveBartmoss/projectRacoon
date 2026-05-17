@@ -1,10 +1,9 @@
 
 
-export function loadRequest(id, title, json) {
+export function loadRequest(json) {
 
     return {
-        id: id,
-        title: title,
+        title: json.title,
         url: json.url,
         method: json.method,
         body: json.body,
@@ -19,9 +18,8 @@ export function loadRequest(id, title, json) {
     }
 }
 
-export function loadEmptyRequest(id) {
+export function loadEmptyRequest() {
     return {
-        id: id,
         title: "New Request",
         url: "",
         method: "GET",
