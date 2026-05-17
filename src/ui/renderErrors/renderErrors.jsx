@@ -16,7 +16,7 @@ export function RenderErrors() {
         >
             {
                 messsages.map(item =>
-                    <pre className="pre-error">
+                    <pre key={item} className="pre-error">
                         {JSON.stringify(item, null, 2)}
                     </pre>
                 )
