@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addRequest, setInfo } from "../../store/requestSlice";
 import { addTab, setCounter } from "../../store/tabSlice";
 import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
-import { createNewTab } from "../../utils/tabsManagerThunks";
+import { createNewTab, crerateTabFromJson } from "../../store/thunks/tabsManagerThunks";
+
 
 
 export function ComandObserver({ children }) {
@@ -72,15 +73,7 @@ export function ComandObserver({ children }) {
         const decoder = new TextDecoder()
         const json = JSON.parse(decoder.decode(bytes))
 
-        dispatch(createNewTab({
-            tab: {
-                title: "New Request",
-                method: json.method,
-                next: null,
-                prev: null,
-            },
-            request: loadRequest(1, 'New Request', json)
-        }))
+        dispatch(crerateTabFromJson(json))
 
         /*
         dispatch(addTab({
@@ -104,15 +97,7 @@ export function ComandObserver({ children }) {
 
     const handleAddTab = (counter, frames) => {
 
-        dispatch(createNewTab({
-            tab: {
-                title: "New Request",
-                method: "GET",
-                next: null,
-                prev: null,
-            },
-            request: loadEmptyRequest(1)
-        }))
+        dispatch(createNewTab())
 
         /*
         dispatch(addTab({
