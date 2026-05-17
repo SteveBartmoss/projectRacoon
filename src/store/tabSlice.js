@@ -3,16 +3,8 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     counter: 1,
-    tabsById: {
-        1: {
-            id: 1,
-            title: "New Request",
-            method: "GET",
-            next: null,
-            prev: null,
-        }
-    },
-    tabIds: [1],
+    tabsById: {},
+    tabIds: [],
     currentTab: 1,
     contexTab: 1, 
     head: 1,
@@ -56,7 +48,6 @@ const tabSlice = createSlice({
 
             if(state.tabIds.length <=0){
                 state.currentTab = 0
-                state.counter = 0
             }
 
         },
@@ -79,7 +70,6 @@ export const {
     setContextTab,
     removeTab,
     setCounter,
-    setNext,
     setMethod,
 } = tabSlice.actions
 
