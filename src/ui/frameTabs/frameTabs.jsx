@@ -6,8 +6,8 @@ import { addRequest } from "../../store/requestSlice";
 import { addTab } from "../../store/tabSlice";
 import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
 import { MenuHelper } from "../menuHelper/menuHelper";
-import { createNewTab, deleteTab } from "../../utils/tabsManagerThunks";
 import { FrameTabHeader } from "./frameTabHeader";
+import { createNewTab, crerateTabFromJson, deleteTab } from "../../store/thunks/tabsManagerThunks";
 
 export function FrameTabs({ elements }) {
 
@@ -21,10 +21,7 @@ export function FrameTabs({ elements }) {
 
     const handleAddTab = () => {
 
-        dispatch(createNewTab({
-            tab: {},
-            request: loadEmptyRequest(1)
-        }))
+        dispatch(createNewTab())
 
         /*
         dispatch(addTab({
@@ -46,12 +43,7 @@ export function FrameTabs({ elements }) {
 
     const handleDuplicateTab = () => {
 
-        dispatch(createNewTab(
-            {
-                tab: {},
-                request: loadRequest(1, swapRequest.title, swapRequest)
-            }
-        ))
+        dispatch(crerateTabFromJson(swapRequest))
 
     }
 
