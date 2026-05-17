@@ -72,49 +72,14 @@ export function ComandObserver({ children }) {
         const decoder = new TextDecoder()
         const json = JSON.parse(decoder.decode(bytes))
 
-        if (frames.length <= 0) {
-
-            dispatch(createNewTab({
-                tab: {
-                    title: "New Request",
-                    method: json.method,
-                    next: null,
-                    prev: null,
-                },
-                request: loadRequest(1, 'New Request', json)
-            }))
-
-            /*
-            dispatch(addTab({
-                id: 1,
-                title: "New Request",
-                method: json.method,
-                next: null,
-                prev: null,
-            }))
-
-            dispatch(addRequest(loadRequest(1, 'New Request', json)))
-            */
-
-            dispatch(setInfo({
-                id: 1,
-                field: "path",
-                value: path
-            }))
-
-            return
-        }
-
-        let newCounter = counter + 1
-
         dispatch(createNewTab({
             tab: {
                 title: "New Request",
                 method: json.method,
                 next: null,
-                prev: null
+                prev: null,
             },
-            request: loadRequest(newCounter, 'New Request', json)
+            request: loadRequest(1, 'New Request', json)
         }))
 
         /*
@@ -139,44 +104,14 @@ export function ComandObserver({ children }) {
 
     const handleAddTab = (counter, frames) => {
 
-        if (frames.length <= 0) {
-
-            dispatch(createNewTab({
-                tab: {
-                    title: "New Request",
-                    method: "GET",
-                    next: null,
-                    prev: null,
-                },
-                request: loadEmptyRequest(1)
-            }))
-
-            /*
-            dispatch(addTab({
-                id: 1,
-                title: "New Request",
-                method: "GET",
-                next: null,
-                prev: null,
-            }))
-
-            dispatch(addRequest(loadEmptyRequest(1)))
-            */
-
-            return
-
-        }
-
-        let newCounter = counter + 1
-
         dispatch(createNewTab({
             tab: {
                 title: "New Request",
                 method: "GET",
                 next: null,
-                prev: null
+                prev: null,
             },
-            request: loadEmptyRequest(newCounter)
+            request: loadEmptyRequest(1)
         }))
 
         /*
