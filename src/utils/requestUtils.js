@@ -47,7 +47,8 @@ export function loadEmptyRequest(id) {
         auth: "",
         authType: "",
         response: {},
-        description: ""
+        description: "",
+        path: ""
     }
 }
 
