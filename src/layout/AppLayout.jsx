@@ -8,8 +8,8 @@ import { invoke } from "@tauri-apps/api/core"
 import { useEffect } from "react"
 import { setConfig } from "../store/appSlice"
 import { ComandObserver } from "../ui/comandObserver/comandObserver"
-import { createNewTab } from "../utils/tabsManagerThunks"
 import { loadEmptyRequest } from "../utils/requestUtils"
+import { createNewTab } from "../store/thunks/tabsManagerThunks"
 
 export function AppLayout() {
 
@@ -31,10 +31,7 @@ export function AppLayout() {
 
     const initTabs = () => {
 
-        dispatch(createNewTab({
-            tab: {},
-            request: loadEmptyRequest(1)
-        }))
+        dispatch(createNewTab())
 
     }
 
