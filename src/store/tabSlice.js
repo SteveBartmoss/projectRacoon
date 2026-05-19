@@ -2,12 +2,10 @@ import { createSlice } from "@reduxjs/toolkit"
 
 
 const initialState = {
-    counter: 1,
     tabsById: {},
     tabIds: [],
-    currentTab: 1,
-    contexTab: 1, 
-    head: 1,
+    currentTab: null,
+    contexTab: null,
 }
 
 const getTab = (state,id) => {
@@ -50,16 +48,6 @@ const tabSlice = createSlice({
                 state.currentTab = 0
             }
 
-        },
-        setCounter(state,action){
-            state.counter = action.payload
-        },
-        setMethod(state, action){
-            const tab = getTab(state, action.payload.id)
-
-            if(tab){
-                tab.method = action.payload.value
-            }
         }
     }
 })
@@ -70,7 +58,6 @@ export const {
     setContextTab,
     removeTab,
     setCounter,
-    setMethod,
 } = tabSlice.actions
 
 export default tabSlice.reducer
