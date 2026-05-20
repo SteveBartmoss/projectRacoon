@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { secureFieldsHeaders, secureFieldsParams, secureFieldsRequest } from "../utils/requestUtils"
 
 const initialState = {
     requestsById: {},
-    requestIds: [1],
+    requestIds: [],
     counter: 1,
     counterHeaders: 1,
 }
@@ -37,7 +38,7 @@ const requestSlice = createSlice({
         },
         setInfo(state, action){
 
-            if(action.payload.field === 'id'){
+            if(!secureFieldsRequest.includes(action.payload.field)){
                 throw new Error('Acceso a una propiedad sensible')
             }
 
@@ -49,7 +50,8 @@ const requestSlice = createSlice({
         },
         setParamInfo(state,action){
 
-            if(action.payload.field === 'id'){
+
+            if(!secureFieldsParams.includes(action.payload.field)){
                 throw new Error('Acceso a una propiedad sensible')
             }
             
@@ -99,7 +101,7 @@ const requestSlice = createSlice({
         },
         setHeaderInfo(state,action){
 
-            if(action.payload.field === 'id'){
+            if(!secureFieldsHeaders.includes(action.payload.field)){
                 throw new Error('Acceso a una propiedad sensible')
             }
 
