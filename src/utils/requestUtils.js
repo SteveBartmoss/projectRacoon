@@ -1,5 +1,29 @@
 
 
+export const secureFieldsRequest = [
+    "title",
+    "url",
+    "method",
+    "body",
+    "auth",
+    "authType",
+    "response",
+    "description",
+    "path"
+]
+
+export const secureFieldsParams = [
+    "name",
+    "value",
+    "active",
+]
+
+export const secureFieldsHeaders = [
+    "name",
+    "value",
+    "active",
+]
+
 export function loadRequest(json) {
 
     return {
@@ -70,13 +94,13 @@ export function getRequestColor(method) {
     }
 }
 
-export function buildOptions (arrayOptions) {
+export function buildOptions(arrayOptions) {
     return arrayOptions.reduce((acc, p) => {
-        if(!p.active) return acc
-        if(!p.name || !p.value) return acc
+        if (!p.active) return acc
+        if (!p.name || !p.value) return acc
 
         acc[p.name] = p.value
 
         return acc
-    },{})
+    }, {})
 }
