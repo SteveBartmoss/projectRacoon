@@ -1,3 +1,4 @@
+import { IDGenerator } from "./generateId"
 
 
 export const secureFieldsRequest = [
@@ -24,6 +25,39 @@ export const secureFieldsHeaders = [
     "active",
 ]
 
+export function buildParams(){
+
+    const id = IDGenerator.generate()
+
+    return {
+        id,
+        paramsObjd: {
+            id,
+            name: "",
+            value: "",
+            active: true
+        },
+        idArray: [id]
+    }
+
+}
+
+export function buildHeaders(){
+
+    const id = IDGenerator.generate()
+
+    return {
+        id,
+        headersObj: {
+            id,
+            name: "",
+            value: "",
+            active: true
+        },
+        idArray: [id]
+    }
+}
+
 export function loadRequest(json) {
 
     return {
@@ -43,35 +77,30 @@ export function loadRequest(json) {
 }
 
 export function loadEmptyRequest() {
+
+    const buildedParams = buildParams()
+    const buildedHeaders = buildHeaders()
+
     return {
         title: "New Request",
         url: "",
         method: "GET",
         body: "",
         paramsById: {
-            1: {
-                id: 1,
-                name: "",
-                value: "",
-                active: true,
-            },
+            [buildedParams.id]: buildedParams.paramsObjd
         },
-        paramIds: [1],
+        paramIds: [buildedParams.id],
         headersById: {
-            1: {
-                id: 1,
-                name: "",
-                value: "",
-                active: true,
-            }
+            [buildedHeaders.id]: buildedHeaders.headersObj
         },
-        headerIds: [1],
+        headerIds: [buildedHeaders.id],
         auth: "",
         authType: "",
         response: {},
         description: "",
         path: ""
     }
+
 }
 
 export function getRequestColor(method) {
