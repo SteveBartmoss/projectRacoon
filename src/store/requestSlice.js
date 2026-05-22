@@ -4,8 +4,6 @@ import { secureFieldsHeaders, secureFieldsParams, secureFieldsRequest } from "..
 const initialState = {
     requestsById: {},
     requestIds: [],
-    counter: 1,
-    counterHeaders: 1,
 }
 
 const getRequest = (state, id) => {
@@ -97,7 +95,6 @@ const requestSlice = createSlice({
                 request.paramIds = [1]
             }
 
-            state.counter = 1
         },
         setHeaderInfo(state,action){
 
@@ -147,7 +144,6 @@ const requestSlice = createSlice({
                 request.headerIds = [1]
             }
 
-            state.counterHeaders = 1
         }
     }
 })
