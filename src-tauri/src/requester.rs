@@ -2,6 +2,22 @@ use serde::{Deserialize, Serialize};
 use std::time::Instant;
 use crate::AppState;
 use reqwest::header::{HeaderName,HeaderValue};
+use thiserror::Error;
+
+#[derive(Debug, Error, Serialize)]
+pub enum HttpError {
+    #[error("Network error: {0}")]
+    Network(String),
+
+    #[error("Invalid header: {0}")]
+    HeaderParse(String),
+
+    #[error("Failed to parse JSON response: {0}")]
+    JsonParse(String),
+
+    #[error("{0}")]
+    Other(String),
+}
 
 #[derive(Serialize, Deserialize)]
 pub enum HttpMethod{
@@ -27,11 +43,6 @@ pub struct HttpResponse {
     pub time: u128,
     pub size: usize,
     pub body: serde_json::Value
-}
-
-#[derive(Serialize)]
-pub struct HttpError{
-    pub message: String
 }
 
 #[tauri::command]
@@ -63,14 +74,10 @@ pub async fn fetch_data(
         for(key, value) in headers {
 
             let name = HeaderName::from_bytes(key.trim().as_bytes())
-                .map_err(|e| HttpError {
-                    message: format!("Invalid header name: {}",e)
-                })?;
-            
+                .map_err(|e| HttpError::HeaderParse(format!("... {}", e)))?;
+
             let val = HeaderValue::from_str(value.trim())
-                .map_err(|e| HttpError {
-                    message: format!("invalid header value: {}",e)
-                })?;
+                .map_err(|e| HttpError::HeaderParse(format!("... {}", e)))?;
 
             request = request.header(name, val);
 
@@ -81,12 +88,7 @@ pub async fn fetch_data(
 
     let start = Instant::now();
 
-    let response = request
-        .send()
-        .await
-        .map_err(|e| HttpError {
-            message: e.to_string() 
-        })?;
+    let response = request.send().await.map_err(|e| HttpError::Network(e.to_string()))?;
 
     let status = response.status().as_u16();
 
@@ -97,26 +99,16 @@ pub async fn fetch_data(
         .unwrap_or("")
         .to_string();
 
-    let bytes = response
-        .bytes()
-        .await
-        .map_err(|e| HttpError{
-            message: e.to_string()
-        })?;
+    let bytes = response.bytes().await.map_err(|e| HttpError::Network(e.to_string()))?;
 
     let duration = start.elapsed().as_millis();
 
     let size = bytes.len();
 
-    let body = if content_type.contains("application/json"){
-        serde_json::from_slice::<serde_json::Value>(&bytes)
-            .unwrap_or(serde_json::Value::String(
-                String::from_utf8_lossy(&bytes).to_string()
-            ))
+    let body = if content_type.contains("application/json") {
+        serde_json::from_slice(&bytes).map_err(|e| HttpError::JsonParse(e.to_string()))?
     } else {
-        serde_json::Value::String(
-            String::from_utf8_lossy(&bytes).to_string()
-        )
+        serde_json::Value::String(String::from_utf8_lossy(&bytes).into_owned())
     };
         
     Ok(HttpResponse {
