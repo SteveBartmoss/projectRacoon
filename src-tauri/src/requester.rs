@@ -3,6 +3,9 @@ use std::time::Instant;
 use crate::AppState;
 use reqwest::header::{HeaderName,HeaderValue};
 use thiserror::Error;
+use base64::Engine;
+use base64::engine::general_purpose::STANDARD as BASE64;
+use serde_urlencoded;
 
 #[derive(Debug, Error, Serialize)]
 pub enum HttpError {
@@ -20,6 +23,32 @@ pub enum HttpError {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(tag="type", content="value")]
+pub enum RequestBody {
+    Json(serde_json::Value),
+    Text(String),
+    Form(std::collections::HashMap<String, String>),
+    Multipart(Vec<MultipartPart>),
+    Binary {
+        data: String,
+        mime_type: String,
+    },
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct MultipartPart {
+    pub name: String,
+    #[serde(default)]
+    pub value: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
 pub enum HttpMethod{
     GET,
     POST,
@@ -33,7 +62,7 @@ pub struct HttpRequest {
     pub url: String,
     pub method: HttpMethod,
     pub params: Option<std::collections::HashMap<String, String>>,
-    pub body: Option<serde_json::Value>,
+    pub body: Option<RequestBody>,
     pub headers: Option<std::collections::HashMap<String, String>>,
 }
 
@@ -65,9 +94,55 @@ pub async fn fetch_data(
         request = request.query(&params);
     }
 
+    let mut body_bytes: Option<Vec<u8>> = None;
+    let mut multipart_form: Option<reqwest::multipart::Form> = None;
+    let mut inferred_content_type: Option<String> = None;
+
     if let Some(body) = req.body {
-        request = request.json(&body);
+
+        match body {
+            RequestBody::Json(val) => {
+                body_bytes = Some(serde_json::to_vec(&val).map_err(|e| HttpError::Other(e.to_string()))?);
+
+                inferred_content_type = Some("application/json".into());
+            }
+            RequestBody::Text(s) => {
+                body_bytes = Some(s.as_bytes().to_vec());
+                inferred_content_type = Some("text/plain; charset=utf-8".into());
+            }
+            RequestBody::Form(map) => {
+                let encoded = serde_urlencoded::to_string(map).map_err(|e| HttpError::Other(format!("Base64 decode error: {}", e)))?;
+                body_bytes = Some(encoded.into_bytes());
+                inferred_content_type = Some("application/x-www-form-urlencoded".into());
+            }
+            RequestBody::Binary { data, mime_type} => {
+                let bin = BASE64.decode(data).map_err(|e| HttpError::Other(format!("Base64 decode error: {}", e)))?;
+                body_bytes = Some(bin);
+                inferred_content_type = Some(mime_type.clone());
+            }
+            RequestBody::Multipart(parts) => {
+                let mut form = reqwest::multipart::Form::new();
+                for part in parts {
+                    if let Some(file_data_b64) = &part.data {
+                        let file_bytes = BASE64.decode(file_data_b64).map_err(|e| HttpError::Other(format!("Base64 decode: {}", e)))?;
+
+                        let mut file_part = reqwest::multipart::Part::bytes(file_bytes).file_name(part.file_name.clone().unwrap_or_else(|| "file".into()));
+
+                        if let Some(ct) = &part.content_type {
+                            file_part = file_part.mime_str(ct).map_err(|e| HttpError::Other(format!("Invalid mime: {}", e)))?;
+                        }
+                        form = form.part(part.name.clone(), file_part);
+                    } else {
+                        form = form.text(part.name.clone(), part.value.clone());
+                    }
+                }
+                multipart_form = Some(form);
+            }
+        }
+
     }
+
+    let mut user_set_content_type = false;
 
     if let Some(headers) = &req.headers {
 
@@ -79,11 +154,29 @@ pub async fn fetch_data(
             let val = HeaderValue::from_str(value.trim())
                 .map_err(|e| HttpError::HeaderParse(format!("... {}", e)))?;
 
+            if name.as_str().eq_ignore_ascii_case("content-type") {
+                user_set_content_type = true;
+            }
+
             request = request.header(name, val);
 
         }
 
         
+    }
+
+    if let Some(form) = multipart_form {
+
+        request = request.multipart(form);
+
+    } else if let Some(bytes) = body_bytes {
+
+        if !user_set_content_type {
+            if let Some(ct) = inferred_content_type {
+                request = request.header("content-type", ct);
+            }
+        }
+        request = request.body(bytes);
     }
 
     let start = Instant::now();
