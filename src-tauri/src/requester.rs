@@ -63,7 +63,9 @@ pub struct HttpRequest {
     pub method: HttpMethod,
     pub params: Option<std::collections::HashMap<String, String>>,
     pub body: Option<RequestBody>,
-    pub headers: Option<std::collections::HashMap<String, String>>,
+    pub headers: Option<Vec<(String,String)>>,
+    #[serde(default)]
+    pub timeout_ms: Option<u64>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -145,32 +147,23 @@ pub async fn fetch_data(
     let mut user_set_content_type = false;
 
     if let Some(headers) = &req.headers {
-
-        for(key, value) in headers {
-
+        for (key, value) in headers {
             let name = HeaderName::from_bytes(key.trim().as_bytes())
-                .map_err(|e| HttpError::HeaderParse(format!("... {}", e)))?;
-
+                .map_err(|e| HttpError::HeaderParse(format!("Invalid header name '{}': {}", key, e)))?;
             let val = HeaderValue::from_str(value.trim())
-                .map_err(|e| HttpError::HeaderParse(format!("... {}", e)))?;
+                .map_err(|e| HttpError::HeaderParse(format!("Invalid header value '{}': {}", value, e)))?;
 
             if name.as_str().eq_ignore_ascii_case("content-type") {
                 user_set_content_type = true;
             }
 
             request = request.header(name, val);
-
         }
-
-        
     }
 
     if let Some(form) = multipart_form {
-
         request = request.multipart(form);
-
     } else if let Some(bytes) = body_bytes {
-
         if !user_set_content_type {
             if let Some(ct) = inferred_content_type {
                 request = request.header("content-type", ct);
@@ -178,6 +171,9 @@ pub async fn fetch_data(
         }
         request = request.body(bytes);
     }
+
+    let timeout_duration = std::time::Duration::from_millis(req.timeout_ms.unwrap_or(30_000));
+    request = request.timeout(timeout_duration);
 
     let start = Instant::now();
 
