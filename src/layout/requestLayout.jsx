@@ -133,7 +133,7 @@ export function RequesLayout({ id }) {
             if(!h.active) return acc
             if(!h.name || !h.value) return acc
 
-            acc[h.name.trim()] = h.value
+            acc.push(h.name.trim(), h.value)
 
             return acc
         },{})
@@ -142,19 +142,21 @@ export function RequesLayout({ id }) {
     const handleRequest = async () => {
 
         const paramsObject = buildParams(params)
-        const headersObject = buildHeaders(headers)
-
-        const finalHeaders = {...headersObject}
+        const headersArray = buildHeaders(headers)
 
         if(auth && authType){
-            finalHeaders.Authorization = `${authType} ${auth}`
+            headersArray.push([`${authType} ${auth}`])
         }
 
         let parsedBody = null
 
         if(body){
             try{
-                parsedBody = JSON.parse(body)
+                const parsed = JSON.parse(body);
+                parsedBody = {
+                    type: "Json",
+                    value: parsed
+                }
             }catch(error){
                 dispatch(addMessage(
                     {
@@ -175,7 +177,7 @@ export function RequesLayout({ id }) {
             method: method,
             params: Object.keys(paramsObject).length ? paramsObject : null,
             body: parsedBody,
-            headers: finalHeaders
+            headers: headersArray.length > 0 ? headersArray : null
         }
 
         let data = await invoke("fetch_data", {
