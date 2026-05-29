@@ -6,6 +6,7 @@ use thiserror::Error;
 use base64::Engine;
 use base64::engine::general_purpose::STANDARD as BASE64;
 use serde_urlencoded;
+use std::collections::HashMap;
 
 #[derive(Debug, Error, Serialize)]
 pub enum HttpError {
@@ -17,6 +18,9 @@ pub enum HttpError {
 
     #[error("Failed to parse JSON response: {0}")]
     JsonParse(String),
+
+    #[error("Response body exceeded size limit of {0} bytes")]
+    ResponseTooLarge(usize),
 
     #[error("{0}")]
     Other(String),
@@ -33,6 +37,14 @@ pub enum RequestBody {
         data: String,
         mime_type: String,
     },
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(tag = "type",content = "value")]
+pub enum ResponseBody {
+    Json(serde_json::Value),
+    Text(String),
+    Binary(String),
 }
 
 #[derive(Serialize, Deserialize)]
@@ -66,6 +78,8 @@ pub struct HttpRequest {
     pub headers: Option<Vec<(String,String)>>,
     #[serde(default)]
     pub timeout_ms: Option<u64>,
+    #[serde(default)]
+    pub max_response_size: Option<usize>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -73,7 +87,8 @@ pub struct HttpResponse {
     pub status: u16,
     pub time: u128,
     pub size: usize,
-    pub body: serde_json::Value
+    pub headers: std::collections::HashMap<String, String>,
+    pub body: ResponseBody,
 }
 
 #[tauri::command]
@@ -181,12 +196,19 @@ pub async fn fetch_data(
 
     let status = response.status().as_u16();
 
-    let content_type = response
+    let response_headers: HashMap<String,String> = response
         .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("")
-        .to_string();
+        .iter()
+        .map(|(k,v)| (k.as_str().to_string(), v.to_str().unwrap_or("").to_string()))
+        .collect();
+
+    if let Some(max_size) = req.max_response_size {
+        if let Some(content_length) = response.content_length() {
+            if content_length > max_size as u64 {
+                return Err(HttpError::ResponseTooLarge(max_size))
+            }
+        }
+    }
 
     let bytes = response.bytes().await.map_err(|e| HttpError::Network(e.to_string()))?;
 
@@ -194,17 +216,40 @@ pub async fn fetch_data(
 
     let size = bytes.len();
 
-    let body = if content_type.contains("application/json") {
-        serde_json::from_slice(&bytes).map_err(|e| HttpError::JsonParse(e.to_string()))?
+    if let Some(max_size) = req.max_response_size {
+        if size > max_size {
+            return Err(HttpError::ResponseTooLarge(max_size))
+        }
+    }
+
+    let content_type = response_headers
+        .get("content-type")
+        .cloned()
+        .unwrap_or_default();
+
+    let response_body = if content_type.contains("application/json") {
+        serde_json::from_slice::<serde_json::Value>(&bytes)
+            .map(ResponseBody::Json)
+            .unwrap_or_else(|_| ResponseBody::Text(String::from_utf8_lossy(&bytes).into_owned()))
+    } else if content_type.starts_with("text/")
+        || content_type.contains("html")
+        || content_type.contains("xml")
+        || content_type.contains("javascript")
+    {
+        match std::str::from_utf8(&bytes) {
+            Ok(s) => ResponseBody::Text(s.to_owned()),
+            Err(_) => ResponseBody::Binary(BASE64.encode(bytes.as_ref())),
+        }
     } else {
-        serde_json::Value::String(String::from_utf8_lossy(&bytes).into_owned())
+        ResponseBody::Binary(BASE64.encode(bytes.as_ref()))
     };
         
     Ok(HttpResponse {
         status,
         time: duration,
         size,
-        body
+        body: response_body,
+        headers: response_headers,
     })
 
 }
