@@ -8,6 +8,7 @@ import deleteImg from '../../assets/delete.svg'
 import { CheckInput } from "../checkbox/checkbox";
 import { useMemo } from "react";
 import { buildParams } from "../../utils/requestUtils";
+import { destroyParams } from "../../store/thunks/tabsManagerThunks";
 
 export function Params({ elements }) {
 
@@ -45,7 +46,8 @@ export function Params({ elements }) {
     }
 
     const handelDeleteAll = () => {
-        dispatch(cleanParams({ id: tabId, param: { id: 1, name: "", value: "", active: true } }))
+        dispatch(destroyParams(tabId))
+        //dispatch(cleanParams({ id: tabId, param: { id: 1, name: "", value: "", active: true } }))
     }
 
     const handleDeleteParam = (paramId) => {
