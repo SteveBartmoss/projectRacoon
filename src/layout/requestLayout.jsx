@@ -10,7 +10,6 @@ import { Params } from "../ui/params/params";
 import { Auth } from "../ui/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { setInfo } from "../store/requestSlice";
-import { setCounter } from "../store/tabSlice";
 import { Headers } from "../ui/headers/headers";
 import { addMessage, setErrorCounter } from "../store/errorsSlice";
 
