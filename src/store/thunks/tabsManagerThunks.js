@@ -1,7 +1,7 @@
-import { addRequest, removeRequest } from "../requestSlice"
+import { addRequest, cleanHeaders, cleanParams, removeRequest } from "../requestSlice"
 import { addTab, removeTab } from "../tabSlice"
 import { IDGenerator } from "../../utils/generateId"
-import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils"
+import { buildHeaders, buildParams, loadEmptyRequest, loadRequest } from "../../utils/requestUtils"
 
 
 export const createNewTab = () => (dispatch) => {
@@ -31,4 +31,18 @@ export const crerateTabFromJson = (json,path=null) => (dispatch) => {
 export const deleteTab = (id) => (dispatch) => {
     dispatch(removeTab(id))
     dispatch(removeRequest(id))
+}
+
+export const destroyParams = (id) => (dispatch) => {
+    const params = buildParams()
+
+    dispatch(cleanParams({id,params}))
+
+}
+
+export const destroyHeaders = (id) => (dispatch) => {
+    const headers = buildHeaders()
+
+    dispatch(cleanHeaders({id,headers}))
+
 }
