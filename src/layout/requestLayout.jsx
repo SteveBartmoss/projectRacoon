@@ -59,7 +59,6 @@ export function RequesLayout({ id }) {
 
     const handleMethod = (value) => {
         dispatch(setInfo({id: id, field: "method", value: value}))
-        dispatch(setMethod({id: id, value: value}))
     }
 
     const handleBody = (value) => {
