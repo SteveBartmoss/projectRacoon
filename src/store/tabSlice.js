@@ -57,7 +57,6 @@ export const {
     setCurrentTab,
     setContextTab,
     removeTab,
-    setCounter,
 } = tabSlice.actions
 
 export default tabSlice.reducer
