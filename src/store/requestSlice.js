@@ -85,14 +85,9 @@ const requestSlice = createSlice({
 
             if (request) {
                 request.paramsById = {
-                    1: {
-                        id: 1,
-                        name: "",
-                        value: "",
-                        ative: true
-                    }
+                    [action.payload.params.id]: action.payload.params.paramsObjd
                 }
-                request.paramIds = [1]
+                request.paramIds = action.payload.params.idArray
             }
 
         },
@@ -134,14 +129,9 @@ const requestSlice = createSlice({
 
             if(request){
                 request.headersById = {
-                    1: {
-                        id: 1,
-                        name: "",
-                        value: "",
-                        active: true
-                    }
+                    [action.payload.headers.id]: action.payload.headers.headersObj
                 }
-                request.headerIds = [1]
+                request.headerIds = action.payload.headers.idArray
             }
 
         }
