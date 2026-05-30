@@ -80,6 +80,14 @@ pub struct HttpRequest {
     pub timeout_ms: Option<u64>,
     #[serde(default)]
     pub max_response_size: Option<usize>,
+    #[serde(default = "default_follow_redirects")]
+    pub follow_redirects: bool,
+    #[serde(default)]
+    pub verify_tls: Option<bool>
+}
+
+fn default_follow_redirects() -> bool {
+    true
 }
 
 #[derive(Serialize, Deserialize)]
@@ -97,7 +105,25 @@ pub async fn fetch_data(
     req: HttpRequest
 ) -> Result<HttpResponse, HttpError>{
 
-    let client = &state.client;
+    //let client = &state.client;
+    let client = if !req.follow_redirects || req.verify_tls == Some(false){
+
+        let mut builder = reqwest::Client::builder()
+            .redirect(if req.follow_redirects {
+                reqwest::redirect::Policy::default()
+            }else {
+                reqwest::redirect::Policy::none()
+            });
+
+        if let Some(verify) = req.verify_tls {
+            builder = builder.danger_accept_invalid_certs(!verify);
+        }
+
+        builder.build().map_err(|e| HttpError::Other(e.to_string()))?
+
+    } else {
+        state.client.clone()
+    };
 
     let mut request = match req.method {
         HttpMethod::GET => client.get(&req.url),
