@@ -7,6 +7,7 @@ import { addHeader, cleanHeaders, removeHeader, setHeaderInfo } from "../../stor
 import { CheckInput } from "../checkbox/checkbox";
 import './headers.css'
 import { buildHeaders } from "../../utils/requestUtils";
+import { destroyHeaders } from "../../store/thunks/tabsManagerThunks";
 
 export function Headers({elements}){
 
@@ -43,7 +44,8 @@ export function Headers({elements}){
     }
 
     const handleDeleteAll = () => {
-        dispatch(cleanHeaders({id: tabId, header: {id: 1, name: "", value: "", active: true} }))
+        dispatch(destroyHeaders(tabId))
+        //dispatch(cleanHeaders({id: tabId, header: {id: 1, name: "", value: "", active: true} }))
     }
 
     const handleDeleteHeader = (headerId) => {
