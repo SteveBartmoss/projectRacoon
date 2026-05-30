@@ -45,7 +45,7 @@ const tabSlice = createSlice({
             state.tabIds = state.tabIds.filter(element => element !== id)
 
             if(state.tabIds.length <=0){
-                state.currentTab = 0
+                state.currentTab = null
             }
 
         }
