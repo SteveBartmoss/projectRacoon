@@ -4,7 +4,7 @@ import { readFile, writeFile } from "@tauri-apps/plugin-fs";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequest, setInfo } from "../../store/requestSlice";
-import { addTab, setCounter } from "../../store/tabSlice";
+import { addTab } from "../../store/tabSlice";
 import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
 import { createNewTab, crerateTabFromJson } from "../../store/thunks/tabsManagerThunks";
 
