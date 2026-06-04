@@ -124,12 +124,12 @@ export function getRequestColor(method) {
 }
 
 export function buildOptions(arrayOptions) {
-    return arrayOptions.reduce((acc, p) => {
-        if (!p.active) return acc
-        if (!p.name || !p.value) return acc
+    return arrayOptions.reduce((acc, op) => {
+        if (!op.active) return acc
+        if (!op.name || !op.value) return acc
 
-        acc[p.name] = p.value
+        acc.push([op.name.trim(), op.value])
 
         return acc
-    }, {})
+    }, [])
 }
