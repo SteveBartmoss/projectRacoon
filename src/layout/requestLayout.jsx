@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setInfo } from "../store/requestSlice";
 import { Headers } from "../ui/headers/headers";
 import { addMessage, setErrorCounter } from "../store/errorsSlice";
+import { buildOptions } from "../utils/requestUtils";
 
 
 
@@ -114,36 +115,13 @@ export function RequesLayout({ id }) {
         }
     ]
 
-    const buildParams = (paramsArray) => {
-        return paramsArray.reduce((acc, p) => {
-            if(!p.active) return acc
-            if(!p.name || !p.value) return acc
-
-            acc[p.name] = p.value
-
-            return acc
-        },{})
-
-    }
-
-    const buildHeaders = (headersArray) => {
-        return headersArray.reduce((acc, h) => {
-            if(!h.active) return acc
-            if(!h.name || !h.value) return acc
-
-            acc.push(h.name.trim(), h.value)
-
-            return acc
-        },{})
-    }
-
     const handleRequest = async () => {
 
-        const paramsObject = buildParams(params)
-        const headersArray = buildHeaders(headers)
+        const paramsObject = buildOptions(params)
+        const headersArray = buildOptions(headers)
 
         if(auth && authType){
-            headersArray.push([`${authType} ${auth}`])
+            headersArray.push(["Authorization", `${authType} ${auth}`])
         }
 
         let parsedBody = null
