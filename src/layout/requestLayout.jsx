@@ -160,6 +160,8 @@ export function RequesLayout({ id }) {
             req: objPeticion
         })
 
+        //todo:"trabajar el body ahora como una respuesta mas completa"
+        
         dispatch(setInfo({
             id: id, 
             field: "response",
@@ -167,7 +169,7 @@ export function RequesLayout({ id }) {
                 status: data.status,
                 time: data.time,
                 size: data.size,
-                body: data.body,
+                body: data.body.value,
             }
         }))
 
