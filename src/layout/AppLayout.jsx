@@ -8,6 +8,9 @@ import { invoke } from "@tauri-apps/api/core"
 import { useEffect } from "react"
 import { setConfig } from "../store/appSlice"
 import { ComandObserver } from "../ui/comandObserver/comandObserver"
+import { loadEmptyRequest } from "../utils/requestUtils"
+import { createNewTab } from "../store/thunks/tabsManagerThunks"
+import { CommandListener } from "../behaviorComponents/commandListener"
 
 export function AppLayout() {
 
@@ -27,13 +30,20 @@ export function AppLayout() {
         return
     }
 
+    const initTabs = () => {
+
+        dispatch(createNewTab())
+
+    }
+
     useEffect(() => {
-        initConfig()
+        initConfig(),
+        initTabs()
     }, []);
 
     return (
         <>
-            <ComandObserver>
+            <CommandListener>
                 <Box styles={{
                     display: "flex",
                     flexDirection: "column",
@@ -45,7 +55,7 @@ export function AppLayout() {
                     <ResizeLayout />
                     <FooterLayout />
                 </Box>
-            </ComandObserver>
+            </CommandListener>
         </>
     )
 }

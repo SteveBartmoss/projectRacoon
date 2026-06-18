@@ -28,3 +28,7 @@
     color: #63b3ed;
     background-color: #1a1a1a;
 }
+
+.display-children{
+    display: flex;
+}

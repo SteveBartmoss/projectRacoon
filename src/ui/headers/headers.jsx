@@ -6,6 +6,8 @@ import { TextField } from "../textField/textField";
 import { addHeader, cleanHeaders, removeHeader, setHeaderInfo } from "../../store/requestSlice";
 import { CheckInput } from "../checkbox/checkbox";
 import './headers.css'
+import { buildHeaders } from "../../utils/requestUtils";
+import { destroyHeaders } from "../../store/thunks/tabsManagerThunks";
 
 export function Headers({elements}){
 
@@ -27,18 +29,23 @@ export function Headers({elements}){
 
     const handleAddHeader = () => {
 
+        /*
         if(frame.headerIds.length <=0){
             dispatch(addHeader({id: tabId, header: {id: 1, name: "", value: "", active: true}}))
             return
         }
 
         let counter = frame.headerIds.length
+        */
 
-        dispatch(addHeader({id: tabId, header: {id: counter+1, name:"", value: "", active: true}}))
+        let buildedHeaders = buildHeaders()
+
+        dispatch(addHeader({id: tabId, header: buildedHeaders.headersObj }))
     }
 
     const handleDeleteAll = () => {
-        dispatch(cleanHeaders({id: tabId, header: {id: 1, name: "", value: "", active: true} }))
+        dispatch(destroyHeaders(tabId))
+        //dispatch(cleanHeaders({id: tabId, header: {id: 1, name: "", value: "", active: true} }))
     }
 
     const handleDeleteHeader = (headerId) => {

@@ -1,7 +1,64 @@
 use serde::{Deserialize, Serialize};
 use std::time::Instant;
 use crate::AppState;
-use reqwest::header::{HeaderMap,HeaderName,HeaderValue};
+use reqwest::header::{HeaderName,HeaderValue};
+use thiserror::Error;
+use base64::Engine;
+use base64::engine::general_purpose::STANDARD as BASE64;
+use serde_urlencoded;
+use std::collections::HashMap;
+
+#[derive(Debug, Error, Serialize)]
+pub enum HttpError {
+    #[error("Network error: {0}")]
+    Network(String),
+
+    #[error("Invalid header: {0}")]
+    HeaderParse(String),
+
+    #[error("Failed to parse JSON response: {0}")]
+    JsonParse(String),
+
+    #[error("Response body exceeded size limit of {0} bytes")]
+    ResponseTooLarge(usize),
+
+    #[error("{0}")]
+    Other(String),
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(tag="type", content="value")]
+pub enum RequestBody {
+    Json(serde_json::Value),
+    Text(String),
+    Form(std::collections::HashMap<String, String>),
+    Multipart(Vec<MultipartPart>),
+    Binary {
+        data: String,
+        mime_type: String,
+    },
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(tag = "type",content = "value")]
+pub enum ResponseBody {
+    Json(serde_json::Value),
+    Text(String),
+    Binary(String),
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct MultipartPart {
+    pub name: String,
+    #[serde(default)]
+    pub value: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<String>,
+}
 
 #[derive(Serialize, Deserialize)]
 pub enum HttpMethod{
@@ -17,8 +74,20 @@ pub struct HttpRequest {
     pub url: String,
     pub method: HttpMethod,
     pub params: Option<std::collections::HashMap<String, String>>,
-    pub body: Option<serde_json::Value>,
-    pub headers: Option<std::collections::HashMap<String, String>>,
+    pub body: Option<RequestBody>,
+    pub headers: Option<Vec<(String,String)>>,
+    #[serde(default)]
+    pub timeout_ms: Option<u64>,
+    #[serde(default)]
+    pub max_response_size: Option<usize>,
+    #[serde(default = "default_follow_redirects")]
+    pub follow_redirects: bool,
+    #[serde(default)]
+    pub verify_tls: Option<bool>
+}
+
+fn default_follow_redirects() -> bool {
+    true
 }
 
 #[derive(Serialize, Deserialize)]
@@ -26,12 +95,8 @@ pub struct HttpResponse {
     pub status: u16,
     pub time: u128,
     pub size: usize,
-    pub body: serde_json::Value
-}
-
-#[derive(Serialize)]
-pub struct HttpError{
-    pub message: String
+    pub headers: std::collections::HashMap<String, String>,
+    pub body: ResponseBody,
 }
 
 #[tauri::command]
@@ -40,7 +105,25 @@ pub async fn fetch_data(
     req: HttpRequest
 ) -> Result<HttpResponse, HttpError>{
 
-    let client = &state.client;
+    //let client = &state.client;
+    let client = if !req.follow_redirects || req.verify_tls == Some(false){
+
+        let mut builder = reqwest::Client::builder()
+            .redirect(if req.follow_redirects {
+                reqwest::redirect::Policy::default()
+            }else {
+                reqwest::redirect::Policy::none()
+            });
+
+        if let Some(verify) = req.verify_tls {
+            builder = builder.danger_accept_invalid_certs(!verify);
+        }
+
+        builder.build().map_err(|e| HttpError::Other(e.to_string()))?
+
+    } else {
+        state.client.clone()
+    };
 
     let mut request = match req.method {
         HttpMethod::GET => client.get(&req.url),
@@ -54,76 +137,145 @@ pub async fn fetch_data(
         request = request.query(&params);
     }
 
+    let mut body_bytes: Option<Vec<u8>> = None;
+    let mut multipart_form: Option<reqwest::multipart::Form> = None;
+    let mut inferred_content_type: Option<String> = None;
+
     if let Some(body) = req.body {
-        request = request.json(&body);
-    }
 
-    if let Some(headers) = &req.headers {
+        match body {
+            RequestBody::Json(val) => {
+                body_bytes = Some(serde_json::to_vec(&val).map_err(|e| HttpError::Other(e.to_string()))?);
 
-        for(key, value) in headers {
+                inferred_content_type = Some("application/json".into());
+            }
+            RequestBody::Text(s) => {
+                body_bytes = Some(s.as_bytes().to_vec());
+                inferred_content_type = Some("text/plain; charset=utf-8".into());
+            }
+            RequestBody::Form(map) => {
+                let encoded = serde_urlencoded::to_string(map).map_err(|e| HttpError::Other(format!("Base64 decode error: {}", e)))?;
+                body_bytes = Some(encoded.into_bytes());
+                inferred_content_type = Some("application/x-www-form-urlencoded".into());
+            }
+            RequestBody::Binary { data, mime_type} => {
+                let bin = BASE64.decode(data).map_err(|e| HttpError::Other(format!("Base64 decode error: {}", e)))?;
+                body_bytes = Some(bin);
+                inferred_content_type = Some(mime_type.clone());
+            }
+            RequestBody::Multipart(parts) => {
+                let mut form = reqwest::multipart::Form::new();
+                for part in parts {
+                    if let Some(file_data_b64) = &part.data {
+                        let file_bytes = BASE64.decode(file_data_b64).map_err(|e| HttpError::Other(format!("Base64 decode: {}", e)))?;
 
-            let name = HeaderName::from_bytes(key.trim().as_bytes())
-                .map_err(|e| HttpError {
-                    message: format!("Invalid header name: {}",e)
-                })?;
-            
-            let val = HeaderValue::from_str(value.trim())
-                .map_err(|e| HttpError {
-                    message: format!("invalid header value: {}",e)
-                })?;
+                        let mut file_part = reqwest::multipart::Part::bytes(file_bytes).file_name(part.file_name.clone().unwrap_or_else(|| "file".into()));
 
-            request = request.header(name, val);
-
+                        if let Some(ct) = &part.content_type {
+                            file_part = file_part.mime_str(ct).map_err(|e| HttpError::Other(format!("Invalid mime: {}", e)))?;
+                        }
+                        form = form.part(part.name.clone(), file_part);
+                    } else {
+                        form = form.text(part.name.clone(), part.value.clone());
+                    }
+                }
+                multipart_form = Some(form);
+            }
         }
 
-        
     }
+
+    let mut user_set_content_type = false;
+
+    if let Some(headers) = &req.headers {
+        for (key, value) in headers {
+            let name = HeaderName::from_bytes(key.trim().as_bytes())
+                .map_err(|e| HttpError::HeaderParse(format!("Invalid header name '{}': {}", key, e)))?;
+            let val = HeaderValue::from_str(value.trim())
+                .map_err(|e| HttpError::HeaderParse(format!("Invalid header value '{}': {}", value, e)))?;
+
+            if name.as_str().eq_ignore_ascii_case("content-type") {
+                user_set_content_type = true;
+            }
+
+            request = request.header(name, val);
+        }
+    }
+
+    if let Some(form) = multipart_form {
+        request = request.multipart(form);
+    } else if let Some(bytes) = body_bytes {
+        if !user_set_content_type {
+            if let Some(ct) = inferred_content_type {
+                request = request.header("content-type", ct);
+            }
+        }
+        request = request.body(bytes);
+    }
+
+    let timeout_duration = std::time::Duration::from_millis(req.timeout_ms.unwrap_or(30_000));
+    request = request.timeout(timeout_duration);
 
     let start = Instant::now();
 
-    let response = request
-        .send()
-        .await
-        .map_err(|e| HttpError {
-            message: e.to_string() 
-        })?;
+    let response = request.send().await.map_err(|e| HttpError::Network(e.to_string()))?;
 
     let status = response.status().as_u16();
 
-    let content_type = response
+    let response_headers: HashMap<String,String> = response
         .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("")
-        .to_string();
+        .iter()
+        .map(|(k,v)| (k.as_str().to_string(), v.to_str().unwrap_or("").to_string()))
+        .collect();
 
-    let bytes = response
-        .bytes()
-        .await
-        .map_err(|e| HttpError{
-            message: e.to_string()
-        })?;
+    if let Some(max_size) = req.max_response_size {
+        if let Some(content_length) = response.content_length() {
+            if content_length > max_size as u64 {
+                return Err(HttpError::ResponseTooLarge(max_size))
+            }
+        }
+    }
+
+    let bytes = response.bytes().await.map_err(|e| HttpError::Network(e.to_string()))?;
 
     let duration = start.elapsed().as_millis();
 
     let size = bytes.len();
 
-    let body = if content_type.contains("application/json"){
+    if let Some(max_size) = req.max_response_size {
+        if size > max_size {
+            return Err(HttpError::ResponseTooLarge(max_size))
+        }
+    }
+
+    let content_type = response_headers
+        .get("content-type")
+        .cloned()
+        .unwrap_or_default();
+
+    let response_body = if content_type.contains("application/json") {
         serde_json::from_slice::<serde_json::Value>(&bytes)
-            .unwrap_or(serde_json::Value::String(
-                String::from_utf8_lossy(&bytes).to_string()
-            ))
+            .map(ResponseBody::Json)
+            .unwrap_or_else(|_| ResponseBody::Text(String::from_utf8_lossy(&bytes).into_owned()))
+    } else if content_type.starts_with("text/")
+        || content_type.contains("html")
+        || content_type.contains("xml")
+        || content_type.contains("javascript")
+    {
+        match std::str::from_utf8(&bytes) {
+            Ok(s) => ResponseBody::Text(s.to_owned()),
+            Err(_) => ResponseBody::Binary(BASE64.encode(bytes.as_ref())),
+        }
     } else {
-        serde_json::Value::String(
-            String::from_utf8_lossy(&bytes).to_string()
-        )
+        ResponseBody::Binary(BASE64.encode(bytes.as_ref()))
     };
         
     Ok(HttpResponse {
         status,
         time: duration,
         size,
-        body
+        body: response_body,
+        headers: response_headers,
     })
 
 }

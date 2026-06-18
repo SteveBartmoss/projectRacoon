@@ -1,20 +1,17 @@
 import { RequesLayout } from "../../layout/requestLayout";
 import addImg from '../../assets/add.svg'
-import closeImg from '../../assets/close.svg'
 import { useDispatch, useSelector } from "react-redux";
 import './frameTabs.css'
-import { Chip } from "../chip/chip";
-import { addRequest, removeRequest } from "../../store/requestSlice";
-import { addTab, removeTab, setContextTab, setCounter, setCurrentTab } from "../../store/tabSlice";
+import { addRequest } from "../../store/requestSlice";
+import { addTab } from "../../store/tabSlice";
 import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
-import { useEffect, useRef, useState } from "react";
 import { MenuHelper } from "../menuHelper/menuHelper";
+import { FrameTabHeader } from "./frameTabHeader";
+import { createNewTab, crerateTabFromJson, deleteTab } from "../../store/thunks/tabsManagerThunks";
 
 export function FrameTabs({ elements }) {
 
-    const listFrames = useSelector((state) => state.tabs.tabIds)
     const tabSelected = useSelector((state) => state.tabs.currentTab)
-    const tabCounter = useSelector((state) => state.tabs.counter)
     const tabContext = useSelector((state) => state.tabs.contexTab)
 
     const swapTab = useSelector((state) => state.tabs.tabsById[tabSelected])
@@ -22,34 +19,11 @@ export function FrameTabs({ elements }) {
 
     const dispatch = useDispatch()
 
-    const handleChangeTab = (id) => {
-        dispatch(setCurrentTab(id))
-    }
-
-    const handleChangeContextTab = (id) => {
-        dispatch(setContextTab(id))
-    }
-
     const handleAddTab = () => {
 
-        if (listFrames.length <= 0) {
-            dispatch(setCounter(1))
+        dispatch(createNewTab())
 
-            dispatch(addTab({
-                id: 1,
-                title: "New Request",
-                method: "GET",
-                next: null,
-                prev: null,
-            }))
-
-            dispatch(addRequest(loadEmptyRequest(1)))
-
-            return
-        }
-
-        let counter = tabCounter + 1
-
+        /*
         dispatch(addTab({
             id: counter,
             title: "New Request",
@@ -59,61 +33,17 @@ export function FrameTabs({ elements }) {
         }))
 
         dispatch(addRequest(loadEmptyRequest(counter)))
+        */
 
-        dispatch(setCounter(counter))
-
-    }
-
-    const handleRemoveTab = (id) => {
-        dispatch(removeTab(id))
-        dispatch(removeRequest(id))
     }
 
     const handleRemoveTabMenu = () => {
-        dispatch(removeTab(tabContext))
-        dispatch(removeRequest(tabContext))
+        dispatch(deleteTab(tabContext))
     }
 
     const handleDuplicateTab = () => {
-        
-        console.log(swapTab)
-        console.log(swapRequest)
 
-        let counter = tabCounter + 1
-
-        dispatch(addTab({
-            id: counter,
-            title: swapTab.title,
-            method: swapTab.method,
-            next: null,
-            prev: null
-        }))
-
-        dispatch(addRequest(loadRequest(counter,swapTab.title,swapRequest)))
-
-        dispatch(setCounter(counter))
-
-    }
-
-    const getColor = (method) => {
-
-        switch (method) {
-
-            case "GET":
-                return "success"
-
-            case "POST":
-                return "redirect"
-
-            case "PUT":
-                return "warning"
-
-            case "PATCH":
-                return "alert"
-
-            case "DELETE":
-                return "error"
-        }
+        dispatch(crerateTabFromJson(swapRequest))
 
     }
 
@@ -136,15 +66,8 @@ export function FrameTabs({ elements }) {
             <div className="container-head">
                 {
                     elements.map(item =>
-                        <MenuHelper key={item.id} options={options} >
-                            <div onContextMenu={(e) => {
-                                e.preventDefault()
-                                handleChangeContextTab(item.id)
-                            }} className={tabSelected === item.id ? "tab-active" : "div-tabs"}>
-                                <Chip text={item.method} type={getColor(item.method)} />
-                                <p className="tab" onClick={() => handleChangeTab(item.id) } >{item.title}</p>
-                                <img className="img-close" onClick={() => handleRemoveTab(item.id)} src={closeImg} />
-                            </div>
+                        <MenuHelper key={item.id} options={options}>
+                            <FrameTabHeader tabRequest={item} />
                         </MenuHelper>
                     )
                 }

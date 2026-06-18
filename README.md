@@ -18,7 +18,9 @@ Actualmente la aplicacion esta disponible para macOs, Windows y Linux
 
 ### Comando para ejecutar el proyecto 
 
+```bash
 npm run tauri dev
+```
 
 # Raccoon 🦝
 A lightweight HTTP client built with React + Tauri + Rust.

@@ -7,6 +7,8 @@ import addImg from '../../assets/add.svg'
 import deleteImg from '../../assets/delete.svg'
 import { CheckInput } from "../checkbox/checkbox";
 import { useMemo } from "react";
+import { buildParams } from "../../utils/requestUtils";
+import { destroyParams } from "../../store/thunks/tabsManagerThunks";
 
 export function Params({ elements }) {
 
@@ -28,19 +30,24 @@ export function Params({ elements }) {
 
     const handleAddParam = () => {
 
+        /*
         if (frame.paramIds.length <= 0) {
             dispatch(addParam({ id: tabId, param: { id: 1, name: "", value: "", active: true } }))
             return
         }
+        */
 
-        let counter = frame.paramIds.length
+        //let counter = frame.paramIds.length
 
-        dispatch(addParam({ id: tabId, param: { id: counter + 1, name: "", value: "", active: true } }))
+        let buildedParams = buildParams()
+
+        dispatch(addParam({ id: tabId, param: buildedParams.paramsObjd }))
 
     }
 
     const handelDeleteAll = () => {
-        dispatch(cleanParams({ id: tabId, param: { id: 1, name: "", value: "", active: true } }))
+        dispatch(destroyParams(tabId))
+        //dispatch(cleanParams({ id: tabId, param: { id: 1, name: "", value: "", active: true } }))
     }
 
     const handleDeleteParam = (paramId) => {

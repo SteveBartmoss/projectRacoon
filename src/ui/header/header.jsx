@@ -6,16 +6,15 @@ import './header.css'
 import { useDispatch, useSelector } from "react-redux"
 import { open, save } from "@tauri-apps/plugin-dialog"
 import { readFile, writeFile } from "@tauri-apps/plugin-fs"
-import { addTab, setCounter } from "../../store/tabSlice"
+import { addTab } from "../../store/tabSlice"
 import { addRequest, setInfo } from "../../store/requestSlice"
 import { loadRequest } from "../../utils/requestUtils"
+import { createNewTab, crerateTabFromJson } from "../../store/thunks/tabsManagerThunks"
 
 export function Header() {
 
     const tabSelected = useSelector((state) => state.tabs.currentTab)
     const request = useSelector((state) => state.requests.requestsById[tabSelected])
-    const listFrames = useSelector((state) => state.tabs.tabIds)
-    const tabCounter = useSelector((state) => state.tabs.counter)
 
     const dispatch = useDispatch()
 
@@ -69,42 +68,9 @@ export function Header() {
         const decoder = new TextDecoder()
         const json = JSON.parse(decoder.decode(bytes))
 
-        if (listFrames.length <= 0) {
-            dispatch(setCounter(1))
+        dispatch(crerateTabFromJson(json))
 
-            dispatch(addTab({
-                id: tabCounter,
-                title: "New Request",
-                method: json.method,
-                next: null,
-                prev: null,
-            }))
-
-            dispatch(addRequest(loadRequest(tabCounter,'New Request',json)))
-
-            dispatch(setInfo({
-                id: tabCounter,
-                field: "path",
-                value: path
-            }))
-
-            return
-        }
-
-        let counter = tabCounter + 1
-
-        dispatch(addTab({
-            id: counter,
-            title: "New Request",
-            method: json.method,
-            next: null,
-            prev: null
-        }))
-
-        dispatch(addRequest(loadRequest(counter,'New Request',json)))
-
-        dispatch(setCounter(counter))
-
+        //todo: pasar esto al createNewTab
         dispatch(setInfo({
             id: counter,
             field: "path",
@@ -115,16 +81,19 @@ export function Header() {
 
     const options = [
         {
+            id: 1,
             title: 'New',
             action: handleNewWindow,
             command: 'Ctrl+Shift+N'
         },
         {
+            id: 2,
             title: 'Save',
             action: handleSaveTab,
             command: 'Ctrl+S'
         },
         {
+            id: 3,
             title: 'Open',
             action: handleOpenFile,
             command: 'Ctrl+O'
