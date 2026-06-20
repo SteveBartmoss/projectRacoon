@@ -66,6 +66,20 @@ export function ResponseFrame({ objProps }) {
 
     }
 
+    const renderResponse = () => {
+        switch (objProps.typeBody) {
+            case 'Json':
+                return <pre>{JSON.stringify(objProps.body, null, 2)}</pre>
+            
+            case 'Html': 
+                return <iframe srcDoc={objProps.body} style={{ width: '100%', height: '100%', border: 'none' }} />
+            
+            case 'Text':
+            case 'Binary':
+                return objProps.body
+        }
+    }
+
     return (
         <>
             <div className='div-container'>
@@ -135,20 +149,8 @@ export function ResponseFrame({ objProps }) {
                     </Box>
                 </div>
                 <div className='div-response'>
-                    {objProps.typeBody === 'Html' ? (
-                        <iframe
-                            srcDoc={objProps.body}
-                            style={{
-                                width: '100%',
-                                height: '500px',
-                                border: 'none'
-                            }}
-                        />
-                    ) : objProps.typeBody === 'Json' ? (
-                        <pre>{JSON.stringify(objProps.body, null, 2)}</pre>
-                    ) : (
-                        <pre>{objProps.body}</pre>
-                    )
+                    {
+                        renderResponse()
                     }
                 </div>
             </div>
