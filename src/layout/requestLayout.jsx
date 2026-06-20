@@ -169,6 +169,7 @@ export function RequesLayout({ id }) {
                 status: data.status,
                 time: data.time,
                 size: data.size,
+                typeBody: data.body.type,
                 body: data.body.value,
             }
         }))
