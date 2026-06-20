@@ -7,9 +7,13 @@ export function Auth({ auth, authType, setAuth, setAuthType }) {
 
     const authElements = [
         {
+            value: "",
+            title: "Ninunguna",
+        },
+        {
             value: "bearer",
             title: "Bearer Token"
-        }
+        },
     ]
 
     return (

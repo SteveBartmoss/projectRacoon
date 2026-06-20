@@ -2,20 +2,10 @@ import { createSlice } from "@reduxjs/toolkit"
 
 
 const initialState = {
-    counter: 1,
-    tabsById: {
-        1: {
-            id: 1,
-            title: "New Request",
-            method: "GET",
-            next: null,
-            prev: null,
-        }
-    },
-    tabIds: [1],
-    currentTab: 1,
-    contexTab: 1, 
-    head: 1,
+    tabsById: {},
+    tabIds: [],
+    currentTab: null,
+    contexTab: null,
 }
 
 const getTab = (state,id) => {
@@ -30,19 +20,10 @@ const tabSlice = createSlice({
 
             const tab = action.payload
 
-            if(state.tabIds.length > 0){
-                state.tabsById[state.head].next = tab.id
-                tab.prev = state.head
-                state.tabsById[tab.id] = tab
-                state.head = tab.id
-                state.tabIds.push(tab.id)
-                state.currentTab = tab.id
-            } else {
-                state.tabsById[tab.id] = tab
-                state.head = tab.id
-                state.tabIds.push(tab.id)
-                state.currentTab = tab.id
-            }
+            state.tabsById[tab.id] = tab
+            state.tabIds.push(tab.id)
+            state.currentTab = tab.id
+
         },
         setCurrentTab(state,action){
             state.currentTab = action.payload
@@ -52,45 +33,21 @@ const tabSlice = createSlice({
         },
         removeTab(state,action){
             const id = action.payload
+            const index = state.tabIds.indexOf(id)
 
-            const next = state.tabsById[id].next
-            const prev = state.tabsById[id].prev
-            
-            if(next && prev){
-                state.head = next
-                state.currentTab = prev
-            }
-
-            if(next){
-                state.tabsById[next].prev = prev
-                state.head = next
-                state.currentTab = next
-            }
-
-            if(prev){
-                state.head = prev
-                state.currentTab = prev
-                state.tabsById[prev].next = next
+            if(state.tabIds[index+1]){
+                state.currentTab = state.tabIds[index+1]
+            } else if( state.tabIds[index-1]){
+                state.currentTab = state.tabIds[index-1]
             }
 
             delete state.tabsById[id]
             state.tabIds = state.tabIds.filter(element => element !== id)
 
             if(state.tabIds.length <=0){
-                state.currentTab = 0
-                state.counter = 0
+                state.currentTab = null
             }
 
-        },
-        setCounter(state,action){
-            state.counter = action.payload
-        },
-        setMethod(state, action){
-            const tab = getTab(state, action.payload.id)
-
-            if(tab){
-                tab.method = action.payload.value
-            }
         }
     }
 })
@@ -100,8 +57,6 @@ export const {
     setCurrentTab,
     setContextTab,
     removeTab,
-    setCounter,
-    setMethod,
 } = tabSlice.actions
 
 export default tabSlice.reducer

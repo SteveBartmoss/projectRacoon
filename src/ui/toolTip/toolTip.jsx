@@ -7,7 +7,7 @@ export function ToolTip({ children, text }) {
 
     return (
         <div className="display-tool-tip">
-            <div onMouseEnter={()=>setShow(true)} onMouseLeave={()=>setShow(false)}>
+            <div className="display-children" onMouseEnter={()=>setShow(true)} onMouseLeave={()=>setShow(false)}>
                 {children}
             </div>
             <div className={show ? 'display-tool-tip-text' : 'display-tool-tip-none' }>

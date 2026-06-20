@@ -43,7 +43,10 @@ export function MenuHelper({ options, children }) {
             <div className={show ? 'display-menu-helper-list' : 'display-menu-helper-none' }>
                 {
                     options.map( element => 
-                        <div key={element.id} className="display-menu-helper-item" onClick={element.action}>
+                        <div key={element.id} className="display-menu-helper-item" onClick={()=>{
+                            element.action()
+                            handleClose()
+                        }}>
                             {element.title}
                         </div>
                     )

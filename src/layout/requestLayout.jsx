@@ -10,9 +10,9 @@ import { Params } from "../ui/params/params";
 import { Auth } from "../ui/auth/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { setInfo } from "../store/requestSlice";
-import { setCounter, setMethod } from "../store/tabSlice";
 import { Headers } from "../ui/headers/headers";
 import { addMessage, setErrorCounter } from "../store/errorsSlice";
+import { buildOptions } from "../utils/requestUtils";
 
 
 
@@ -59,7 +59,6 @@ export function RequesLayout({ id }) {
 
     const handleMethod = (value) => {
         dispatch(setInfo({id: id, field: "method", value: value}))
-        dispatch(setMethod({id: id, value: value}))
     }
 
     const handleBody = (value) => {
@@ -116,45 +115,24 @@ export function RequesLayout({ id }) {
         }
     ]
 
-    const buildParams = (paramsArray) => {
-        return paramsArray.reduce((acc, p) => {
-            if(!p.active) return acc
-            if(!p.name || !p.value) return acc
-
-            acc[p.name] = p.value
-
-            return acc
-        },{})
-
-    }
-
-    const buildHeaders = (headersArray) => {
-        return headersArray.reduce((acc, h) => {
-            if(!h.active) return acc
-            if(!h.name || !h.value) return acc
-
-            acc[h.name.trim()] = h.value
-
-            return acc
-        },{})
-    }
-
     const handleRequest = async () => {
 
-        const paramsObject = buildParams(params)
-        const headersObject = buildHeaders(headers)
-
-        const finalHeaders = {...headersObject}
+        const paramsObject = buildOptions(params)
+        const headersArray = buildOptions(headers)
 
         if(auth && authType){
-            finalHeaders.Authorization = `${authType} ${auth}`
+            headersArray.push(["Authorization", `${authType} ${auth}`])
         }
 
         let parsedBody = null
 
         if(body){
             try{
-                parsedBody = JSON.parse(body)
+                const parsed = JSON.parse(body);
+                parsedBody = {
+                    type: "Json",
+                    value: parsed
+                }
             }catch(error){
                 dispatch(addMessage(
                     {
@@ -175,13 +153,15 @@ export function RequesLayout({ id }) {
             method: method,
             params: Object.keys(paramsObject).length ? paramsObject : null,
             body: parsedBody,
-            headers: finalHeaders
+            headers: headersArray.length > 0 ? headersArray : null
         }
 
         let data = await invoke("fetch_data", {
             req: objPeticion
         })
 
+        //todo:"trabajar el body ahora como una respuesta mas completa"
+        
         dispatch(setInfo({
             id: id, 
             field: "response",
@@ -189,7 +169,7 @@ export function RequesLayout({ id }) {
                 status: data.status,
                 time: data.time,
                 size: data.size,
-                body: data.body,
+                body: data.body.value,
             }
         }))
 

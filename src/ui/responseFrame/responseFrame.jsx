@@ -72,6 +72,9 @@ export function ResponseFrame({ objProps }) {
                 <div className='div-status-bar'>
                     <Box
                         styles={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
                             margin: ".3rem",
                         }}
                     >
@@ -79,6 +82,9 @@ export function ResponseFrame({ objProps }) {
                     </Box>
                     <Box
                         styles={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
                             margin: ".3rem",
                         }}
                     >
@@ -86,6 +92,9 @@ export function ResponseFrame({ objProps }) {
                     </Box>
                     <Box
                         styles={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
                             margin: ".3rem",
                         }}
                     >
@@ -93,6 +102,9 @@ export function ResponseFrame({ objProps }) {
                     </Box>
                     <Box
                         styles={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
                             margin: ".3rem",
                         }}
                     >
@@ -102,6 +114,9 @@ export function ResponseFrame({ objProps }) {
                     </Box>
                     <Box
                         styles={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
                             margin: ".3rem",
                         }}
                     >

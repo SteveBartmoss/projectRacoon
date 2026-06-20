@@ -1,5 +1,4 @@
 use std::fs;
-use std::path::PathBuf;
 use serde::{Serialize, Deserialize};
 use tauri::Manager;
 
@@ -22,7 +21,7 @@ pub fn load_config(app: tauri::AppHandle) -> Result<AppConfig, String>{
 
     let config_path = config_dir.join("config.json");
 
-    if(!config_path.exists()){
+    if !config_path.exists() {
 
         let default = AppConfig{
             theme: "dark".into(),
