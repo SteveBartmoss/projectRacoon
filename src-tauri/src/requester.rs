@@ -43,6 +43,7 @@ pub enum RequestBody {
 #[serde(tag = "type",content = "value")]
 pub enum ResponseBody {
     Json(serde_json::Value),
+    Html(String),
     Text(String),
     Binary(String),
 }
@@ -97,6 +98,20 @@ pub struct HttpResponse {
     pub size: usize,
     pub headers: std::collections::HashMap<String, String>,
     pub body: ResponseBody,
+}
+
+fn decode_text(bytes: &[u8], charset: &Option<String>) -> String {
+    if let Some(charset) = charset {
+        match charset.as_str() {
+            "utf-8" | "utf8" => String::from_utf8(bytes.to_vec())
+                .unwrap_or_else(|_| String::from_utf8_lossy(bytes).into_owned()),
+            "iso-8859-1" | "latin1" => bytes.iter().map(|&b| b as char).collect(),
+            _ => String::from_utf8_lossy(bytes).into_owned(),
+        }
+    } else {
+        String::from_utf8(bytes.to_vec())
+            .unwrap_or_else(|_| String::from_utf8_lossy(bytes).into_owned())
+    }
 }
 
 #[tauri::command]
@@ -253,19 +268,33 @@ pub async fn fetch_data(
         .cloned()
         .unwrap_or_default();
 
-    let response_body = if content_type.contains("application/json") {
+    let charset = content_type
+        .split(';')
+        .find(|part| part.trim().to_lowercase().starts_with("charset="))
+        .and_then(|part| part.split('=').nth(1))
+        .map(|s| s.trim().to_lowercase());
+
+    let content_type_lower = content_type.to_lowercase();
+
+    let response_body = if content_type_lower.contains("application/json") {
         serde_json::from_slice::<serde_json::Value>(&bytes)
             .map(ResponseBody::Json)
             .unwrap_or_else(|_| ResponseBody::Text(String::from_utf8_lossy(&bytes).into_owned()))
-    } else if content_type.starts_with("text/")
-        || content_type.contains("html")
-        || content_type.contains("xml")
-        || content_type.contains("javascript")
+            
+    } else if content_type_lower.contains("html") {
+        // Detectado como HTML (text/html, application/xhtml+xml, etc.)
+        let text = decode_text(&bytes, &charset);
+        ResponseBody::Html(text)
+        
+    } else if content_type_lower.starts_with("text/")
+        || content_type_lower.contains("xml")
+        || content_type_lower.contains("javascript")
+        || content_type_lower.contains("css")
     {
-        match std::str::from_utf8(&bytes) {
-            Ok(s) => ResponseBody::Text(s.to_owned()),
-            Err(_) => ResponseBody::Binary(BASE64.encode(bytes.as_ref())),
-        }
+        // Resto de tipos textuales
+        let text = decode_text(&bytes, &charset);
+        ResponseBody::Text(text)
+        
     } else {
         ResponseBody::Binary(BASE64.encode(bytes.as_ref()))
     };
