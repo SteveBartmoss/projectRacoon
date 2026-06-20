@@ -1,6 +1,6 @@
 [package]
 name = "racoon"
-version = "0.1.0"
+version = "1.23.15"
 description = "A Tauri App"
 authors = ["you"]
 edition = "2021"
