@@ -13,6 +13,8 @@ import { setInfo } from "../store/requestSlice";
 import { Headers } from "../ui/headers/headers";
 import { addMessage, setErrorCounter } from "../store/errorsSlice";
 import { buildOptions } from "../utils/requestUtils";
+import { ResponseLayout } from "./responseLayout";
+import { addResponse } from "../store/responseSlice";
 
 
 
@@ -161,17 +163,17 @@ export function RequesLayout({ id }) {
         })
 
         //todo:"trabajar el body ahora como una respuesta mas completa"
-        
-        dispatch(setInfo({
-            id: id, 
-            field: "response",
-            value: {
-                status: data.status,
-                time: data.time,
-                size: data.size,
-                typeBody: data.body.type,
-                body: data.body.value,
-            }
+
+        console.log(data)
+
+        dispatch(addResponse({
+            id: id,
+            status: data.status,
+            time: data.time,
+            size: data.size,
+            headers: data.headers,
+            typeBody: data.body.type,
+            body: data.body.value,
         }))
 
     }
@@ -222,7 +224,8 @@ export function RequesLayout({ id }) {
                     </Box>
                     <Tab elements={tabsElements} />
                 </Box>
-                <ResponseFrame objProps={response} />
+
+                <ResponseLayout />
             </Box>
         </>
     )
