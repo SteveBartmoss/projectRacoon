@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './tab.css'
 
-export function Tab({ elements }) {
+export function Tab({ elements, otherElments=null  }) {
 
     const [currentTab, setCurrentTab] = useState(1)
 
@@ -16,6 +16,9 @@ export function Tab({ elements }) {
                             <p className="tab" onClick={() => setCurrentTab(item.id)}>{item.title}</p>
                         </div>
                     )
+                }
+                {
+                    otherElments
                 }
             </div>
             <div>
