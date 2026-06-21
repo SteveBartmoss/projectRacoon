@@ -1,7 +1,8 @@
 import { addRequest, cleanHeaders, cleanParams, removeRequest } from "../requestSlice"
 import { addTab, removeTab } from "../tabSlice"
 import { IDGenerator } from "../../utils/generateId"
-import { buildHeaders, buildParams, loadEmptyRequest, loadRequest } from "../../utils/requestUtils"
+import { buildHeaders, buildParams, loadEmptyRequest, loadResponseAndRequest } from "../../utils/requestUtils"
+import { addResponse } from "../responseSlice"
 
 
 export const createNewTab = () => (dispatch) => {
@@ -16,15 +17,16 @@ export const createNewTab = () => (dispatch) => {
     
 }
 
-export const crerateTabFromJson = (json,path=null) => (dispatch) => {
+export const createTabFromJson = (json,path=null) => (dispatch) => {
 
     const id = IDGenerator.generate()
 
     dispatch(addTab({id}))
+    
+    const {request,response} = loadResponseAndRequest(json)
 
-    const {title, url, method, body, paramsById, paramIds, headersById, headerIds, auth, authType, response, description} = loadRequest(json)
-
-    dispatch(addRequest({id,title, url, method, body, paramsById, paramIds, headersById, headerIds, auth, authType, response, description}))
+    dispatch(addRequest({id,...request}))
+    dispatch(addResponse({id,...response}))
 
 }
 
