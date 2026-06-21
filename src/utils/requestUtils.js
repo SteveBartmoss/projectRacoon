@@ -58,24 +58,6 @@ export function buildHeaders(){
     }
 }
 
-export function loadRequest(json) {
-
-    return {
-        title: json.title,
-        url: json.url,
-        method: json.method,
-        body: json.body,
-        paramsById: json.paramsById,
-        paramIds: json.paramIds,
-        headersById: json.headersById,
-        headerIds: json.headerIds,
-        auth: json.auth,
-        authType: json.authType,
-        response: json.response,
-        description: json.description
-    }
-}
-
 export function loadEmptyRequest() {
 
     const buildedParams = buildParams()
@@ -96,7 +78,6 @@ export function loadEmptyRequest() {
         headerIds: [buildedHeaders.id],
         auth: "",
         authType: "",
-        response: {},
         description: "",
         path: ""
     }
@@ -132,4 +113,56 @@ export function buildOptions(arrayOptions) {
 
         return acc
     }, [])
+}
+
+export function builJson2Donwload(request,response){
+    return {
+        title: request.title,
+        url: request.url,
+        method: request.method,
+        body: request.body,
+        paramsById: request.paramsById,
+        paramIds: request.paramIds,
+        headersById: request.headersById,
+        headerIds: request.headerIds,
+        auth: request.auth,
+        authType: request.authType,
+        response: {
+            status: response.status,
+            time: response.time,
+            size: response.size,
+            headers: response.headers,
+            typeBody: response.typeBody,
+            body: response.body,
+        },
+        description: request.description
+    }
+    
+}
+
+export function loadResponseAndRequest(json){
+
+    return{
+        request: {
+            title: json.title,
+            url: json.url,
+            method: json.method,
+            body: json.body,
+            paramsById: json.paramsById,
+            paramIds: json.paramIds,
+            headersById: json.headersById,
+            headerIds: json.headerIds,
+            auth: json.auth,
+            authType: json.authType,
+            description: json.description
+        },
+        response:{
+            status: json.response.status,
+            time: json.response.time,
+            size: json.response.size,
+            headers: json.response.headers,
+            typeBody: json.response.typeBody,
+            body: json.response.body,
+        }
+    }
 }
