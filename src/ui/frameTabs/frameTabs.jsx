@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import './frameTabs.css'
 import { addRequest } from "../../store/requestSlice";
 import { addTab } from "../../store/tabSlice";
-import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
+import { loadEmptyRequest } from "../../utils/requestUtils";
 import { MenuHelper } from "../menuHelper/menuHelper";
 import { FrameTabHeader } from "./frameTabHeader";
-import { createNewTab, crerateTabFromJson, deleteTab } from "../../store/thunks/tabsManagerThunks";
+import { createNewTab, createTabFromJson, deleteTab } from "../../store/thunks/tabsManagerThunks";
 
 export function FrameTabs({ elements }) {
 
@@ -43,7 +43,7 @@ export function FrameTabs({ elements }) {
 
     const handleDuplicateTab = () => {
 
-        dispatch(crerateTabFromJson(swapRequest))
+        dispatch(createTabFromJson(swapRequest))
 
     }
 
