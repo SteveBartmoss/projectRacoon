@@ -11,6 +11,7 @@ import { ResponseFrame } from "../ui/responseFrame/responseFrame";
 import { removeResponse } from "../store/responseSlice";
 import { save } from "@tauri-apps/plugin-dialog";
 import { writeFile } from "@tauri-apps/plugin-fs";
+import { ResponseHeaders } from "../ui/responseHeaders/responseHeaders";
 
 
 export function ResponseLayout() {
@@ -77,7 +78,7 @@ export function ResponseLayout() {
         {
             id: 2,
             title: "Headers",
-            content: <h1>Headers</h1>
+            content: <ResponseHeaders headers={response?.headers} />
         }
     ]
 
