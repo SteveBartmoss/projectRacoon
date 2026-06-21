@@ -8,13 +8,14 @@ import { open, save } from "@tauri-apps/plugin-dialog"
 import { readFile, writeFile } from "@tauri-apps/plugin-fs"
 import { addTab } from "../../store/tabSlice"
 import { addRequest, setInfo } from "../../store/requestSlice"
-import { loadRequest } from "../../utils/requestUtils"
-import { createNewTab, crerateTabFromJson } from "../../store/thunks/tabsManagerThunks"
+import { builJson2Donwload } from "../../utils/requestUtils"
+import { createNewTab, createTabFromJson } from "../../store/thunks/tabsManagerThunks"
 
 export function Header() {
 
     const tabSelected = useSelector((state) => state.tabs.currentTab)
     const request = useSelector((state) => state.requests.requestsById[tabSelected])
+    const response = useSelector((state) => state.responses.responsesById[tabSelected])
 
     const dispatch = useDispatch()
 
@@ -38,8 +39,10 @@ export function Header() {
 
         const encoder = new TextEncoder()
 
+        const objDonwload = builJson2Donwload(request,response)
+
         const bytes = encoder.encode(
-            JSON.stringify(request, null, 2)
+            JSON.stringify(objDonwload, null, 2)
         )
 
         await writeFile(path, bytes)
@@ -68,7 +71,7 @@ export function Header() {
         const decoder = new TextDecoder()
         const json = JSON.parse(decoder.decode(bytes))
 
-        dispatch(crerateTabFromJson(json))
+        dispatch(createTabFromJson(json))
 
         //todo: pasar esto al createNewTab
         dispatch(setInfo({
