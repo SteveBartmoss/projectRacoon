@@ -5,8 +5,8 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequest, setInfo } from "../../store/requestSlice";
 import { addTab } from "../../store/tabSlice";
-import { loadEmptyRequest, loadRequest } from "../../utils/requestUtils";
-import { createNewTab, crerateTabFromJson } from "../../store/thunks/tabsManagerThunks";
+import { loadEmptyRequest } from "../../utils/requestUtils";
+import { createNewTab, createTabFromJson } from "../../store/thunks/tabsManagerThunks";
 
 
 
@@ -73,7 +73,7 @@ export function ComandObserver({ children }) {
         const decoder = new TextDecoder()
         const json = JSON.parse(decoder.decode(bytes))
 
-        dispatch(crerateTabFromJson(json))
+        dispatch(createTabFromJson(json))
 
         /*
         dispatch(addTab({
@@ -84,7 +84,6 @@ export function ComandObserver({ children }) {
             prev: null
         }))
 
-        dispatch(addRequest(loadRequest(newCounter, 'New Request', json)))
         */
 
         dispatch(setInfo({
