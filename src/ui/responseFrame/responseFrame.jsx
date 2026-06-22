@@ -1,14 +1,4 @@
-import { Chip } from '../chip/chip'
 import './responseFrame.css'
-import copy from "../../assets/copy.svg"
-import download from "../../assets/download.svg"
-import clean from "../../assets/delete.svg"
-import { Box } from '../containers/containers'
-import { save } from "@tauri-apps/plugin-dialog"
-import { writeFile } from '@tauri-apps/plugin-fs'
-import { useDispatch, useSelector } from 'react-redux'
-import { setInfo } from '../../store/requestSlice'
-import { ToolTip } from '../toolTip/toolTip'
 
 export function ResponseFrame({ typeBody, body }) {
 
