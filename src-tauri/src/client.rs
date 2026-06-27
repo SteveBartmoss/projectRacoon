@@ -1,3 +1,8 @@
+use crate::AppState;
+use crate::models::HttpRequest;
+use crate::errors::HttpError;
+
+
 pub fn build_client(
     state: &AppState,
     req: &HttpRequest,
