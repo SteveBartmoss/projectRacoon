@@ -1,7 +1,12 @@
-pub stuct PreparedBody {
+use crate::models::RequestBody;
+use crate::errors::HttpError;
+use base64::Engine;
+use base64::engine::general_purpose::STANDARD as BASE64;
+
+pub struct PreparedBody {
     pub body_bytes: Option<Vec<u8>>,
-    pub multipart_form: Option<reqwest::Multipart::Form>,
-    pub content_type: Option<String>.
+    pub multipart_form: Option<reqwest::multipart::Form>,
+    pub content_type: Option<String>,
 }
 
 pub fn prepare_body(
@@ -18,23 +23,23 @@ pub fn prepare_body(
         Some(RequestBody::Json(val)) => {
             body_bytes = Some(serde_json::to_vec(&val).map_err(|e| HttpError::Other(e.to_string()))?);
 
-            inferred_content_type = Some("application/json".into());
+            content_type = Some("application/json".into());
         }
 
-        Some(RequestBody::Text(text)) => {=
-            body_bytes = Some(s.as_bytes().to_vec());
+        Some(RequestBody::Text(text)) => {
+            body_bytes = Some(text.as_bytes().to_vec());
 
-            inferred_content_type = Some("text/plain; charset=utf-8".into());
+            content_type = Some("text/plain; charset=utf-8".into());
 
         }
 
         Some(RequestBody::Form(form)) => {
 
-            let encoded = serde_urlencoded::to_string(map).map_err(|e| HttpError::Other(format!("Base64 decode error: {}", e)))?;
+            let encoded = serde_urlencoded::to_string(form).map_err(|e| HttpError::Other(format!("Base64 decode error: {}", e)))?;
 
             body_bytes = Some(encoded.into_bytes());
 
-            inferred_content_type = Some("application/x-www-form-urlencoded".into());
+            content_type = Some("application/x-www-form-urlencoded".into());
 
         }
 
@@ -44,7 +49,7 @@ pub fn prepare_body(
 
             body_bytes = Some(bin);
 
-            inferred_content_type = Some(mime_type.clone());
+            content_type = Some(mime_type.clone());
 
         }
 
@@ -54,7 +59,7 @@ pub fn prepare_body(
             
             for part in parts {
 
-                if let Some(file_data_b64) = $part.data {
+                if let Some(file_data_b64) = &part.data {
 
                     let file_bytes = BASE64.decode(file_data_b64).map_err(|e| HttpError::Other(format!("Base64 decode: {}", e)))?;
 
@@ -73,10 +78,11 @@ pub fn prepare_body(
                     form = form.text(part.name.clone(), part.value.clone());
 
                 }
-
-                multipart_form = Some(form);
                 
             }
+            
+            multipart_form = Some(form);
+
         }
 
         None => {}
