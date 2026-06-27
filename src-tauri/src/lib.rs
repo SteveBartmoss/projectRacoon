@@ -3,6 +3,7 @@ mod config;
 mod errors;
 mod models;
 mod client;
+mod body_builder;
 
 use requester::fetch_data;
 use reqwest::Client;
