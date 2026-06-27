@@ -7,12 +7,12 @@ pub enum HttpError {
     Network(String),
 
     #[error("Invalid header: {0}")]
-    HeaderParse(string),
+    HeaderParse(String),
 
     #[error("Failed to parse JSON response: {0}")]
     JsonParse(String),
 
-    #[error("Response body execeeded size limit of {0} bytes")]
+    #[error("Response body exceeded size limit of {0} bytes")]
     ResponseTooLarge(usize),
 
     #[error("{0}")]
