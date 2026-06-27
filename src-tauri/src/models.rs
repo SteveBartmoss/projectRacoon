@@ -6,7 +6,7 @@ use std::collections::HashMap;
 pub enum RequestBody {
     Json(serde_json::Value),
     Text(String),
-    Form(std::collections::HashMap<String,Sting),
+    Form(std::collections::HashMap<String,String>),
     Multipart(Vec<MultipartPart>),
     Binary {
         data: String,
@@ -31,7 +31,7 @@ pub struct MultipartPart {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_type: Option<Strin>,
+    pub content_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<String>,
 }
@@ -52,6 +52,8 @@ pub struct HttpRequest {
     pub params: Option<std::collections::HashMap<String,String>>,
     pub body: Option<RequestBody>,
     pub headers: Option<Vec<(String,String)>>,
+    #[serde(default)]
+    pub timeout_ms: Option<u64>,
     #[serde(default)]
     pub max_response_size: Option<usize>,
     #[serde(default="default_follow_redirects")]
