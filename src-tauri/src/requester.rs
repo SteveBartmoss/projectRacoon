@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 use std::time::Instant;
 use crate::AppState;
+use crate::client;
+use crate::client::build_client;
 use reqwest::header::{HeaderName,HeaderValue};
 use thiserror::Error;
 use base64::Engine;
@@ -35,24 +37,9 @@ pub async fn fetch_data(
     req: HttpRequest
 ) -> Result<HttpResponse, HttpError>{
 
-    //let client = &state.client;
-    let client = if !req.follow_redirects || req.verify_tls == Some(false){
-
-        let mut builder = reqwest::Client::builder()
-            .redirect(if req.follow_redirects {
-                reqwest::redirect::Policy::default()
-            }else {
-                reqwest::redirect::Policy::none()
-            });
-
-        if let Some(verify) = req.verify_tls {
-            builder = builder.danger_accept_invalid_certs(!verify);
-        }
-
-        builder.build().map_err(|e| HttpError::Other(e.to_string()))?
-
-    } else {
-        state.client.clone()
+    let client = match build_client(&state, &req){
+        Ok(client) => client,
+        Err(err) => return Err(err)
     };
 
     let mut request = match req.method {
