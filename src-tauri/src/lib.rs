@@ -1,6 +1,7 @@
 mod requester;
 mod config;
 mod errors;
+mod models;
 
 use requester::fetch_data;
 use reqwest::Client;
