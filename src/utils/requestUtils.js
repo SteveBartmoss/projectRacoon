@@ -115,9 +115,9 @@ export function buildOptions(arrayOptions) {
     }, [])
 }
 
-export function builJson2Donwload(request,response){
+export function builJson2Donwload(request,response,fileName,path){
     return {
-        title: request.title,
+        title: fileName,
         url: request.url,
         method: request.method,
         body: request.body,
@@ -135,7 +135,8 @@ export function builJson2Donwload(request,response){
             typeBody: response.typeBody,
             body: response.body,
         },
-        description: request.description
+        description: request.description,
+        path: path,
     }
     
 }
@@ -154,7 +155,8 @@ export function loadResponseAndRequest(json){
             headerIds: json.headerIds,
             auth: json.auth,
             authType: json.authType,
-            description: json.description
+            description: json.description,
+            path: json.path
         },
         response:{
             status: json.response.status,
