@@ -4,26 +4,40 @@ import { setInfo } from "../requestSlice"
 import { builJson2Donwload, loadEmptyRequest } from "../../utils/requestUtils"
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow"
 import { createNewTab,createTabFromJson } from "./tabsManagerThunks"
+import { basename } from "@tauri-apps/api/path"
 
 
 export const saveCurrentTab = () => async (dispatch, getState) => {
 
     const { tabs, requests, responses } = getState()
     const tabId = tabs.currentTab
-    const request = requests.requestById[tabId]
+    const request = requests.requestsById[tabId]
     const response = responses.responsesById[tabId]
+    
 
     if (!request) return
 
-    const path = await save({ defaultPath: 'newrequest.json' })
+    let path = null
+
+    if(!request.path){
+        path = await save({ defaultPath: 'newrequest.json' })
+    } else {
+        path = request.path
+    }
+ 
     if (!path) return
 
-    const objDonwload = builJson2Donwload(request,response)
+    const fileName = await basename(path)
 
     const encoder = new TextEncoder()
+
+    const objDonwload = builJson2Donwload(request,response,fileName,path)
+
     await writeFile(path, encoder.encode(JSON.stringify(objDonwload, null, 2)))
 
     dispatch(setInfo({ id: tabId, field: 'path', value: path }))
+
+    dispatch(setInfo({id: tabId, field: 'title', value: fileName}))
 
 }
 
@@ -42,8 +56,6 @@ export const openFileAsNewTab = () => async (dispatch, getState) => {
 
     await dispatch(createTabFromJson(json))
 
-    // Todo: manejarlo dentro de la tab que se acaba de crear
-    //dispatch(setInfo({ id: newCounter, field: 'path', value: path }));
 }
 
 export const newEmptyTab = () => async (dispatch, getState) => {
