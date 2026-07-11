@@ -38,9 +38,9 @@ export function Header() {
             path = await save({
                 defaultPath: "newrequest.json"
             })
+        } else {
+            path = request.path
         }
-
-        path = request.path
 
         if (!path) return
 
@@ -87,15 +87,6 @@ export function Header() {
         const json = JSON.parse(decoder.decode(bytes))
 
         dispatch(createTabFromJson(json))
-
-        //todo: pasar esto al createNewTab
-        /*
-        dispatch(setInfo({
-            id: counter,
-            field: "path",
-            value: path
-        }))
-        */
 
     }
 
