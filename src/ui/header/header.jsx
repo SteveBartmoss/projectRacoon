@@ -10,6 +10,7 @@ import { addTab } from "../../store/tabSlice"
 import { addRequest, setInfo } from "../../store/requestSlice"
 import { builJson2Donwload } from "../../utils/requestUtils"
 import { createNewTab, createTabFromJson } from "../../store/thunks/tabsManagerThunks"
+import { basename } from "@tauri-apps/api/path"
 
 export function Header() {
 
@@ -31,21 +32,35 @@ export function Header() {
 
     const handleSaveTab = async () => {
 
-        const path = await save({
-            defaultPath: "newrequest.json"
-        })
+        let path = null
+
+        if (!request.path) {
+            path = await save({
+                defaultPath: "newrequest.json"
+            })
+        }
+
+        path = request.path
 
         if (!path) return
 
+        const fileName = await basename(path)
+
         const encoder = new TextEncoder()
 
-        const objDonwload = builJson2Donwload(request,response)
+        const objDonwload = builJson2Donwload(request, response, fileName, path)
 
         const bytes = encoder.encode(
             JSON.stringify(objDonwload, null, 2)
         )
 
         await writeFile(path, bytes)
+
+        dispatch(setInfo({
+            id: tabSelected,
+            field: "title",
+            value: fileName,
+        }))
 
         dispatch(setInfo({
             id: tabSelected,
@@ -74,11 +89,13 @@ export function Header() {
         dispatch(createTabFromJson(json))
 
         //todo: pasar esto al createNewTab
+        /*
         dispatch(setInfo({
             id: counter,
             field: "path",
             value: path
         }))
+        */
 
     }
 
