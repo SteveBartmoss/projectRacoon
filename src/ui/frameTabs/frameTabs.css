@@ -1,6 +1,7 @@
 .container-head {
     display: flex;
     flex-direction: row;
+    overflow-x: scroll;
 }
 
 .tab-close {
@@ -20,22 +21,32 @@
 }
 
 .tab-active {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: .3rem; 
+    padding: .3rem .75rem;          
+    width: fit-content;        
+    max-width: 220px;          
+    white-space: nowrap;       
+    overflow: hidden;
+    text-overflow: ellipsis;   
+    flex-shrink: 0;
     border-top: 1px solid #63b3ed;
 }
 
 .div-tabs{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: .3rem;
+    padding: .3rem .75rem;           
+    width: fit-content;        
+    max-width: 220px;          
+    white-space: nowrap;       
+    overflow: hidden;
+    text-overflow: ellipsis;   
+    flex-shrink: 0;            
 }
 
 .div-content-tab-frame{
