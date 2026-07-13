@@ -1,0 +1,24 @@
+
+.div-toggle{
+    height: 100px;
+    min-height: 50px;
+    max-height: 100%;
+}
+
+.resize-handle {
+    height: 2px;
+    cursor: row-resize;
+    background-color: rgba(255,255,255,0.05);
+    transition: background .2s ease;
+    flex-shrink: 0;
+}
+
+.resize-handle:hover {
+    background-color: #63b3ed;
+}
+
+.panel-resize {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
