@@ -1,0 +1,30 @@
+.div-root {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: auto 1fr auto;
+    height: 100%;
+    width: 100%;
+}
+
+.div-right {
+    grid-area: 2 / 3 / 4 / 4;
+    overflow: auto;
+}
+
+.div-left{
+    grid-area: 2 / 1 / 3 / 2;
+    overflow: auto;
+}
+
+.div-top{
+    grid-area: 1 / 1 / 2 / 4;
+}
+
+.div-bottom{
+    grid-area: 3 / 1 / 4 / 4;
+}
+
+.div-center{
+    grid-area: 2 / 2 / 3 / 3;
+    overflow: auto;
+}
