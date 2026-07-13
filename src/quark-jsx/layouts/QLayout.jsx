@@ -1,48 +1,33 @@
 
+import './css/qlayout.css'
 
-export function QLayout({top,left,rigth,buttom,center}){
+export function QLayout({top,left,right,bottom,center}){
 
     return(
-        <div style={{
-            display: "flex",
-            flexDirection: "column",
-            height: "100%",
-            width: "100%",
-        }}>
-            <div style={{
-                display: "flex",
-                flexDirection: "row",
-            }}>
+        <div className="div-root">
+            <div className="div-top">
                 {top}
             </div>
             <div style={{
-                display: "flex",
-                flexDirection: "row",
-            }}>
-                <div style={{
                     display:"flex",
                     flexDirection: "column",
                 }}>
                     {left}
-                </div>
-                <div style={{
+            </div>
+            <div style={{
                     display:"flex",
                     flexDirection: "column",
                 }}>
                     {center}
-                </div>
-                <div style={{
+            </div>
+            <div style={{
                     display:"flex",
                     flexDirection: "column",
                 }}>
-                    {rigth}
-                </div>
+                    {right}
             </div>
-            <div style={{
-                display: "flex",
-                flexDirection: "row",
-            }}>
-                {buttom}
+            <div className="div-bottom">
+                {bottom}
             </div>
         </div>
     )
