@@ -43,7 +43,7 @@ pub async fn fetch_data(
         Err(err) => return Err(err)
     };
 
-    let mut request = match req.method {
+    let mut request: reqwest::RequestBuilder = match req.method {
         HttpMethod::GET => client.get(&req.url),
         HttpMethod::POST => client.post(&req.url),
         HttpMethod::PUT => client.put(&req.url),
