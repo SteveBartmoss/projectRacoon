@@ -1,4 +1,6 @@
 
+import { store } from "./store/store"
+import { Provider } from "react-reduxt";
 
 export function Quantum() {
 
@@ -13,10 +15,9 @@ export function Quantum() {
     }
 
     return(
-        <>
+        <Provider store={store}>
             <div onKeyDown={handleKeyDown}>
-                
             </div>
-        </>
+        </Provider>
     )
 }
