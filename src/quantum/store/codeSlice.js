@@ -1,7 +1,8 @@
 import {createSlice} from "@reduxjs/toolkit"
 
 const initialState = {
-    codeLinesById: {}
+    codeLinesById: {},
+    tabIndex: 0,
 }
 
 const codeSlice = createSlice({
@@ -20,6 +21,13 @@ const codeSlice = createSlice({
 
             delete state.codeLinesById[id]
 
+        },
+        setTabIndex(state,action) = {
+            
+            const index = action.payload
+
+            state.tabIndex = index
+
         }
     }
 })
@@ -27,6 +35,7 @@ const codeSlice = createSlice({
 export const {
     addCodeLine,
     removeCodeLine,
+    setTabIndex,
 } = codeSlice.actions
 
 export default codeSlice.reducer
