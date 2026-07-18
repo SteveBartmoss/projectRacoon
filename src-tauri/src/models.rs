@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-#[derive(Serialize,Deserialize)]
+#[derive(Serialize,Deserialize,Debug,Clone)]
 #[serde(tag="type", content="value")]
 pub enum RequestBody {
     Json(serde_json::Value),
@@ -23,7 +23,7 @@ pub enum ResponseBody {
     Binary(String),
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize,Debug,Clone)]
 pub struct MultipartPart {
     pub name: String,
     #[serde(default)]
