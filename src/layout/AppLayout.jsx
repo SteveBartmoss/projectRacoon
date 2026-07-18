@@ -11,6 +11,7 @@ import { loadEmptyRequest } from "../utils/requestUtils"
 import { createNewTab } from "../store/thunks/tabsManagerThunks"
 import { CommandListener } from "../behaviorComponents/commandListener"
 import { QBox } from "../quark-jsx/containers/QBox"
+import { QLayout } from "../quark-jsx/layouts/QLayout"
 
 export function AppLayout() {
 
@@ -50,10 +51,16 @@ export function AppLayout() {
                     height: "100vh",
                     width: "100vw"
                 }}>
-                    <Header />
-                    <FrameTabs elements={tabs} />
-                    <ResizeLayout />
-                    <FooterLayout />
+                    <QLayout 
+                        top={<Header />} 
+                        center={
+                            <>
+                            <FrameTabs elements={tabs} />
+                            <ResizeLayout />
+                            </>
+                        }
+                        bottom={<FooterLayout />}
+                    />
                 </QBox>
             </CommandListener>
         </>
