@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux"
-import { Box } from "../ui/containers/containers"
 import { Header } from "../ui/header/header"
 import { FrameTabs } from "../ui/frameTabs/frameTabs"
 import { FooterLayout } from "./FooterLayout"
@@ -11,6 +10,7 @@ import { ComandObserver } from "../ui/comandObserver/comandObserver"
 import { loadEmptyRequest } from "../utils/requestUtils"
 import { createNewTab } from "../store/thunks/tabsManagerThunks"
 import { CommandListener } from "../behaviorComponents/commandListener"
+import { QBox } from "../quark-jsx/containers/QBox"
 
 export function AppLayout() {
 
@@ -44,7 +44,7 @@ export function AppLayout() {
     return (
         <>
             <CommandListener>
-                <Box styles={{
+                <QBox styles={{
                     display: "flex",
                     flexDirection: "column",
                     height: "100vh",
@@ -54,7 +54,7 @@ export function AppLayout() {
                     <FrameTabs elements={tabs} />
                     <ResizeLayout />
                     <FooterLayout />
-                </Box>
+                </QBox>
             </CommandListener>
         </>
     )
