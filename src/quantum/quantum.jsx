@@ -1,13 +1,12 @@
 
 
-export function useKeyboardInputs() {
+export function Quantum() {
 
-    useEffect(() => {
-        
-        const handleKeyDown = (event) => {
-
-            
-        }
-
-    })
+    return(
+        <>
+            <div>
+                
+            </div>
+        </>
+    )
 }
