@@ -8,22 +8,13 @@ export function QLayout({top,left,right,bottom,center}){
             <div className="div-top">
                 {top}
             </div>
-            <div style={{
-                    display:"flex",
-                    flexDirection: "column",
-                }}>
+            <div className="div-left">
                     {left}
             </div>
-            <div style={{
-                    display:"flex",
-                    flexDirection: "column",
-                }}>
+            <div className="div-center">
                     {center}
             </div>
-            <div style={{
-                    display:"flex",
-                    flexDirection: "column",
-                }}>
+            <div className="div-right">
                     {right}
             </div>
             <div className="div-bottom">
