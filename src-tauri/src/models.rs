@@ -20,6 +20,7 @@ pub enum ResponseBody {
     Json(serde_json::Value),
     Html(String),
     Text(String),
+    Image(String),
     Binary(String),
 }
 
