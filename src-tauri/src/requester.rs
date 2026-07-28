@@ -1,21 +1,13 @@
-use serde::{Deserialize, Serialize};
 use std::time::Instant;
 use crate::AppState;
 use crate::body_builder::prepare_body;
-use crate::client;
 use crate::client::build_client;
 use crate::request_builder::build_request;
-use reqwest::header::{HeaderName,HeaderValue};
-use thiserror::Error;
 use base64::Engine;
 use base64::engine::general_purpose::STANDARD as BASE64;
-use serde_urlencoded;
 use std::collections::HashMap;
 use crate::errors::HttpError;
-use crate::models::RequestBody;
 use crate::models::ResponseBody;
-use crate::models::MultipartPart;
-use crate::models::HttpMethod;
 use crate::models::HttpRequest;
 use crate::models::HttpResponse;
 
@@ -92,6 +84,8 @@ pub async fn fetch_data(
     } else if content_type_lower.contains("html") {
         let text = decode_text(&bytes, &charset);
         ResponseBody::Html(text)
+    } else if content_type_lower.starts_with("image/"){
+        ResponseBody::Image(BASE64.encode(bytes.as_ref()))
     } else if content_type_lower.starts_with("text/")
         || content_type_lower.contains("xml")
         || content_type_lower.contains("javascript")
