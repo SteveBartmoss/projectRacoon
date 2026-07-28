@@ -28,3 +28,15 @@
     grid-area: 2 / 2 / 3 / 3;
     overflow: auto;
 }
+
+.panel-left {
+  grid-row: 1 / -1;
+  grid-column: 1 / 2;
+  overflow: auto;
+}
+
+.panel-right {
+  grid-row: 1 / -1;
+  grid-column: 2 / -1;
+  overflow: auto;
+}
