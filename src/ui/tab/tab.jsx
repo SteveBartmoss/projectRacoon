@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import './tab.css'
 
-export function Tab({ elements, otherElments=null  }) {
+export function Tab({ elements, otherElments = null }) {
 
     const [currentTab, setCurrentTab] = useState(1)
 
 
 
     return (
-        <div>
+        <>
             <div className="container-head">
                 {
                     elements.map(item =>
@@ -21,18 +21,16 @@ export function Tab({ elements, otherElments=null  }) {
                     otherElments
                 }
             </div>
-            <div>
-                {
-                    elements.map(item =>
-                        <div key={item.id} className={currentTab !== item.id ? 'tab-close' : 'div-content-tab'}>
-                            {
-                                item.content
-                            }
-                        </div>
-                    )
-                }
-            </div>
-        </div>
+            {
+                elements.map(item =>
+                    <div key={item.id} className={currentTab !== item.id ? 'tab-close' : 'div-content-tab'}>
+                        {
+                            item.content
+                        }
+                    </div>
+                )
+            }
+        </>
     )
 
 }
