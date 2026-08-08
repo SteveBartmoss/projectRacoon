@@ -15,6 +15,7 @@ import { addMessage, setErrorCounter } from "../store/errorsSlice";
 import { buildOptions } from "../utils/requestUtils";
 import { ResponseLayout } from "./responseLayout";
 import { addResponse } from "../store/responseSlice";
+import { setAlertContent, setShowAlerts } from "../store/appSlice";
 
 
 
@@ -136,6 +137,8 @@ export function RequesLayout({ id }) {
                     value: parsed
                 }
             }catch(error){
+                dispatch(setShowAlerts(true))
+                dispatch(setAlertContent({title: "Error", message: "Invalid JSON body"}))
                 dispatch(addMessage(
                     {
                         error: true, 
