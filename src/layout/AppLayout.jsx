@@ -55,11 +55,15 @@ export function AppLayout() {
                         top={<Header />} 
                         center={
                             <>
-                            <FrameTabs elements={tabs} />
-                            <ResizeLayout />
+                                <FrameTabs elements={tabs} />
                             </>
                         }
-                        bottom={<FooterLayout />}
+                        bottom={
+                            <>
+                                <ResizeLayout />
+                                <FooterLayout />
+                            </>
+                        }
                     />
                 </QBox>
             </CommandListener>
