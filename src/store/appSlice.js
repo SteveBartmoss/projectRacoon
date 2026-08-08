@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     showErrorsWindow: false,
+    showAlerts: false,
+    alertContent: null,
     config: null,
 }
 
@@ -15,6 +17,15 @@ const appSlice = createSlice({
         },
         setConfig(state,action){
             state.config = action.payload.value
+        },
+        setShowAlerts(state, action){
+            console.log('I am here')
+            console.log(action.payload)
+            state.showAlerts = action.payload
+            console.log(state.showAlerts)
+        },
+        setAlertContent(state, action){
+            state.alertContent = action.payload
         }
     }
 })
@@ -22,6 +33,8 @@ const appSlice = createSlice({
 export const {
     setShowErrorWindow,
     setConfig,
+    setShowAlerts,
+    setAlertContent,
 } = appSlice.actions
 
 export default appSlice.reducer
