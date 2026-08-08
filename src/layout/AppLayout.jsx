@@ -12,6 +12,7 @@ import { createNewTab } from "../store/thunks/tabsManagerThunks"
 import { CommandListener } from "../behaviorComponents/commandListener"
 import { QBox } from "../quark-jsx/containers/QBox"
 import { QLayout } from "../quark-jsx/layouts/QLayout"
+import { Snackbar } from "../quark-jsx/snackbar/snackbar"
 
 export function AppLayout() {
 
@@ -60,6 +61,7 @@ export function AppLayout() {
                         }
                         bottom={
                             <>
+                                <Snackbar />
                                 <ResizeLayout />
                                 <FooterLayout />
                             </>
