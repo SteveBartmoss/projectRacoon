@@ -1,0 +1,17 @@
+.div-close {
+    display: none;
+}
+
+.container-snackbar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 2rem 1rem;
+}
+
+.snackbar-content{
+    color: #f6f6f6;
+    background-color: #1e2326;
+    padding: .5rem;
+    border-radius: 1rem;
+}
