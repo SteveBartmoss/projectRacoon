@@ -85,7 +85,12 @@ pub async fn fetch_data(
         let text = decode_text(&bytes, &charset);
         ResponseBody::Html(text)
     } else if content_type_lower.starts_with("image/"){
-        ResponseBody::Image(BASE64.encode(bytes.as_ref()))
+
+        ResponseBody::Image{
+            mime: content_type.clone(),
+            data: BASE64.encode(bytes.as_ref())
+        }
+        
     } else if content_type_lower.starts_with("text/")
         || content_type_lower.contains("xml")
         || content_type_lower.contains("javascript")
