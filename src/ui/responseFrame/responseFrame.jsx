@@ -10,6 +10,10 @@ export function ResponseFrame({ typeBody, body }) {
             case 'Html':
                 return <iframe srcDoc={body} style={{ width: '100%', height: '100%', border: 'none' }} />
 
+            case 'Image':
+                const imageUrl = `data:${body.mime};base64,${body.data}`
+                return <img src={imageUrl} alt='Image response' style={{maxWidth: '100%'}} />
+
             case 'Text':
             case 'Binary':
                 return body
