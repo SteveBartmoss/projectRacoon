@@ -4,6 +4,7 @@ import requestSlice from "./requestSlice"
 import errorSlice from "./errorsSlice"
 import appSlice from "./appSlice"
 import responseSlice from "./responseSlice"
+import historyResponseSlice from "./historyResponseSlice"
 
 export const store = configureStore({
     reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
         errors: errorSlice,
         appInfo: appSlice,
         responses: responseSlice,
+        historyResponse: historyResponseSlice, 
     }
 })
