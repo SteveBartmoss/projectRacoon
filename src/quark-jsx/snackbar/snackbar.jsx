@@ -24,8 +24,8 @@ export function Snackbar(){
 
         <div className={ show ? "container-snackbar" : "div-close"}>
             <div className="snackbar-content">
-                <h1>{content?.title}</h1>
-                <p>{content?.message}</p>
+                <p className="snack-title">{content?.title}</p>
+                <p className="snack-content">{content?.message}</p>
             </div>
         </div>
     )
