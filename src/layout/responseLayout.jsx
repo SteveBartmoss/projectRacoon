@@ -12,6 +12,7 @@ import { removeResponse } from "../store/responseSlice";
 import { save } from "@tauri-apps/plugin-dialog";
 import { writeFile } from "@tauri-apps/plugin-fs";
 import { ResponseHeaders } from "../ui/responseHeaders/responseHeaders";
+import { Timeline } from "../ui/timeline/timeline";
 
 
 export function ResponseLayout() {
@@ -79,6 +80,11 @@ export function ResponseLayout() {
             id: 2,
             title: "Headers",
             content: <ResponseHeaders headers={response?.headers} />
+        },
+        {
+            id: 3,
+            title: "Timeline",
+            content: <Timeline />
         }
     ]
 
@@ -160,7 +166,7 @@ export function ResponseLayout() {
             <Box
                 styles={{
                     width: "60%",
-                    height: "80vh",
+                    height: "89vh",
                     display: "flex",
                     flexDirection: "column",
                     flexShrink: "0",
