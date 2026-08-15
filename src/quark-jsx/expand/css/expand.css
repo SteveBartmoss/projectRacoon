@@ -1,0 +1,44 @@
+
+.expand-panel {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    /*background-color: #15202B;
+    border-radius: .5rem;
+    margin-top: .5rem;
+    */
+}
+
+.expand-title{
+    color: white;
+    font-family: "Poppins";
+    font-size: 1.3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: .5rem;
+}
+
+.expand-content {
+    color: white;
+    padding: .5rem;
+}
+
+.close-content {
+    display: none;
+}
+
+.down-icon {
+    transform: rotate(180deg);
+}
+
+.up-icon {
+    transform: rotate(360deg);
+}
+
+.extend-content p {
+    color: white;
+    font-family: "Poppins";
+    font-size: 1.2rem !important;
+    padding: .5rem;
+}
