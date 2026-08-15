@@ -1,0 +1,16 @@
+.div-timeline{
+    height: 80vh;
+    overflow-y: auto;
+}
+
+.div-timeline-item{
+    width: 99%;
+}
+
+.title-timeline-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: .2rem;
+}
