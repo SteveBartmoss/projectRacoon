@@ -16,6 +16,7 @@ import { buildOptions } from "../utils/requestUtils";
 import { ResponseLayout } from "./responseLayout";
 import { addResponse } from "../store/responseSlice";
 import { setAlertContent, setShowAlerts } from "../store/appSlice";
+import { addEntry } from "../store/historyResponseSlice";
 
 
 
@@ -178,6 +179,12 @@ export function RequesLayout({ id }) {
             typeBody: data.body.type,
             body: data.body.value,
         }))
+
+        dispatch(addEntry({
+            id: id,
+            response: data
+        }))
+        
 
     }
 
