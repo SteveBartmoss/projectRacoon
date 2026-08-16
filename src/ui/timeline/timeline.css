@@ -1,10 +1,11 @@
 .div-timeline{
     height: 80vh;
     overflow-y: auto;
+    width: 99.8%;
 }
 
 .div-timeline-item{
-    width: 99%;
+    width: 100%;
 }
 
 .title-timeline-item{
