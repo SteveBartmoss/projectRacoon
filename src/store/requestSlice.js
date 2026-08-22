@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { secureFieldsHeaders, secureFieldsParams, secureFieldsRequest } from "../utils/requestUtils"
+import { secureFieldDataForm, secureFieldsHeaders, secureFieldsParams, secureFieldsRequest } from "../utils/requestUtils"
 
 const initialState = {
     requestsById: {},
@@ -16,6 +16,10 @@ const getParam = (request, id) => {
 
 const getHeader = (request, id) => {
     return request.headersById[id]
+}
+
+const getItemForm = (request, id) => {
+    return request.dataFormByIdp[id]
 }
 
 const requestSlice = createSlice({
@@ -134,7 +138,44 @@ const requestSlice = createSlice({
                 request.headerIds = action.payload.headers.idArray
             }
 
-        }
+        },
+        setDataFormInfo(state, action){
+            
+            if(!secureFieldDataForm.includes(action.payload.field)){
+                throw new Error('Acceso a una propiedad sensible')
+            }
+
+            const request = getRequest(state, action.payload.requestId)
+
+            if(!request) return
+
+            const itemForm = getItemForm(request,action.payload.itemFormId)
+
+            if(itemForm){
+                itemForm[action.payload.field] = action.payload.itemFormValue
+            }
+            
+        },
+        addDataFormItem(state,action){
+
+            const request = getRequest(state, action.payload.id)
+
+            if(request){
+                request.dataFormById[action.payload.itemForm.id] = action.payload.itemForm
+                request.dataFormIds.push(action.payload.itemForm.id) 
+            }
+
+        },
+        removeDataFormInfo(state, action){
+
+            const request = getRequest(state, action.payload.id)
+
+            if(request){
+                delete request.dataFormById[action.payload.itemFormId]
+                request.dataFormIds = request.dataFormIds.filter(element => element !== action.payload.itemFormId)
+            }
+        },
+
     }
 })
 
@@ -150,6 +191,9 @@ export const {
     addHeader,
     removeHeader,
     cleanHeaders,
+    setDataFormInfo,
+    addDataFormItem,
+    removeDataFormInfo,
 } = requestSlice.actions
 
 export default requestSlice.reducer
