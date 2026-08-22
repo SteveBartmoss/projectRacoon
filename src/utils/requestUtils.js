@@ -25,6 +25,12 @@ export const secureFieldsHeaders = [
     "active",
 ]
 
+export const secureFieldDataForm = [
+    "name",
+    "value",
+    "active",
+]
+
 export function buildParams(){
 
     const id = IDGenerator.generate()
@@ -58,10 +64,27 @@ export function buildHeaders(){
     }
 }
 
+export function buildDataForm(){
+    const id = IDGenerator.generate()
+
+    return {
+        id,
+        itemFormObj: {
+            id,
+            name: "",
+            value: "",
+            typeValue: "",
+            activeL: true,
+        },
+        idArray: [id]
+    }
+}
+
 export function loadEmptyRequest() {
 
     const buildedParams = buildParams()
     const buildedHeaders = buildHeaders()
+    const buildedDataForm = buildDataForm()
 
     return {
         title: "New Request",
@@ -76,6 +99,10 @@ export function loadEmptyRequest() {
             [buildedHeaders.id]: buildedHeaders.headersObj
         },
         headerIds: [buildedHeaders.id],
+        dataFormById: {
+            [buildDataForm.id]: buildDataForm.itemFormObj
+        },
+        dataFormIds: [buildDataForm.id],
         auth: "",
         authType: "",
         description: "",
