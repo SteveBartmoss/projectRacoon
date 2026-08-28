@@ -3,7 +3,8 @@ import { Box } from "../containers/containers"
 import { TextField } from "../textField/textField"
 import { setParamInfo } from "../../store/requestSlice"
 import { CheckInput } from "../checkbox/checkbox"
-
+import addImg from '../../assets/add.svg'
+import deleteImg from '../../assets/delete.svg'
 
 export function DataForm() {
 
@@ -34,6 +35,9 @@ export function DataForm() {
         dispatch(setParaInf)
     }
 
+    const handleDeleteParam = () => {
+        dispatch(removeParam({id: tabId, paramId: paramId}))
+    }
 
     return (
         <div>
@@ -72,8 +76,11 @@ export function DataForm() {
                                 alignItems: "center",
                                 margin: "1rem"
                             }}>
-                                <CheckInput target={itemt.active} handleTarget={}  
+                                <CheckInput target={itemt.active} handleTarget={(event) => handleActiveParam(event.target.checked, item.id)} />  
                             </Box>
+                            <div onClick={}>
+                                <img className="img-delete" src={deleteImg} />
+                            </div>
                         </Box>
                     )
                 }
