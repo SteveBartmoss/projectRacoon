@@ -17,6 +17,7 @@ import { ResponseLayout } from "./responseLayout";
 import { addResponse } from "../store/responseSlice";
 import { setAlertContent, setShowAlerts } from "../store/appSlice";
 import { addEntry } from "../store/historyResponseSlice";
+import { BodyLayout } from "./BodyLayout";
 
 
 
@@ -81,6 +82,8 @@ export function RequesLayout({ id }) {
         dispatch(setInfo({id: id, field: 'description', value: value}))
     }
 
+    //<BodyForm body={body} setBody={handleBody} />
+
     const tabsElements = [
         {
             id: 1,
@@ -94,7 +97,7 @@ export function RequesLayout({ id }) {
                 width: "100%",
                 height: "50vh",
             }}>
-                <BodyForm body={body} setBody={handleBody} />
+                <BodyLayout />
             </Box>
         },
         {
