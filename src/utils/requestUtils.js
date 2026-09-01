@@ -10,6 +10,7 @@ export const secureFieldsRequest = [
     "authType",
     "response",
     "description",
+    "typeContent",
     "path"
 ]
 
@@ -103,6 +104,7 @@ export function loadEmptyRequest() {
             [buildDataForm.id]: buildDataForm.itemFormObj
         },
         dataFormIds: [buildDataForm.id],
+        typeContent: "JSON",
         auth: "",
         authType: "",
         description: "",
