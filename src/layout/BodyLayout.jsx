@@ -1,11 +1,14 @@
 import { useState } from "react"
 import { Select } from "../ui/select/select"
 import { BodyForm } from "../ui/bodyForm/bodyForm"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { setInfo } from "../store/requestSlice"
+import { DataForm } from "../ui/dataForm/dataForm"
 
 
 export function BodyLayout() {
 
+    const dispatch = useDispatch()
     const activeTab = useSelector((state) => state.tabs.currentTab)
     const request = useSelector((state) => state.requests.requestsById[activeTab])
 
@@ -27,16 +30,24 @@ export function BodyLayout() {
     }
 
     const renderBody = () => {
-        switch(typeBody){
+
+        switch(request.typeContent){
 
             case "JSON":
-                return (<BodyForm body={request.body} setBody={handleBody} />)
+                return <BodyForm body={request.body} setBody={handleBody} />
                 
+            case "FOMRDATA":
+                return <DataForm />
             
             default: 
                 return (<></>)
 
         }
+
+    }
+
+    const changeBody = (value) => {
+        dispatch(setInfo({id: activeTab, field: "typeContent", value: value}))
     }
 
     return(
@@ -44,13 +55,14 @@ export function BodyLayout() {
             <div>
                 <div>
                     <Select
-                        target={typeBody}
+                        target={request.typeContent}
                         elements={bodyElements}
-                        handleChange={(event) => setTypeBody(event.target.value)}
+                        handleChange={(event) => changeBody(event.target.value)}
                     />
                 </div>
                 {
                     //todo: Someting render the content
+                    renderBody()
                 }
             </div>
         </>
