@@ -1,42 +1,52 @@
 import { useSelector } from "react-redux"
 import { Box } from "../containers/containers"
 import { TextField } from "../textField/textField"
-import { setParamInfo } from "../../store/requestSlice"
+import { addDataFormItem, removeDataFormInfo, setDataFormInfo, setParamInfo } from "../../store/requestSlice"
 import { CheckInput } from "../checkbox/checkbox"
 import addImg from '../../assets/add.svg'
 import deleteImg from '../../assets/delete.svg'
+import { buildDataForm } from "../../utils/requestUtils"
 
 export function DataForm() {
 
     const tabId = useSelector((state) => state.tabs.currentTab)
-    const request = useSelector((state) => state.request.requestsById[id])
+
+    const request = useSelector((state) => state.requests.requestsById[tabId])
 
     const dataForm = request.dataFormIds.map(id => request.dataFormById[id])
 
     const handleName = (value, dataFormId) => {
-        dispatch(setParamInfo({ 
+        dispatch(setDataFormInfo({ 
             requestId: tabId, 
-            paramId: dataFormId,
+            itemFormId: dataFormId,
             field: "name",
-            paramValue: value,
+            itemFormValue: value,
         }))
     }
 
     const handleValue = (value,dataFormId) => {
         dispatch(setParamInfo({
             requestId: tabId,
-            paramId: dataFormId,
+            itemFormId: dataFormId,
             field: "value",
-            paramValue: value,
+            itemFormValue: value,
         }))
     }
 
-    const handleActiveParam = (value, dataFormId) => {
+    const handleAddDataItem = () => {
+
+        let buildedItem = buildDataForm()
+
+        dispatch(addDataFormItem({id: tabId, itemForm: buildedItem.itemFormObj}))
+
+    }
+
+    const handleActiveItem = (value, dataFormId) => {
         dispatch(setParaInf)
     }
 
-    const handleDeleteParam = () => {
-        dispatch(removeParam({id: tabId, paramId: paramId}))
+    const handleDeleteItem = (itemFormId) => {
+        dispatch(removeDataFormInfo({id: tabId, itemFormId: itemFormId}))
     }
 
     return (
@@ -76,9 +86,9 @@ export function DataForm() {
                                 alignItems: "center",
                                 margin: "1rem"
                             }}>
-                                <CheckInput target={itemt.active} handleTarget={(event) => handleActiveParam(event.target.checked, item.id)} />  
+                                <CheckInput target={item.active} handleTarget={(event) => handleActiveParam(event.target.checked, item.id)} />  
                             </Box>
-                            <div onClick={}>
+                            <div onClick={() => handleDeleteItem(item.id)} className="div-delete">
                                 <img className="img-delete" src={deleteImg} />
                             </div>
                         </Box>
