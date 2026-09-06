@@ -75,7 +75,7 @@ export function buildDataForm(){
             name: "",
             value: "",
             typeValue: "",
-            activeL: true,
+            active: true,
         },
         idArray: [id]
     }
@@ -101,9 +101,9 @@ export function loadEmptyRequest() {
         },
         headerIds: [buildedHeaders.id],
         dataFormById: {
-            [buildDataForm.id]: buildDataForm.itemFormObj
+            [buildedDataForm.id]: buildedDataForm.itemFormObj
         },
-        dataFormIds: [buildDataForm.id],
+        dataFormIds: [buildedDataForm.id],
         typeContent: "JSON",
         auth: "",
         authType: "",
