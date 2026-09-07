@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Box } from "../containers/containers"
 import { TextField } from "../textField/textField"
 import { addDataFormItem, removeDataFormInfo, setDataFormInfo, setParamInfo } from "../../store/requestSlice"
@@ -6,9 +6,11 @@ import { CheckInput } from "../checkbox/checkbox"
 import addImg from '../../assets/add.svg'
 import deleteImg from '../../assets/delete.svg'
 import { buildDataForm } from "../../utils/requestUtils"
+import './dataForm.css'
 
 export function DataForm() {
 
+    const dispatch = useDispatch()
     const tabId = useSelector((state) => state.tabs.currentTab)
 
     const request = useSelector((state) => state.requests.requestsById[tabId])
@@ -55,8 +57,9 @@ export function DataForm() {
                 display: "flex",
                 flexDirection: "row"
             }}>
-                <div>
-                    <p>Add</p>
+                <div onClick={() => handleAddDataItem()} className="div-add">
+                    <p className="item-btn">Add</p>
+                    <img src={addImg} />
                 </div>
             </Box>
             <Box styles={{
@@ -65,7 +68,7 @@ export function DataForm() {
             }}>
                 {
                     dataForm.map(item => 
-                        <Box key={item.id} styles0={{
+                        <Box key={item.id} styles={{
                             display: "flex",
                             flexDirection: "row"
                         }}>
@@ -75,10 +78,13 @@ export function DataForm() {
                             }}>
                                 <TextField textHolder={"name"} target={item.name} handleTarget={(event) => handleName(event.target.value, item.id) } />
                             </Box>
-                            <Box>
+                            <Box styles={{
+                                width: "40%",
+                                margin: "1rem"
+                            }}>
                                 <TextField textHolder={"value"} target={item.value} handleTarget={(event) => handleName(event.target.value, item.id)} />
                             </Box>
-                            <Box tyles={{
+                            <Box styles={{
                                 width: "5%",
                                 display: "flex",
                                 flexDirection: "row",
