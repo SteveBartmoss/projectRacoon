@@ -144,6 +144,17 @@ export function buildOptions(arrayOptions) {
     }, [])
 }
 
+export function buildDataForm(arrayOptions) {
+    let dataForm = new FormData()
+
+    arrayOptions.forEach(element => {
+        dataForm.append(element.name,element.value)
+    });
+
+    return dataForm
+    
+}
+
 export function builJson2Donwload(request,response,fileName,path){
     return {
         title: fileName,
