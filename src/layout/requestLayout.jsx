@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setInfo } from "../store/requestSlice";
 import { Headers } from "../ui/headers/headers";
 import { addMessage, setErrorCounter } from "../store/errorsSlice";
-import { buildOptions } from "../utils/requestUtils";
+import { buildDataForm, buildOptions } from "../utils/requestUtils";
 import { ResponseLayout } from "./responseLayout";
 import { addResponse } from "../store/responseSlice";
 import { setAlertContent, setShowAlerts } from "../store/appSlice";
@@ -29,11 +29,28 @@ export function RequesLayout({ id }) {
     const request = useSelector((state) => state.requests.requestsById[id])
     const dispatch = useDispatch()
 
-    const { url, method, body, paramsById, paramIds, headersById, headerIds, auth, authType, response, description } = request
+    const { 
+        url, 
+        method, 
+        body, 
+        paramsById, 
+        paramIds, 
+        headersById, 
+        headerIds, 
+        auth, 
+        authType, 
+        response, 
+        description,
+        dataFormById,
+        dataFormIds,
+        typeContent,
+    } = request
 
     const params = paramIds.map(id => paramsById[id])
 
     const headers = headerIds.map(id => headersById[id])
+
+    const dataItems = dataFormIds.map(id => dataFormById[id])
 
     const methodElements = [
         {
@@ -134,27 +151,34 @@ export function RequesLayout({ id }) {
         let parsedBody = null
 
         if(body){
-            try{
-                const parsed = JSON.parse(body);
-                parsedBody = {
-                    type: "Json",
-                    value: parsed
+
+            if(typeContent === 'JSON'){
+                try{
+                    const parsed = JSON.parse(body);
+                    parsedBody = {
+                        type: "Json",
+                        value: parsed
+                    }
+                }catch(error){
+                    dispatch(setShowAlerts(true))
+                    dispatch(setAlertContent({title: "Error", message: "Invalid JSON body"}))
+                    dispatch(addMessage(
+                        {
+                            error: true, 
+                            message:{
+                                errorMessage:error.message, 
+                                alert: "Invalid JSON body",
+                                url: url,
+                                method: method,
+                            }
+                        }))
+                    return
                 }
-            }catch(error){
-                dispatch(setShowAlerts(true))
-                dispatch(setAlertContent({title: "Error", message: "Invalid JSON body"}))
-                dispatch(addMessage(
-                    {
-                        error: true, 
-                        message:{
-                            errorMessage:error.message, 
-                            alert: "Invalid JSON body",
-                            url: url,
-                            method: method,
-                        }
-                    }))
-                return
+
+            } else if(typeContent === 'FOMRDATA'){
+                parsedBody = buildDataForm(dataItems)
             }
+            
         }
 
         let objPeticion = {
